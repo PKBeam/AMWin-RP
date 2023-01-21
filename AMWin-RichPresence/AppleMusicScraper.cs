@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using System.Windows.Automation;
+using System.Web;
 
 namespace AMWin_RichPresence {
 
@@ -168,13 +169,35 @@ namespace AMWin_RichPresence {
                     .Where(x => x.Attributes["class"].Value.Contains("grid--top-results"))
                     .ToList();
 
-                var imgSources = list[0].ChildNodes[0]
+                var firstResult = list[0].ChildNodes[0];
+
+                var imgSources = firstResult
                     .Descendants("source")
                     .Where(x => x.Attributes["type"].Value == "image/jpeg")
                     .ToList();
 
                 var x = imgSources[0].Attributes["srcset"].Value;
-                return x.Split(' ')[0];
+
+                var searchResultTitle = firstResult
+                    .Descendants("li")
+                    .First(x => x.Attributes["data-testid"].Value == "top-search-result-title")
+                    .InnerHtml;
+
+                var searchResultSubtitle = firstResult
+                    .Descendants("li")
+                    .First(x => x.Attributes["data-testid"].Value == "top-search-result-subtitle")
+                    .InnerHtml;
+
+                // need to decode html to avoid instances like "&amp;"
+                searchResultTitle = HttpUtility.HtmlDecode(searchResultTitle);
+                searchResultSubtitle = HttpUtility.HtmlDecode(searchResultSubtitle);
+
+                // check that the first result actually is the song
+                if (searchResultTitle == songName && searchResultSubtitle.Contains(songArtist)) {
+                    return x.Split(' ')[0];
+                } else {
+                    return null;
+                }
             } catch {
                 return null;
             }
