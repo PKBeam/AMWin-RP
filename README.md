@@ -5,6 +5,8 @@ A Discord Rich Presence client for Apple Music's native Windows app.
 
 ![image](https://user-images.githubusercontent.com/18737124/213862194-e02ec9e7-07ab-481f-9dc5-451b9159c903.png)
 
+Check back regularly for bug fixes and new features!
+
 ## Installation
 
 Releases can be found [here](https://github.com/PKBeam/AMWin-RP/releases).
