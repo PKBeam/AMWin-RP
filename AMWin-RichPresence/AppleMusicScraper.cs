@@ -17,6 +17,7 @@ namespace AMWin_RichPresence {
         // DateTimes are in UTC.
         public bool     IsPaused;
         public string   SongName;
+        public string   SongSubTitle;
         public string   SongAlbum;
         public string   SongArtist;
         public DateTime PlaybackStart;
@@ -131,6 +132,7 @@ namespace AMWin_RichPresence {
                 HasSong = true,
                 IsPaused = songIsPaused,
                 SongName = songName,
+                SongSubTitle = songAlbumArtist,
                 SongAlbum = songAlbum,
                 SongArtist = songArtist,
                 PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime),

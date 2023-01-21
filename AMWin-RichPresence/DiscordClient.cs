@@ -26,7 +26,7 @@ internal class AppleMusicDiscordClient {
         }
         var rp = new RichPresence() {
             Details = $"{amInfo.SongName}",
-            State = $"{amInfo.SongAlbum}",
+            State = $"{amInfo.SongSubTitle}",
             Assets = new Assets() {
                 LargeImageKey = Constants.DiscordLargeImageKey,
                 SmallImageKey = Constants.DiscordSmallImageKey
