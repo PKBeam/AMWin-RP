@@ -51,10 +51,10 @@ namespace AMWin_RichPresence {
             base.OnExit(e);
         }
         private void TaskbarIcon_DoubleClick(object sender, RoutedEventArgs e) {
-            mainWindow.Show();
+            //mainWindow.Show();
         }
         private void MenuItemSettings_Click(object sender, RoutedEventArgs e) {
-            mainWindow.Show();
+            //mainWindow.Show();
         }
         private void MenuItemExit_Click(object sender, RoutedEventArgs e) {
             Current.Shutdown();
