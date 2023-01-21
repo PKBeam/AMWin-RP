@@ -15,6 +15,9 @@ Otherwise, download the other unlabelled release. This release is larger in size
 
 ## Usage
 
+Only the [Microsoft Store](https://apps.microsoft.com/store/detail/apple-music-preview/9PFHDD62MXS1) version of Apple Music is supported.     
+The app must be open and currently playing music in order for the rich presence to show. 
+
 The app runs in the background, minimised to the system tray. 
 
 It can be closed by right-clicking on the tray icon and selecting "Exit".
