@@ -16,11 +16,33 @@ If you have (or are able to install) the [.NET 7.0 runtime](https://dotnet.micro
 Otherwise, download the other release (the one that isn't labelled as `NoRuntime`). This release is larger in size as it bundles the necessary components of .NET 7.
 
 ## Usage
+Only the [Microsoft store version](https://apps.microsoft.com/store/detail/apple-music-preview/9PFHDD62MXS1) of Apple Music is supported.  
+There's no support for iTunes, Apple Music via WSA, or any third-party players.
 
-Only the [Microsoft Store](https://apps.microsoft.com/store/detail/apple-music-preview/9PFHDD62MXS1) version of Apple Music is supported.     
-The app must be open and currently playing music in order for the rich presence to show. 
+The app runs in the background, minimised to the system tray. It can be closed by right-clicking on the tray icon and selecting "Exit".  
+In order for the rich presence to show, the Apple Music app must be open and currently playing music (i.e. not paused).  
 
-The app runs in the background, minimised to the system tray. 
+If you like, you can set the app to automatically run on startup using Windows settings. In future, you'll be able to do it directly from the app.  
 
-It can be closed by right-clicking on the tray icon and selecting "Exit".
+<hr/>
+
+## How does it work?
+
+**(Technical details ahead)**
+
+The biggest challenge here is being able to extract song information out of the Apple Music app.
+
+This is achieved using .NET's [UI Automation](https://learn.microsoft.com/en-us/dotnet/framework/ui-automation/ui-automation-overview), which lets us access UI elements of any window on the user's desktop.
+
+The general process is this:
+- We look for the Apple Music window on the desktop.
+- We then navigate to known UI controls that hold the info we're after (e.g. song name).
+- We extract this information and send it to the part of the program that handles the Discord RPC.
+
+The other problem is getting the song's cover art.  
+
+(It's not well documented, but Discord RPC now lets you specify arbitrary images by sending the image URL in place of the assets key.)  
+
+We can't use UI Automation to get the image being displayed in the window (as far as I know). Instead we send an HTTP request to the Apple Music website, where we try to search for the song and grab the cover image URL from there. It's not ideal but gives us what we're looking for most of the time.
+
 
