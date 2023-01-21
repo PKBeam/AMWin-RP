@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using HtmlAgilityPack;
+using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Automation;
 
@@ -22,6 +19,7 @@ namespace AMWin_RichPresence {
         public string   SongArtist;
         public DateTime PlaybackStart;
         public DateTime PlaybackEnd;
+        public string   CoverArtUrl;
 
         public static AppleMusicInfo NoSong() {
             var amInfo = new AppleMusicInfo();
@@ -38,7 +36,8 @@ namespace AMWin_RichPresence {
                 - SongAlbum: {SongAlbum},
                 - SongArtist: {SongArtist},
                 - PlaybackStart: {PlaybackStart},
-                - PlaybackEnd: {PlaybackEnd}
+                - PlaybackEnd: {PlaybackEnd},
+                - CoverArtUrl: {CoverArtUrl}
                 """;
         }
         public void Print() {
@@ -137,7 +136,8 @@ namespace AMWin_RichPresence {
                 SongAlbum = songAlbum,
                 SongArtist = songArtist,
                 PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime),
-                PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration)
+                PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration),
+                CoverArtUrl = GetAlbumArtUrl(songName, songAlbum, songArtist)
             };
 
             return amInfo;
@@ -155,6 +155,24 @@ namespace AMWin_RichPresence {
             int sec = int.Parse(time.Split(":")[1]);
 
             return min * 60 + sec;
+        }
+
+        private static string GetAlbumArtUrl(string songName, string songAlbum, string songArtist) {
+            var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
+            var web = new HtmlWeb();
+            var doc = web.Load(url);
+            var list = doc.DocumentNode
+                .Descendants("ul")
+                .Where(x => x.Attributes["class"].Value.Contains("grid--top-results"))
+                .ToList();
+
+            var imgSources = list[0].ChildNodes[0]
+                .Descendants("source")
+                .Where(x => x.Attributes["type"].Value == "image/jpeg")
+                .ToList();
+
+            var x = imgSources[0].Attributes["srcset"].Value;
+            return x.Split(' ')[0];
         }
     }
 }

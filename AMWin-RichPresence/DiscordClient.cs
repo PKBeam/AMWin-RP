@@ -28,8 +28,8 @@ internal class AppleMusicDiscordClient {
             Details = $"{amInfo.SongName}",
             State = $"{amInfo.SongSubTitle}",
             Assets = new Assets() {
-                LargeImageKey = Constants.DiscordLargeImageKey,
-                SmallImageKey = Constants.DiscordSmallImageKey
+                LargeImageKey = amInfo.CoverArtUrl,
+                SmallImageKey = Constants.DiscordAppleMusicImageKey
             }
         };
 
