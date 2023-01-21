@@ -19,7 +19,7 @@ namespace AMWin_RichPresence {
         public string   SongArtist;
         public DateTime PlaybackStart;
         public DateTime PlaybackEnd;
-        public string   CoverArtUrl;
+        public string?  CoverArtUrl;
 
         public static AppleMusicInfo NoSong() {
             var amInfo = new AppleMusicInfo();
@@ -157,22 +157,27 @@ namespace AMWin_RichPresence {
             return min * 60 + sec;
         }
 
-        private static string GetAlbumArtUrl(string songName, string songAlbum, string songArtist) {
+        private static string? GetAlbumArtUrl(string songName, string songAlbum, string songArtist) {
             var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
             var web = new HtmlWeb();
             var doc = web.Load(url);
-            var list = doc.DocumentNode
-                .Descendants("ul")
-                .Where(x => x.Attributes["class"].Value.Contains("grid--top-results"))
-                .ToList();
 
-            var imgSources = list[0].ChildNodes[0]
-                .Descendants("source")
-                .Where(x => x.Attributes["type"].Value == "image/jpeg")
-                .ToList();
+            try {
+                var list = doc.DocumentNode
+                    .Descendants("ul")
+                    .Where(x => x.Attributes["class"].Value.Contains("grid--top-results"))
+                    .ToList();
 
-            var x = imgSources[0].Attributes["srcset"].Value;
-            return x.Split(' ')[0];
+                var imgSources = list[0].ChildNodes[0]
+                    .Descendants("source")
+                    .Where(x => x.Attributes["type"].Value == "image/jpeg")
+                    .ToList();
+
+                var x = imgSources[0].Attributes["srcset"].Value;
+                return x.Split(' ')[0];
+            } catch {
+                return null;
+            }
         }
     }
 }
