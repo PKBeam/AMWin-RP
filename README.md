@@ -13,7 +13,7 @@ Releases can be found [here](https://github.com/PKBeam/AMWin-RP/releases).
 
 If you have (or are able to install) the [.NET 7.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0), you can download the `NoRuntime` release.
 
-Otherwise, download the other unlabelled release. This release is larger in size as it bundles the necessary components of .NET 7.
+Otherwise, download the other release (the one that isn't labelled as `NoRuntime`). This release is larger in size as it bundles the necessary components of .NET 7.
 
 ## Usage
 
