@@ -19,6 +19,20 @@ namespace AMWin_RichPresence {
 
         public App() {
             mainWindow = new MainWindow();
+
+            // start Discord RPC
+            discordClient = new(Constants.DiscordClientID, enabled: false);
+
+            // start scraper
+            amScraper = new(Constants.RefreshPeriod, (newInfo) => {
+                // disable RPC when Apple Music is paused or not open
+                if (newInfo != null && !((AppleMusicInfo)newInfo).IsPaused) {
+                    discordClient.Enable();
+                    discordClient.SetPresence((AppleMusicInfo)newInfo);
+                } else {
+                    discordClient.Disable();
+                }
+            });
         }
         
         protected override void OnStartup(StartupEventArgs e) {
@@ -30,21 +44,6 @@ namespace AMWin_RichPresence {
             // bind commands to context menu
             var contextMenu = taskbarIcon.ContextMenu;
             BindContextMenuActions(contextMenu);
-
-            // start Discord RPC
-            discordClient = new(Constants.DiscordClientID, enabled: false);
-
-            // start scraper
-            amScraper = new(Constants.RefreshPeriod, (newInfo) => {
-                // disable RPC when Apple Music is paused or not open
-                if (newInfo != null && !((AppleMusicInfo)newInfo).IsPaused) {   
-                    discordClient.Enable();
-                    discordClient.SetPresence((AppleMusicInfo)newInfo);
-                } else {
-                    discordClient.Disable();
-                }
-            });
-
         }
         protected override void OnExit(ExitEventArgs e) {
             taskbarIcon?.Dispose();

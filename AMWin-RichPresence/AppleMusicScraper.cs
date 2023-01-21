@@ -64,6 +64,7 @@ namespace AMWin_RichPresence {
 
             timer = new Timer(refreshPeriodInSec * 1000);
             timer.Elapsed += Refresh;
+            Refresh(this, null);
             timer.Start();
         }
 

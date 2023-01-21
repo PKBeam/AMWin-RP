@@ -6,6 +6,7 @@
     <RootNamespace>AMWin_RichPresence</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\AppleMusicTray.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

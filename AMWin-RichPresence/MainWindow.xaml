@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AMWin_RichPresence"
         mc:Ignorable="d"
+        Icon="/Resources/AppleMusicTray.ico"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
 
