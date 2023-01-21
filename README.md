@@ -3,8 +3,19 @@ A Discord Rich Presence client for Apple Music's native Windows app.
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total)
 
+![image](https://user-images.githubusercontent.com/18737124/213859546-a49d3928-c72f-49b1-91fa-130d95b0d06c.png)
+
 ## Installation
 
-This app uses .NET 7. If you have (or are able to install) the [.NET 7.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0), you can download the `NoRuntime` release.
+Releases can be found [here](https://github.com/PKBeam/AMWin-RP/releases).
+
+If you have (or are able to install) the [.NET 7.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0), you can download the `NoRuntime` release.
 
 Otherwise, download the other unlabelled release. This release is larger in size as it bundles the necessary components of .NET 7.
+
+## Usage
+
+The app runs in the background, minimised to the system tray. 
+
+It can be closed by right-clicking on the tray icon and selecting "Exit".
+
