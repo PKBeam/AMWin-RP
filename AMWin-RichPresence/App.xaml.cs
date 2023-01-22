@@ -26,7 +26,7 @@ namespace AMWin_RichPresence {
             // start scraper
             amScraper = new(Constants.RefreshPeriod, (newInfo) => {
                 // disable RPC when Apple Music is paused or not open
-                if (newInfo != null && !((AppleMusicInfo)newInfo).IsPaused) {
+                if (newInfo != null && ((AppleMusicInfo)newInfo).HasSong && !((AppleMusicInfo)newInfo).IsPaused) {
                     discordClient.Enable();
                     discordClient.SetPresence((AppleMusicInfo)newInfo);
                 } else {
