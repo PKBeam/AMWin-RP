@@ -7,14 +7,16 @@
         xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
         mc:Ignorable="d"
         Icon="/Resources/AppleMusicTray.ico"
-        Title="AMWin-RichPresence" Height="170" Width="320" ResizeMode="NoResize">
+        Title="AMWin-RichPresence" Height="185" Width="320" ResizeMode="NoResize">
     <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <DockPanel>
-            <Border DockPanel.Dock="Top" Height="48" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
+            <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="/Resources/AppleMusic64x.png" Width="32"/>
-                    <TextBlock Margin="7 0 0 3" VerticalAlignment="Center" FontSize="20">AMWin-Rich Presence</TextBlock>
-                    <TextBlock x:Name="TextBlock_VersionString" Margin="10 0 0 5" VerticalAlignment="Bottom" FontSize="11">v0.1.1</TextBlock>
+                    <Image Margin="0 0 10 0" Source="/Resources/AppleMusic64x.png"/>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" FontSize="18">AMWin-Rich Presence</TextBlock>
+                        <TextBlock x:Name="TextBlock_VersionString" VerticalAlignment="Bottom" FontSize="11">v1.0.0-dev</TextBlock>
+                    </StackPanel>
                 </StackPanel>
             </Border>
             <Border Padding="15" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">

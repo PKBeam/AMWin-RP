@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.IO;
 
 namespace AMWin_RichPresence {
     internal static class Constants {
-        private static string ProgramVersionBase = "v0.2.0";
+        private static Assembly assembly = Assembly.GetExecutingAssembly();
+        private static FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+        private static string ProgramVersionBase = $"v{fvi.FileVersion}";
 #if DEBUG
         public static string  ProgramVersion = $"{ProgramVersionBase}-dev";
 #else

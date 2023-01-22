@@ -13,6 +13,7 @@ namespace AMWin_RichPresence {
     public partial class SettingsWindow : Window {
         public SettingsWindow() {
             InitializeComponent();
+            TextBlock_VersionString.Text = Constants.ProgramVersion;
         }
 
         private void CheckBox_RunOnStartup_Click(object sender, RoutedEventArgs e) {
