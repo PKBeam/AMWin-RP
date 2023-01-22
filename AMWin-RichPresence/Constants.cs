@@ -5,9 +5,17 @@ using System.IO;
 
 namespace AMWin_RichPresence {
     internal static class Constants {
-        private static Assembly assembly = Assembly.GetExecutingAssembly();
-        private static FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-        private static string ProgramVersionBase = $"v{fvi.FileVersion}";
+        private static string ProgramVersionBase {
+            get {
+                try {
+                    Assembly assembly = Assembly.GetExecutingAssembly();
+                    FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+                    return $"v{fvi.FileVersion}";
+                } catch {
+                    return "";
+                }
+            }
+        } 
 #if DEBUG
         public static string  ProgramVersion = $"{ProgramVersionBase}-dev";
 #else

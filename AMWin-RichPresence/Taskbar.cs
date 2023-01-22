@@ -12,8 +12,8 @@ namespace AMWin_RichPresence {
 
         private void ShowWindow() {
             try { 
-                settingsWindow.Show(); 
-                settingsWindow.Focus();
+                settingsWindow!.Show(); 
+                settingsWindow!.Focus();
             } catch (Exception e) when (e is NullReferenceException || e is InvalidOperationException) { 
                 settingsWindow = new SettingsWindow(); 
                 settingsWindow.Show();
