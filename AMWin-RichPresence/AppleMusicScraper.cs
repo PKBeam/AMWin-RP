@@ -159,45 +159,50 @@ namespace AMWin_RichPresence {
         }
 
         private static string? GetAlbumArtUrl(string songName, string songAlbum, string songArtist) {
+
+            // search on the Apple Music website for the song
             var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
             var web = new HtmlWeb();
-            var doc = web.Load(url);
-
+            var doc = web.Load(HttpUtility.HtmlEncode(url));
+            
             try {
+
+                // scrape search results
                 var list = doc.DocumentNode
                     .Descendants("ul")
                     .Where(x => x.Attributes["class"].Value.Contains("grid--top-results"))
                     .ToList();
 
-                var firstResult = list[0].ChildNodes[0];
+                // try each result until we find one that looks correct
+                foreach (var result in list[0].ChildNodes) {
 
-                var imgSources = firstResult
-                    .Descendants("source")
-                    .Where(x => x.Attributes["type"].Value == "image/jpeg")
-                    .ToList();
+                    var imgSources = result
+                        .Descendants("source")
+                        .Where(x => x.Attributes["type"].Value == "image/jpeg")
+                        .ToList();
 
-                var x = imgSources[0].Attributes["srcset"].Value;
+                    var x = imgSources[0].Attributes["srcset"].Value;
 
-                var searchResultTitle = firstResult
-                    .Descendants("li")
-                    .First(x => x.Attributes["data-testid"].Value == "top-search-result-title")
-                    .InnerHtml;
+                    var searchResultTitle = result
+                        .Descendants("li")
+                        .First(x => x.Attributes["data-testid"].Value == "top-search-result-title")
+                        .InnerHtml;
 
-                var searchResultSubtitle = firstResult
-                    .Descendants("li")
-                    .First(x => x.Attributes["data-testid"].Value == "top-search-result-subtitle")
-                    .InnerHtml;
+                    var searchResultSubtitle = result
+                        .Descendants("li")
+                        .First(x => x.Attributes["data-testid"].Value == "top-search-result-subtitle")
+                        .InnerHtml;
 
-                // need to decode html to avoid instances like "&amp;"
-                searchResultTitle = HttpUtility.HtmlDecode(searchResultTitle);
-                searchResultSubtitle = HttpUtility.HtmlDecode(searchResultSubtitle);
+                    // need to decode html to avoid instances like "&amp;" instead of "&"
+                    searchResultTitle = HttpUtility.HtmlDecode(searchResultTitle);
+                    searchResultSubtitle = HttpUtility.HtmlDecode(searchResultSubtitle);
 
-                // check that the first result actually is the song
-                if (searchResultTitle == songName && searchResultSubtitle.Contains(songArtist)) {
-                    return x.Split(' ')[0];
-                } else {
-                    return null;
+                    // check that the first result actually is the song
+                    if (searchResultTitle == songName && searchResultSubtitle.StartsWith("Song") && searchResultSubtitle.EndsWith(songArtist)) {
+                        return x.Split(' ')[0];
+                    } 
                 }
+                return null;
             } catch {
                 return null;
             }
