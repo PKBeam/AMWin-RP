@@ -1,10 +1,10 @@
-﻿using HtmlAgilityPack;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Timers;
 using System.Windows.Automation;
 using System.Web;
+using HtmlAgilityPack;
 
 namespace AMWin_RichPresence {
 
@@ -68,7 +68,7 @@ namespace AMWin_RichPresence {
             timer.Start();
         }
 
-        public void Refresh(Object? source, ElapsedEventArgs e) {
+        public void Refresh(Object? source, ElapsedEventArgs? e) {
             if (appleMusicWindow == null) {
                 FindAppleMusicWindow();
             } 

@@ -1,32 +1,53 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using AMWin_RichPresence;
 using DiscordRPC;
-using DiscordRPC.Logging;
 
 internal class AppleMusicDiscordClient {
+    public enum RPSubtitleDisplayOptions {
+        ArtistAlbum = 0, ArtistOnly = 1, AlbumOnly = 2
+    }
+
+    public static RPSubtitleDisplayOptions SubtitleOptionFromIndex(int i) {
+        return (RPSubtitleDisplayOptions)i;
+    }
+
+    public RPSubtitleDisplayOptions subtitleOptions;
     DiscordRpcClient? client;
     string discordClientID;
     bool enabled = false;
-    public AppleMusicDiscordClient(string discordClientID, bool enabled = true) {
+
+    public AppleMusicDiscordClient(string discordClientID, bool enabled = true, RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistAlbum) {
         this.discordClientID = discordClientID;
         this.enabled = enabled;
+        this.subtitleOptions = subtitleOptions;
 
         if (enabled) {
             InitClient();
         }
     }
 
-    public void SetPresence() {
-        SetPresence(AppleMusicInfo.NoSong());
-    }
     public void SetPresence(AppleMusicInfo amInfo) {
-        if (!enabled) {
+        if (!enabled || !amInfo.HasSong) {
             return;
         }
+
+        // pick the subtitle format to show
+        var subtitle = "";
+        switch (subtitleOptions) {
+            case RPSubtitleDisplayOptions.ArtistAlbum:
+                subtitle = $"{amInfo.SongSubTitle}";
+                break;
+            case RPSubtitleDisplayOptions.ArtistOnly:
+                subtitle = $"{amInfo.SongArtist}";
+                break;
+            case RPSubtitleDisplayOptions.AlbumOnly:
+                subtitle = $"{amInfo.SongAlbum}";
+                break;
+        }
+
         var rp = new RichPresence() {
             Details = $"{amInfo.SongName}",
-            State = $"{amInfo.SongSubTitle}",
+            State = subtitle,
             Assets = new Assets() {
                 LargeImageKey = amInfo.CoverArtUrl ?? Constants.DiscordAppleMusicImageKey,
                 SmallImageKey = (amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey
@@ -39,7 +60,7 @@ internal class AppleMusicDiscordClient {
 
         client?.SetPresence(rp);
 
-        Trace.WriteLine($"Set Discord RP to:\n{amInfo}");
+        Trace.WriteLine($"Set Discord RP to:\n{amInfo}\n");
     }
     public void Enable() {
         if (enabled) {
@@ -57,7 +78,7 @@ internal class AppleMusicDiscordClient {
         DeinitClient();
     }
     private void InitClient() {
-        client = new DiscordRpcClient(discordClientID, logger : new ConsoleLogger());
+        client = new DiscordRpcClient(discordClientID);
         client.Initialize();
     }
     private void DeinitClient() {

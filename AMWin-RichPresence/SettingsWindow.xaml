@@ -1,0 +1,47 @@
+﻿<Window x:Class="AMWin_RichPresence.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AMWin_RichPresence"
+        xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
+        mc:Ignorable="d"
+        Icon="/Resources/AppleMusicTray.ico"
+        Title="AMWin-RichPresence" Height="170" Width="320" ResizeMode="NoResize">
+    <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+        <DockPanel>
+            <Border DockPanel.Dock="Top" Height="48" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Resources/AppleMusic64x.png" Width="32"/>
+                    <TextBlock Margin="7 0 0 3" VerticalAlignment="Center" FontSize="20">AMWin-Rich Presence</TextBlock>
+                    <TextBlock x:Name="TextBlock_VersionString" Margin="10 0 0 5" VerticalAlignment="Bottom" FontSize="11">v0.1.1</TextBlock>
+                </StackPanel>
+            </Border>
+            <Border Padding="15" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0">Run when Windows starts</TextBlock>
+                        <CheckBox x:Name="CheckBox_RunOnStartup" Grid.Row="0" Grid.Column="1" Margin="0 1 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=RunOnStartup, Mode=TwoWay}" Click="CheckBox_RunOnStartup_Click"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">Rich Presence subtitle</TextBlock>
+                        <ComboBox x:Name="ComboBox_RPSubtitleChoice" Grid.Row="1" Grid.Column="1" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPSubtitleChoice, Mode=TwoWay}" SelectionChanged="ComboBox_RPSubtitleChoice_SelectionChanged">
+                            <!-- The order of these items matters! (check the enum in AppleMusicDiscordClient.cs) -->
+                            <ComboBoxItem>Artist and album</ComboBoxItem>
+                            <ComboBoxItem>Artist only</ComboBoxItem>
+                            <ComboBoxItem>Album only</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </DockPanel>
+    </Grid>
+</Window>
