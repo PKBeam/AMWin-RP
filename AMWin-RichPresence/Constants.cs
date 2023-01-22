@@ -8,8 +8,8 @@ namespace AMWin_RichPresence {
         private static string ProgramVersionBase {
             get {
                 try {
-                    Assembly assembly = Assembly.GetExecutingAssembly();
-                    FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+                    var exePath = Process.GetCurrentProcess().MainModule.FileName;
+                    FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(exePath);
                     return $"v{fvi.FileVersion}";
                 } catch {
                     return "";
