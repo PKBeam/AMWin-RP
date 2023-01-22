@@ -5,6 +5,7 @@ using System.Timers;
 using System.Windows.Automation;
 using System.Web;
 using HtmlAgilityPack;
+using System.Net.Http;
 
 namespace AMWin_RichPresence {
 
@@ -162,9 +163,11 @@ namespace AMWin_RichPresence {
 
             // search on the Apple Music website for the song
             var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
-            var web = new HtmlWeb();
-            var doc = web.Load(HttpUtility.HtmlEncode(url));
-            
+            var client = new HttpClient();
+            var res = client.GetStringAsync(url).Result;
+            HtmlDocument doc = new HtmlDocument(); 
+            doc.LoadHtml(res); 
+
             try {
 
                 // scrape search results
@@ -198,7 +201,7 @@ namespace AMWin_RichPresence {
                     searchResultSubtitle = HttpUtility.HtmlDecode(searchResultSubtitle);
 
                     // check that the first result actually is the song
-                    if (searchResultTitle == songName && searchResultSubtitle.StartsWith("Song") && searchResultSubtitle.EndsWith(songArtist)) {
+                    if (searchResultTitle == songName && searchResultSubtitle == $"Song · {songArtist}") {
                         return x.Split(' ')[0];
                     } 
                 }
