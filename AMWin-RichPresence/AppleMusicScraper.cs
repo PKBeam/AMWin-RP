@@ -53,47 +53,41 @@ namespace AMWin_RichPresence {
 
         Timer timer;
 
-        // if null, Apple Music is not open
-        AppleMusicInfo? amInfo;
-
-        AutomationElement? appleMusicWindow;
-        
         RefreshHandler refreshHandler;
 
         public AppleMusicScraper(int refreshPeriodInSec, RefreshHandler refreshHandler) {
             this.refreshHandler = refreshHandler;
-
             timer = new Timer(refreshPeriodInSec * 1000);
             timer.Elapsed += Refresh;
             Refresh(this, null);
             timer.Start();
         }
 
-        public void Refresh(Object? source, ElapsedEventArgs? e) {
-            if (appleMusicWindow == null) {
-                FindAppleMusicWindow();
-            } 
-            amInfo = GetAppleMusicInfo();
-            refreshHandler(amInfo);
-        }
-    
+        public void Refresh(object? source, ElapsedEventArgs? e) {
+            AppleMusicInfo? appleMusicInfo = null;
+            AutomationElement? appleMusicWindow;
 
-        public void FindAppleMusicWindow() {
+            appleMusicWindow = FindAppleMusicWindow();
+            if (appleMusicWindow != null) {
+                appleMusicInfo = GetAppleMusicInfo(appleMusicWindow);
+            }
+            refreshHandler(appleMusicInfo);
+        }
+
+        public static AutomationElement? FindAppleMusicWindow() {
             var allWindows = AutomationElement.RootElement.FindAll(TreeScope.Children, Condition.TrueCondition);
             foreach (AutomationElement element in allWindows) {
                 var elementProperties = element.Current;
                 // TODO - How do we tell it's the actual Windows-native Apple Music application and not some other one?
                 if (elementProperties.Name == "Apple Music" && elementProperties.ClassName == "WinUIDesktopWin32WindowClass") {
-                    appleMusicWindow = element;
+                    return element;
                 }
             }
+            return null;
         }
 
-        public AppleMusicInfo? GetAppleMusicInfo() {
-            if (appleMusicWindow == null) {
-                return null;
-            }
-            var amWindow = appleMusicWindow;
+        public static AppleMusicInfo? GetAppleMusicInfo(AutomationElement amWindow) {
+
             var amWinChild = amWindow.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.NameProperty, "DesktopChildSiteBridge"));
             var songFields = amWinChild.FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
 
@@ -146,7 +140,7 @@ namespace AMWin_RichPresence {
         }
 
         // e.g. parse "-1:30" to 90 seconds
-        private int ParseTimeString(string time) {
+        private static int ParseTimeString(string time) {
 
             // remove leading "-"
             if (time.Contains('-')) {
