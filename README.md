@@ -1,4 +1,4 @@
-# AMWin-RP
+# AMWin-RP-Scrobbler
 A Discord Rich Presence client for Apple Music's native Windows app.  
 
 ![GitHub all releases](https://img.shields.io/github/downloads/PKBeam/AMWin-RP/total)
@@ -10,13 +10,7 @@ A Discord Rich Presence client for Apple Music's native Windows app.
 
 ## Installation
 
-Releases can be found [here](https://github.com/PKBeam/AMWin-RP/releases).
-
-If you have (or are able to install) the [.NET 7.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0), you can download the `NoRuntime` release.
-
-Otherwise, download the other release (the one that isn't labelled as `NoRuntime`).  
-This release is larger in size as it bundles the components of .NET 7.0 that are needed for the app to run.
-
+Coming soon.
 ## Usage
 Only the [Microsoft store version](https://apps.microsoft.com/store/detail/apple-music-preview/9PFHDD62MXS1) of Apple Music is supported.  
 There's no support for iTunes, Apple Music via WSA, or any third-party players.
@@ -47,4 +41,6 @@ The other problem is getting the song's cover art.
 
 We can't use UI Automation to get the image being displayed in the window (as far as I know). Instead we send an HTTP request to the Apple Music website, where we try to search for the song and grab the cover image URL from there. It's not ideal but gives us what we're looking for most of the time.
 
+## Scrobbling
 
+Coming soon.
