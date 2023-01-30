@@ -46,5 +46,41 @@ namespace AMWin_RichPresence.Properties {
                 this["RPSubtitleChoice"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastfmAPIKey {
+            get {
+                return ((string)(this["LastfmAPIKey"]));
+            }
+            set {
+                this["LastfmAPIKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastfmSecret {
+            get {
+                return ((string)(this["LastfmSecret"]));
+            }
+            set {
+                this["LastfmSecret"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastfmUsername {
+            get {
+                return ((string)(this["LastfmUsername"]));
+            }
+            set {
+                this["LastfmUsername"] = value;
+            }
+        }
     }
 }
