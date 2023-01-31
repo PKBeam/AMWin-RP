@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -66,20 +67,29 @@ namespace AMWin_RichPresence {
             // Store the actual password to the Credential Manager.  Not as good as true Last.FM tokenized authentication,
             //       but better than storing plain-text password in config file
             //       https://stackoverflow.com/questions/32548714/how-to-store-and-retrieve-credentials-on-windows-using-c-sharp
-            using (var cred = new SecureCredential())
+            try
             {
+                using (var cred = new SecureCredential())
+                {
 
-                cred.SecurePassword = ConvertToSecureString(LastfmPassword.Password);
-                cred.Target = Constants.LastFMCredentialTargetName;
-                cred.Type = CredentialType.Generic;
-                cred.PersistanceType = PersistanceType.LocalComputer;
-                cred.Save();
+                    cred.SecurePassword = ConvertToSecureString(LastfmPassword.Password);
+                    cred.Target = Constants.LastFMCredentialTargetName;
+                    cred.Type = CredentialType.Generic;
+                    cred.PersistanceType = PersistanceType.LocalComputer;
+                    cred.Save();
+                }
             }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+                Trace.WriteLine(ex.StackTrace);
 
+            }
             SaveSettings(); // The other three values are just stored in Settings
 
             // Signals the LastFM Scrobbler to re-init with new credentials
             ((App)Application.Current).UpdateLastfmCreds();
+            Close();
         }
 
         private SecureString ConvertToSecureString(string password)
@@ -94,11 +104,20 @@ namespace AMWin_RichPresence {
         public static string GetLastFMPassword()
         {
             // Read the stored password from Windows Credential Manager and use it to log into Last.FM
-            using (var cred = new SecureCredential())
+            try
             {
-                cred.Target = Constants.LastFMCredentialTargetName;
-                cred.Load();
-                return ToPlainString(cred.SecurePassword);
+                using (var cred = new SecureCredential())
+                {
+                    cred.Target = Constants.LastFMCredentialTargetName;
+                    cred.Load();
+                    return ToPlainString(cred.SecurePassword);
+                }
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.Message);
+                Trace.WriteLine(ex.StackTrace);
+                return String.Empty;
             }
         }
 

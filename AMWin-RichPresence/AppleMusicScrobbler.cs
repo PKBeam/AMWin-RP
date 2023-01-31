@@ -24,11 +24,16 @@ namespace AMWin_RichPresence
 
         public async void init()
         {
-            // Use the four pieces of information (API Key, API Secret, Username, Password) to log into Last.FM for Scrobbling
-            httpClient = new HttpClient();
-            lastfmAuth = new LastAuth(AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey, AMWin_RichPresence.Properties.Settings.Default.LastfmSecret);
-            await lastfmAuth.GetSessionTokenAsync(AMWin_RichPresence.Properties.Settings.Default.LastfmUsername, SettingsWindow.GetLastFMPassword());
-            lastFmScrobbler = new MemoryScrobbler(lastfmAuth, httpClient);
+            if (!String.IsNullOrEmpty(AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey) 
+                && !String.IsNullOrEmpty(AMWin_RichPresence.Properties.Settings.Default.LastfmSecret)
+                && !String.IsNullOrEmpty(AMWin_RichPresence.Properties.Settings.Default.LastfmUsername))
+            {
+                // Use the four pieces of information (API Key, API Secret, Username, Password) to log into Last.FM for Scrobbling
+                httpClient = new HttpClient();
+                lastfmAuth = new LastAuth(AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey, AMWin_RichPresence.Properties.Settings.Default.LastfmSecret);
+                await lastfmAuth.GetSessionTokenAsync(AMWin_RichPresence.Properties.Settings.Default.LastfmUsername, SettingsWindow.GetLastFMPassword());
+                lastFmScrobbler = new MemoryScrobbler(lastfmAuth, httpClient);
+            }
         }
 
         public IScrobbler? GetLastFmScrobbler()
