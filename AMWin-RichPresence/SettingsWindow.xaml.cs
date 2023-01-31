@@ -78,9 +78,8 @@ namespace AMWin_RichPresence {
 
             SaveSettings(); // The other three values are just stored in Settings
 
-            // Restart the app so that the Scrobbler will use new credentials:  https://stackoverflow.com/questions/3895188/restart-application-using-c-sharp
-            System.Windows.Forms.Application.Restart();
-            Application.Current.Shutdown();
+            // Signals the LastFM Scrobbler to re-init with new credentials
+            ((App)Application.Current).UpdateLastfmCreds();
         }
 
         private SecureString ConvertToSecureString(string password)

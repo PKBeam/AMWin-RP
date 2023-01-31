@@ -36,6 +36,15 @@ namespace AMWin_RichPresence
             return lastFmScrobbler;
         }
 
+        public void UpdateCreds()
+        {
+            httpClient = null;
+            lastfmAuth = null;
+            lastFmScrobbler = null;
+            init();
+        }
+
+
         public async void Scrobbleit(AppleMusicInfo info, IScrobbler? lastFmScrobbler)
         {
             // This gets called every five seconds (Constants.RefreshPeriod) when a song is playing. There are some rules before we want to scrobble.

@@ -46,5 +46,10 @@ namespace AMWin_RichPresence {
         internal void UpdateRPSubtitleDisplay(AppleMusicDiscordClient.RPSubtitleDisplayOptions newVal) {
             discordClient.subtitleOptions = newVal;
         }
+
+        internal void UpdateLastfmCreds()
+        {
+            scrobblerClient.UpdateCreds();
+        }
     }
 }
