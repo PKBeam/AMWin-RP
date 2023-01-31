@@ -28,7 +28,7 @@ If you like, you can set the app to automatically run when Windows starts. You c
 <hr/>
 
 ## Last.FM Scrobbling
-Scrobbling to Last.FM is supported.  You will need your own Last.FM API Key and Key Secret.  To generate one, go to https://www.last.fm/api and select "Get and API Account."  Use these two pieces of information along with your Last.FM username and password:
+Scrobbling to Last.FM is supported.  You will need your own Last.FM API Key and Key Secret.  To generate one, go to https://www.last.fm/api and select "Get an API Account."  Use these two pieces of information along with your Last.FM username and password:
 
 ![AMWin-RP-Scrobbler_Settings](https://user-images.githubusercontent.com/317772/215867741-2999591c-35eb-442a-a349-b8e9046634fb.png)
 
