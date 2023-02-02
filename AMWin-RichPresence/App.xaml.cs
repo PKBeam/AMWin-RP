@@ -12,7 +12,6 @@ namespace AMWin_RichPresence {
         private AppleMusicScraper amScraper;
         private AppleMusicDiscordClient discordClient;
         private AppleMusicScrobbler scrobblerClient;
-
         public App() {
 
             // start Discord RPC
@@ -25,7 +24,7 @@ namespace AMWin_RichPresence {
                 // disable RPC when Apple Music is paused or not open
                 if (newInfo != null && ((AppleMusicInfo)newInfo).HasSong && !((AppleMusicInfo)newInfo).IsPaused) {
                     discordClient.Enable();
-                    discordClient.SetPresence((AppleMusicInfo)newInfo);
+                    discordClient.SetPresence((AppleMusicInfo)newInfo, AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon);
                     scrobblerClient.Scrobbleit((AppleMusicInfo)newInfo, scrobblerClient.GetLastFmScrobbler());
                 } else {
                     discordClient.Disable();
@@ -47,8 +46,7 @@ namespace AMWin_RichPresence {
             discordClient.subtitleOptions = newVal;
         }
 
-        internal void UpdateLastfmCreds()
-        {
+        internal void UpdateLastfmCreds() {
             scrobblerClient.UpdateCreds();
         }
     }

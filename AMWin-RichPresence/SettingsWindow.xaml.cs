@@ -29,6 +29,11 @@ namespace AMWin_RichPresence {
 
             SaveSettings();
         }
+
+        private void CheckBox_ShowAppleMusicIcon_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
         private void ComboBox_RPSubtitleChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var newOption = AppleMusicDiscordClient.SubtitleOptionFromIndex(ComboBox_RPSubtitleChoice.SelectedIndex);
             ((App)Application.Current).UpdateRPSubtitleDisplay(newOption);
@@ -89,7 +94,7 @@ namespace AMWin_RichPresence {
 
             // Signals the LastFM Scrobbler to re-init with new credentials
             ((App)Application.Current).UpdateLastfmCreds();
-            Close();
+           // Close();
         }
 
         private SecureString ConvertToSecureString(string password)
@@ -126,6 +131,5 @@ namespace AMWin_RichPresence {
             String plainStr = new System.Net.NetworkCredential(string.Empty, secureStr).Password;
             return plainStr;
         }
-
     }
 }

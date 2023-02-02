@@ -82,5 +82,17 @@ namespace AMWin_RichPresence.Properties {
                 this["LastfmUsername"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowAppleMusicIcon {
+            get {
+                return ((bool)(this["ShowAppleMusicIcon"]));
+            }
+            set {
+                this["ShowAppleMusicIcon"] = value;
+            }
+        }
     }
 }

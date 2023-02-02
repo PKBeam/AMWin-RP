@@ -26,7 +26,7 @@ internal class AppleMusicDiscordClient {
         }
     }
 
-    public void SetPresence(AppleMusicInfo amInfo) {
+    public void SetPresence(AppleMusicInfo amInfo, bool showSmallImage) {
         if (!enabled || !amInfo.HasSong) {
             return;
         }
@@ -50,9 +50,13 @@ internal class AppleMusicDiscordClient {
             State = subtitle,
             Assets = new Assets() {
                 LargeImageKey = amInfo.CoverArtUrl ?? Constants.DiscordAppleMusicImageKey,
-                SmallImageKey = (amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey
+                LargeImageText = amInfo.SongSubTitle
             }
         };
+
+        if (showSmallImage) {
+            rp.Assets.SmallImageKey = (amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey;
+        }
 
         if (!amInfo.IsPaused) {
             rp = rp.WithTimestamps(new Timestamps(amInfo.PlaybackStart, amInfo.PlaybackEnd));
