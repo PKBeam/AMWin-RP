@@ -11,11 +11,14 @@ namespace AMWin_RichPresence {
         private TaskbarIcon? taskbarIcon;
         private AppleMusicScraper amScraper;
         private AppleMusicDiscordClient discordClient;
-        
+        private AppleMusicScrobbler scrobblerClient;
+
         public App() {
 
             // start Discord RPC
             discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: (AppleMusicDiscordClient.RPSubtitleDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPSubtitleChoice);
+            scrobblerClient = new AppleMusicScrobbler();
+            scrobblerClient.init();
 
             // start scraper
             amScraper = new(Constants.RefreshPeriod, (newInfo) => {
@@ -23,6 +26,7 @@ namespace AMWin_RichPresence {
                 if (newInfo != null && ((AppleMusicInfo)newInfo).HasSong && !((AppleMusicInfo)newInfo).IsPaused) {
                     discordClient.Enable();
                     discordClient.SetPresence((AppleMusicInfo)newInfo);
+                    scrobblerClient.Scrobbleit((AppleMusicInfo)newInfo, scrobblerClient.GetLastFmScrobbler());
                 } else {
                     discordClient.Disable();
                 }
@@ -41,6 +45,11 @@ namespace AMWin_RichPresence {
 
         internal void UpdateRPSubtitleDisplay(AppleMusicDiscordClient.RPSubtitleDisplayOptions newVal) {
             discordClient.subtitleOptions = newVal;
+        }
+
+        internal void UpdateLastfmCreds()
+        {
+            scrobblerClient.UpdateCreds();
         }
     }
 }

@@ -1,7 +1,6 @@
 # AMWin-RP
-A Discord Rich Presence client for Apple Music's native Windows app.  
+A Discord Rich Presence client for Apple Music's native Windows app.
 
-![GitHub all releases](https://img.shields.io/github/downloads/PKBeam/AMWin-RP/total)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total)
 
 ![image](https://user-images.githubusercontent.com/18737124/213901852-2620d316-afca-49e4-aee9-576c5a41d1bc.png)
@@ -27,6 +26,18 @@ In order for the rich presence to show, the Apple Music app must be open and cur
 If you like, you can set the app to automatically run when Windows starts. You can do this by double clicking on the tray icon and changing the settings.  
 
 <hr/>
+
+## Last.FM Scrobbling
+Scrobbling to Last.FM is supported.  You will need your own Last.FM API Key and Key Secret.  To generate one, go to https://www.last.fm/api and select "Get an API Account."  Use these two pieces of information along with your Last.FM username and password:
+
+![AMWin-RP-Scrobbler_Settings](https://user-images.githubusercontent.com/317772/215867741-2999591c-35eb-442a-a349-b8e9046634fb.png)
+
+The Last.FM password is stored in [Windows Credentials Manager](https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0) under your local Windows account.
+
+This Scrobbler implementation does not support offline Scrobbles, which means any songs you listen to while not connected to the Internet will be lost.
+
+<hr/>
+
 
 ## How does it work?
 

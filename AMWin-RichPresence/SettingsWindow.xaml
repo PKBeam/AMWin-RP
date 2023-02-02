@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
         mc:Ignorable="d"
         Icon="/Resources/AppleMusicTray.ico"
-        Title="AMWin-RichPresence" Height="185" Width="320" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="AMWin-RichPresence" Height="325" Width="480" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <DockPanel>
             <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
@@ -28,7 +28,13 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
-                            <RowDefinition/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0">Run when Windows starts</TextBlock>
@@ -41,6 +47,16 @@
                             <ComboBoxItem>Artist only</ComboBoxItem>
                             <ComboBoxItem>Album only</ComboBoxItem>
                         </ComboBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center">Last.FM API Key</TextBlock>
+                        <TextBox x:Name="LastfmAPIKey" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Margin="0,0,-121,0" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center">Last.FM API Secret</TextBlock>
+                        <TextBox x:Name="LastfmSecret" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap" Margin="0,0,-121,0" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center">Last.FM Username</TextBlock>
+                        <TextBox x:Name="LastfmUsername" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmUsername}" Grid.Row="4" Grid.Column="1" TextWrapping="Wrap" Margin="0,0,-121,0" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center">Last.FM Password</TextBlock>
+                        <PasswordBox x:Name="LastfmPassword" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" Margin="0,0,-121,0"/>
+                        <Button Grid.Column="1" Content="Button" HorizontalAlignment="Left" Margin="201,10,0,0" Grid.Row="6" VerticalAlignment="Top" Width="0"/>
+                        <Button x:Name="SaveLastFMCreds" Grid.Column="1" Content="Save Last.FM Credentials" Grid.Row="6" VerticalAlignment="Center" Margin="99,0,-120,0" Click="SaveLastFMCreds_Click"/>
                     </Grid>
                 </StackPanel>
             </Border>

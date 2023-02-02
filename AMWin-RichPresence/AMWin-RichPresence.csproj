@@ -20,6 +20,8 @@
     <PackageReference Include="DiscordRichPresence" Version="1.1.3.18" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+    <PackageReference Include="Inflatable.Lastfm" Version="1.2.0" />
+    <PackageReference Include="SecureCredentialManagement" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
