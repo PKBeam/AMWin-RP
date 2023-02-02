@@ -75,13 +75,17 @@ namespace AMWin_RichPresence {
         }
 
         public static AutomationElement? FindAppleMusicWindow() {
-            var allWindows = AutomationElement.RootElement.FindAll(TreeScope.Children, Condition.TrueCondition);
-            foreach (AutomationElement element in allWindows) {
-                var elementProperties = element.Current;
-                // TODO - How do we tell it's the actual Windows-native Apple Music application and not some other one?
-                if (elementProperties.Name == "Apple Music" && elementProperties.ClassName == "WinUIDesktopWin32WindowClass") {
-                    return element;
+            try {
+                var allWindows = AutomationElement.RootElement.FindAll(TreeScope.Children, Condition.TrueCondition);
+                foreach (AutomationElement element in allWindows) {
+                    var elementProperties = element.Current;
+                    // TODO - How do we tell it's the actual Windows-native Apple Music application and not some other one?
+                    if (elementProperties.Name == "Apple Music" && elementProperties.ClassName == "WinUIDesktopWin32WindowClass") {
+                        return element;
+                    }
                 }
+            } catch (ElementNotAvailableException) {
+                return null;
             }
             return null;
         }
