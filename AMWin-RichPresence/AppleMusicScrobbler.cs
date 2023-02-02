@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace AMWin_RichPresence
 {
@@ -32,6 +33,13 @@ namespace AMWin_RichPresence
                 httpClient = new HttpClient();
                 lastfmAuth = new LastAuth(AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey, AMWin_RichPresence.Properties.Settings.Default.LastfmSecret);
                 await lastfmAuth.GetSessionTokenAsync(AMWin_RichPresence.Properties.Settings.Default.LastfmUsername, SettingsWindow.GetLastFMPassword());
+
+                if (lastfmAuth.Authenticated) {
+                    MessageBox.Show("The Last.FM credentials were successfully authenticated.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
+                } else {
+                    MessageBox.Show("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
                 lastFmScrobbler = new MemoryScrobbler(lastfmAuth, httpClient);
             }
         }
@@ -59,6 +67,8 @@ namespace AMWin_RichPresence
             //
             // Important caveat:  this does not have any "Scrobbler queue" built in - so only real-time Scrobbling will work (no offline capability).  Fair trade-off
             //    until an official Scrobbler is released.
+
+
             try
             {
                 string thisSongID = info.SongArtist + info.SongName + info.SongAlbum;
