@@ -23,7 +23,7 @@ namespace AMWin_RichPresence
         private bool hasScrobbled;
 
 
-        public async void init()
+        public async void init(bool showMessageBoxOnSuccess = false)
         {
             if (!String.IsNullOrEmpty(AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey) 
                 && !String.IsNullOrEmpty(AMWin_RichPresence.Properties.Settings.Default.LastfmSecret)
@@ -35,9 +35,11 @@ namespace AMWin_RichPresence
                 await lastfmAuth.GetSessionTokenAsync(AMWin_RichPresence.Properties.Settings.Default.LastfmUsername, SettingsWindow.GetLastFMPassword());
 
                 if (lastfmAuth.Authenticated) {
-                    MessageBox.Show("The Last.FM credentials were successfully authenticated.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (showMessageBoxOnSuccess) {
+                        MessageBox.Show("The Last.FM credentials were successfully authenticated.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 } else {
-                    MessageBox.Show("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
                 lastFmScrobbler = new MemoryScrobbler(lastfmAuth, httpClient);
@@ -49,12 +51,12 @@ namespace AMWin_RichPresence
             return lastFmScrobbler;
         }
 
-        public void UpdateCreds()
+        public void UpdateCreds(bool showMessageBoxOnSuccess)
         {
             httpClient = null;
             lastfmAuth = null;
             lastFmScrobbler = null;
-            init();
+            init(showMessageBoxOnSuccess);
         }
 
 

@@ -46,8 +46,8 @@ namespace AMWin_RichPresence {
             discordClient.subtitleOptions = newVal;
         }
 
-        internal void UpdateLastfmCreds() {
-            scrobblerClient.UpdateCreds();
+        internal void UpdateLastfmCreds(bool showMessageBoxOnSuccess) {
+            scrobblerClient.UpdateCreds(showMessageBoxOnSuccess);
         }
     }
 }

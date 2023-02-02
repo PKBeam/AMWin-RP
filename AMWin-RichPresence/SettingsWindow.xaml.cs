@@ -93,7 +93,7 @@ namespace AMWin_RichPresence {
             SaveSettings(); // The other three values are just stored in Settings
 
             // Signals the LastFM Scrobbler to re-init with new credentials
-            ((App)Application.Current).UpdateLastfmCreds();
+            ((App)Application.Current).UpdateLastfmCreds(showMessageBoxOnSuccess: true);
            // Close();
         }
 
