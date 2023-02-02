@@ -1,7 +1,7 @@
 # AMWin-RP
 A Discord Rich Presence client for Apple Music's native Windows app.
 
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) 
 
 ![image](https://user-images.githubusercontent.com/18737124/213901852-2620d316-afca-49e4-aee9-576c5a41d1bc.png)
 
