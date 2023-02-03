@@ -1,5 +1,6 @@
 # AMWin-RP
-A Discord Rich Presence client for Apple Music's native Windows app.
+A Discord Rich Presence client for Apple Music's native Windows app.  
+Last.FM scrobbling is also supported!
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) 
 
