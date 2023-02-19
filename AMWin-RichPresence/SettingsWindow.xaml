@@ -51,9 +51,7 @@
                             <ComboBoxItem>Artist only</ComboBoxItem>
                             <ComboBoxItem>Album only</ComboBoxItem>
                         </ComboBox>
-
-                        <TextBlock Grid.Row="3" VerticalAlignment="Center" FontWeight="Bold" Padding="0 3 0 0">Last.FM settings</TextBlock>
-
+                        <TextBlock Grid.Row="3" VerticalAlignment="Center" FontWeight="Bold" Padding="0 3 0 0">Last.FM Settings</TextBlock>
                         <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">API Key</TextBlock>
                         <TextBox Grid.Row="4" Grid.Column="1" x:Name="LastfmAPIKey" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}" TextWrapping="Wrap" Margin="0,0,-121,0" FontFamily="Lucida Sans Typewriter" VerticalAlignment="Center"/>
                         <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">API Secret</TextBlock>

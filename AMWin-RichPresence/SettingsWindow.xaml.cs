@@ -33,7 +33,6 @@ namespace AMWin_RichPresence {
         private void CheckBox_ShowAppleMusicIcon_Click(object sender, RoutedEventArgs e)
         {
             SaveSettings();
-      
         }
 
         private void CheckBox_ScrobblePimaryOnly_Click(object sender, RoutedEventArgs e)
