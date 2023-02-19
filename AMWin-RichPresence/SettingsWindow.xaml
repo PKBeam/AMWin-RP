@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
         mc:Ignorable="d"
         Icon="/Resources/AppleMusicTray.ico"
-        Title="AMWin-RichPresence" Height="360" Width="440" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="AMWin-RichPresence" Height="400" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <DockPanel>
             <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
@@ -19,9 +19,9 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <Border Padding="15" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+            <Border Padding="15" Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" Height="307">
                 <StackPanel Orientation="Vertical">
-                    <Grid>
+                    <Grid Height="250" Width="408">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
                             <ColumnDefinition Width="120"/>
@@ -62,8 +62,10 @@
                         <TextBox Grid.Row="6" Grid.Column="1" x:Name="LastfmUsername" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmUsername}" TextWrapping="Wrap" Margin="0,0,-121,0" VerticalAlignment="Center"/>
                         <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">Password</TextBlock>
                         <PasswordBox Grid.Row="7" Grid.Column="1" x:Name="LastfmPassword" VerticalAlignment="Center" Margin="0,0,-121,0"/>
-                        <Button Grid.Row="8" Grid.Column="1" Content="Button" HorizontalAlignment="Left" Margin="201,10,0,0" VerticalAlignment="Top" Width="0"/>
-                        <Button Grid.Row="8" Grid.Column="1" x:Name="SaveLastFMCreds" Content="Save Last.FM Credentials" VerticalAlignment="Center" Margin="99,0,-121,0" Click="SaveLastFMCreds_Click"/>
+                        <TextBlock Grid.Row="8" Grid.Column="0" Margin="10,2,17,3" Grid.ColumnSpan="2">Scrobble only Primary Artist (EXPERIMENTAL)</TextBlock>
+                        <CheckBox Grid.Row="9" x:Name="CheckBox_scrobblePimaryOnly" Margin="103,2,-103,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=scrobbleOnlyPrimary, Mode=TwoWay}" Click="CheckBox_ScrobblePimaryOnly_Click" Grid.Column="1"/>
+                        <Button Grid.Row="9" Grid.Column="1" Content="Button" HorizontalAlignment="Left" Margin="201,10,0,0" VerticalAlignment="Top" Width="0"/>
+                        <Button Grid.Row="10" Grid.Column="1" x:Name="SaveLastFMCreds" Content="Save Last.FM Credentials" Margin="103,25,-125,-20" Click="SaveLastFMCreds_Click"/>
                     </Grid>
                 </StackPanel>
             </Border>

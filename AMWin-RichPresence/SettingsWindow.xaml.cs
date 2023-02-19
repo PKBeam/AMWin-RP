@@ -30,11 +30,19 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
-        private void CheckBox_ShowAppleMusicIcon_Click(object sender, RoutedEventArgs e) {
+        private void CheckBox_ShowAppleMusicIcon_Click(object sender, RoutedEventArgs e)
+        {
+            SaveSettings();
+      
+        }
+
+        private void CheckBox_ScrobblePimaryOnly_Click(object sender, RoutedEventArgs e)
+        {
             SaveSettings();
         }
 
-        private void ComboBox_RPSubtitleChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+            private void ComboBox_RPSubtitleChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var newOption = AppleMusicDiscordClient.SubtitleOptionFromIndex(ComboBox_RPSubtitleChoice.SelectedIndex);
             ((App)Application.Current).UpdateRPSubtitleDisplay(newOption);
 

@@ -94,5 +94,17 @@ namespace AMWin_RichPresence.Properties {
                 this["ShowAppleMusicIcon"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool scrobbleOnlyPrimary {
+            get {
+                return ((bool)(this["scrobbleOnlyPrimary"]));
+            }
+            set {
+                this["scrobbleOnlyPrimary"] = value;
+            }
+        }
     }
 }

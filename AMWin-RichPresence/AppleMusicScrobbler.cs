@@ -22,6 +22,10 @@ namespace AMWin_RichPresence
         private string? lastSongID;
         private bool hasScrobbled;
 
+        //for personal use not sure if better way of doing this
+        string[] exemptArtists = {"Tyler, The Creator", "nothing,nowhere."};
+
+
 
         public async void init(bool showMessageBoxOnSuccess = false)
         {
@@ -89,6 +93,14 @@ namespace AMWin_RichPresence
                     {
                         if (lastfmAuth != null && lastfmAuth.Authenticated)
                         {
+                            if (AMWin_RichPresence.Properties.Settings.Default.scrobbleOnlyPrimary == true && !exemptArtists.Contains(info.SongArtist))
+                            {
+                                //todo exemptions for artists containing & or comma (not exactly sure if possible without manually enetering artist names)
+                                string[] artists = info.SongArtist.Split('&', ',');
+                                string primaryArtist = artists[0].Trim();
+                                info.SongArtist = primaryArtist;
+                            }
+                            
                             Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Scrobbling: {1}", DateTime.UtcNow.ToString(), lastSongID));
                             var scrobble = new Scrobble(info.SongArtist, info.SongAlbum, info.SongName, DateTime.UtcNow);
                             var response = await lastFmScrobbler.ScrobbleAsync(scrobble);
