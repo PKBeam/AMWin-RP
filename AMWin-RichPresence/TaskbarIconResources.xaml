@@ -11,6 +11,6 @@
         <MenuItem Header="Exit" Click="MenuItemExit_Click"/>
     </ContextMenu>
 
-    <tb:TaskbarIcon x:Key="TaskbarIcon" ContextMenu="{StaticResource SysTrayMenu}" IconSource="/Resources/AppleMusicTray.ico" TrayMouseDoubleClick="TaskbarIcon_DoubleClick"/>
+    <tb:TaskbarIcon x:Key="TaskbarIcon" ContextMenu="{StaticResource SysTrayMenu}" IconSource="/Resources/AMWinRP.ico" TrayMouseDoubleClick="TaskbarIcon_DoubleClick"/>
 
 </ResourceDictionary>

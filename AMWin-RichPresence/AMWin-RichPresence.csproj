@@ -6,14 +6,18 @@
     <RootNamespace>AMWin_RichPresence</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Resources\AppleMusicTray.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\AMWinRP.ico</ApplicationIcon>
     <AssemblyVersion>1.0</AssemblyVersion>
-    <FileVersion>1.1.0</FileVersion>
+    <FileVersion>1.1.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\AppleMusic64x.png" />
-    <None Remove="Resources\AppleMusicTray.ico" />
+    <None Remove="Resources\AMWinRP-128x.png" />
+    <None Remove="Resources\AMWinRP.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\AMWinRP.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\AppleMusic64x.png" />
-    <Resource Include="Resources\AppleMusicTray.ico" />
+    <Resource Include="Resources\AMWinRP-128x.png" />
+    <Resource Include="Resources\AMWinRP.ico" />
   </ItemGroup>
 
   <ItemGroup>

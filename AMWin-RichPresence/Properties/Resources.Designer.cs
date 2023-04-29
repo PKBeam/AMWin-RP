@@ -61,22 +61,22 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Bitmap AppleMusic64x {
+        internal static System.Drawing.Icon AMWinRP {
             get {
-                object obj = ResourceManager.GetObject("AppleMusic64x", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("AMWinRP", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Icon AppleMusicTray {
+        internal static System.Drawing.Bitmap AMWinRP_128x {
             get {
-                object obj = ResourceManager.GetObject("AppleMusicTray", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                object obj = ResourceManager.GetObject("AMWinRP-128x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

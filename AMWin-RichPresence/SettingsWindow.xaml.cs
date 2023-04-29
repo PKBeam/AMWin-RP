@@ -29,6 +29,9 @@ namespace AMWin_RichPresence {
 
             SaveSettings();
         }
+        private void CheckBox_EnableDiscordRP_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
 
         private void CheckBox_ShowAppleMusicIcon_Click(object sender, RoutedEventArgs e) {
             SaveSettings();

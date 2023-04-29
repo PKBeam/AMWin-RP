@@ -50,7 +50,7 @@ namespace AMWin_RichPresence {
     internal class AppleMusicScraper {
 
         public delegate void RefreshHandler(AppleMusicInfo? newInfo);
-
+        
         Timer timer;
 
         RefreshHandler refreshHandler;
@@ -121,8 +121,8 @@ namespace AMWin_RichPresence {
             var currentTimeElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "CurrentTime"));
             var remainingDurationElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "Duration"));
             
-            var currentTime = ParseTimeString(currentTimeElement.Current.Name);
-            var remainingDuration = ParseTimeString(remainingDurationElement.Current.Name);
+            var currentTime = ParseTimeString(currentTimeElement?.Current.Name ?? "0:00");
+            var remainingDuration = ParseTimeString(remainingDurationElement?.Current.Name ?? "0:00");
 
             // check if the song is paused or not
             var playPauseButton = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportControl_PlayPauseStop"));

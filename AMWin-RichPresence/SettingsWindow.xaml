@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:AMWin_RichPresence"
         xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
         mc:Ignorable="d"
-        Icon="/Resources/AppleMusicTray.ico"
-        Title="AMWin-RichPresence" Height="360" Width="440" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Icon="/Resources/AMWinRP.ico"
+        Title="AMWin-RichPresence" Height="385" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <DockPanel>
             <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
                 <StackPanel Orientation="Horizontal">
-                    <Image Margin="0 0 10 0" Source="/Resources/AppleMusic64x.png"/>
+                    <Image Margin="0 0 10 0" Source="/Resources/AMWinRP-128x.png"/>
                     <StackPanel Orientation="Vertical">
                         <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" FontSize="18">AMWin-Rich Presence</TextBlock>
                         <TextBlock x:Name="TextBlock_VersionString" VerticalAlignment="Bottom" FontSize="11">v1.0.0-dev</TextBlock>
@@ -23,10 +23,11 @@
                 <StackPanel Orientation="Vertical">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="160"/>
                             <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
@@ -41,29 +42,36 @@
                         <TextBlock Grid.Row="0" Grid.Column="0">Run when Windows starts</TextBlock>
                         <CheckBox Grid.Row="0" Grid.Column="1" x:Name="CheckBox_RunOnStartup" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=RunOnStartup, Mode=TwoWay}" Click="CheckBox_RunOnStartup_Click"/>
 
-                        <TextBlock Grid.Row="1" Grid.Column="0">Apple Music icon in status</TextBlock>
-                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBox_ShowAppleMusicIcon" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowAppleMusicIcon, Mode=TwoWay}" Click="CheckBox_ShowAppleMusicIcon_Click"></CheckBox>
+                        <TextBlock Grid.Row="1" Grid.Column="0">Enable Discord Rich Presence</TextBlock>
+                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBox_EnableDiscordRP" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableDiscordRP, Mode=TwoWay}" Click="CheckBox_EnableDiscordRP_Click" HorizontalAlignment="Right" Width="120"/>
 
-                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 0 2">Rich Presence subtitle</TextBlock>
-                        <ComboBox Grid.Row="2" Grid.Column="1" x:Name="ComboBox_RPSubtitleChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPSubtitleChoice, Mode=TwoWay}" Height="22" SelectionChanged="ComboBox_RPSubtitleChoice_SelectionChanged">
+                        <TextBlock Grid.Row="2" Grid.Column="0">Apple Music icon in status</TextBlock>
+                        <CheckBox Grid.Row="2" Grid.Column="1" x:Name="CheckBox_ShowAppleMusicIcon" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowAppleMusicIcon, Mode=TwoWay}" Click="CheckBox_ShowAppleMusicIcon_Click"></CheckBox>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 0 2">Rich Presence subtitle</TextBlock>
+                        <ComboBox Grid.Row="3" Grid.Column="1" x:Name="ComboBox_RPSubtitleChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPSubtitleChoice, Mode=TwoWay}" Height="22" SelectionChanged="ComboBox_RPSubtitleChoice_SelectionChanged">
                             <!-- The order of these items matters! (check the enum in AppleMusicDiscordClient.cs) -->
                             <ComboBoxItem>Artist and album</ComboBoxItem>
                             <ComboBoxItem>Artist only</ComboBoxItem>
                             <ComboBoxItem>Album only</ComboBoxItem>
                         </ComboBox>
 
-                        <TextBlock Grid.Row="3" VerticalAlignment="Center" FontWeight="Bold" Padding="0 3 0 0">Last.FM settings</TextBlock>
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" FontWeight="Bold" Padding="0 3 0 0">Last.FM settings</TextBlock>
 
-                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">API Key</TextBlock>
-                        <TextBox Grid.Row="4" Grid.Column="1" x:Name="LastfmAPIKey" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}" TextWrapping="Wrap" Margin="0,0,-121,0" FontFamily="Lucida Sans Typewriter" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">API Secret</TextBlock>
-                        <TextBox Grid.Row="5" Grid.Column="1" x:Name="LastfmSecret" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}" TextWrapping="Wrap" Margin="0,0,-121,0" FontFamily="Lucida Sans Typewriter" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">Username</TextBlock>
-                        <TextBox Grid.Row="6" Grid.Column="1" x:Name="LastfmUsername" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmUsername}" TextWrapping="Wrap" Margin="0,0,-121,0" VerticalAlignment="Center"/>
-                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">Password</TextBlock>
-                        <PasswordBox Grid.Row="7" Grid.Column="1" x:Name="LastfmPassword" VerticalAlignment="Center" Margin="0,0,-121,0"/>
-                        <Button Grid.Row="8" Grid.Column="1" Content="Button" HorizontalAlignment="Left" Margin="201,10,0,0" VerticalAlignment="Top" Width="0"/>
-                        <Button Grid.Row="8" Grid.Column="1" x:Name="SaveLastFMCreds" Content="Save Last.FM Credentials" VerticalAlignment="Center" Margin="99,0,-121,0" Click="SaveLastFMCreds_Click"/>
+                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">API Key</TextBlock>
+                        <TextBox Grid.Row="5" Grid.Column="1" x:Name="LastfmAPIKey" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}" TextWrapping="Wrap" Margin="0,0,-121,0" FontFamily="Lucida Sans Typewriter" VerticalAlignment="Center"/>
+
+                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">API Secret</TextBlock>
+                        <TextBox Grid.Row="6" Grid.Column="1" x:Name="LastfmSecret" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}" TextWrapping="Wrap" Margin="0,0,-121,0" FontFamily="Lucida Sans Typewriter" VerticalAlignment="Center"/>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">Username</TextBlock>
+                        <TextBox Grid.Row="7" Grid.Column="1" x:Name="LastfmUsername" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmUsername}" TextWrapping="Wrap" Margin="0,0,-121,0" VerticalAlignment="Center"/>
+
+                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">Password</TextBlock>
+                        <PasswordBox Grid.Row="8" Grid.Column="1" x:Name="LastfmPassword" VerticalAlignment="Center" Margin="0,0,-121,0"/>
+
+                        <Button Grid.Row="9" Grid.Column="1" Content="Button" HorizontalAlignment="Left" Margin="201,10,0,0" VerticalAlignment="Top" Width="0"/>
+                        <Button Grid.Row="9" Grid.Column="1" x:Name="SaveLastFMCreds" Content="Save Last.FM Credentials" VerticalAlignment="Center" Margin="99,0,-121,0" Click="SaveLastFMCreds_Click"/>
                     </Grid>
                 </StackPanel>
             </Border>

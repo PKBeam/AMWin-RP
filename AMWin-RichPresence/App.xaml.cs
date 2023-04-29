@@ -15,14 +15,18 @@ namespace AMWin_RichPresence {
         public App() {
 
             // start Discord RPC
-            discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: (AppleMusicDiscordClient.RPSubtitleDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPSubtitleChoice);
+            var subtitleOptions = (AppleMusicDiscordClient.RPSubtitleDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPSubtitleChoice;
+            discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions);
+
+            // start Last.FM scrobbler
             scrobblerClient = new AppleMusicScrobbler();
             scrobblerClient.init();
 
-            // start scraper
+            // start Apple Music scraper
             amScraper = new(Constants.RefreshPeriod, (newInfo) => {
-                // disable RPC when Apple Music is paused or not open
-                if (newInfo != null && ((AppleMusicInfo)newInfo).HasSong && !((AppleMusicInfo)newInfo).IsPaused) {
+                bool userEnabledRP = AMWin_RichPresence.Properties.Settings.Default.EnableDiscordRP;
+                // disable RPC when requested by the user, and also when Apple Music is paused/not open
+                if (userEnabledRP && newInfo != null && ((AppleMusicInfo)newInfo).HasSong && !((AppleMusicInfo)newInfo).IsPaused) {
                     discordClient.Enable();
                     discordClient.SetPresence((AppleMusicInfo)newInfo, AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon);
                     scrobblerClient.Scrobbleit((AppleMusicInfo)newInfo, scrobblerClient.GetLastFmScrobbler());
