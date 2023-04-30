@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Timers;
 using System.Windows.Automation;
+using System.Windows.Automation.Provider;
 
 namespace AMWin_RichPresence {
 
@@ -25,10 +26,6 @@ namespace AMWin_RichPresence {
             return amInfo;
         }
 
-        public override int GetHashCode() {
-            return $"{SongName}{SongSubTitle}".GetHashCode();
-        }
-
         public override string ToString() {
             return $"""
                 AppleMusicInfo: 
@@ -50,13 +47,9 @@ namespace AMWin_RichPresence {
     internal class AppleMusicClientScraper {
 
         public delegate void RefreshHandler(AppleMusicInfo? newInfo);
-        
+     
         Timer timer;
-
         RefreshHandler refreshHandler;
-
-        int? currentSongID;
-        DateTime currentSongPlaybackStarted;
 
         public AppleMusicClientScraper(int refreshPeriodInSec, RefreshHandler refreshHandler) {
             this.refreshHandler = refreshHandler;
@@ -136,13 +129,6 @@ namespace AMWin_RichPresence {
             amInfo.SongArtist = songArtist;
             amInfo.SongAlbum = songAlbum;
 
-            // check if a new song just started playing
-            if (amInfo.GetHashCode() != currentSongID) {
-                // update currently playing song information
-                currentSongID = amInfo.GetHashCode();
-                currentSongPlaybackStarted = DateTime.Now;
-            }
-
             // ================================================
             //  Get song timestamps
             // ------------------------------------------------
@@ -150,26 +136,33 @@ namespace AMWin_RichPresence {
             var currentTimeElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "CurrentTime"));
             var remainingDurationElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "Duration"));
 
+            // grab the seek slider to check song playback progress
+            var songProgressElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCDScrubber"));
+            var songProgressSlider = songProgressElement.GetCurrentPattern(RangeValuePattern.Pattern) as RangeValuePattern;
+            var songProgressPercent = songProgressSlider.Current.Value / songProgressSlider.Current.Maximum;
+
+            // calculate song timestamps
             int currentTime;
             int remainingDuration;
 
             // if the timestamps are being hidden by Apple Music, we fall back to independent timestamp calculation
             if (currentTimeElement == null || remainingDurationElement == null) {
-                var songDuration = AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist);
-                var currentTimeF = (DateTime.Now - currentSongPlaybackStarted).TotalSeconds;
-                currentTime = (int)currentTimeF;
-                remainingDuration = (int)(ParseTimeString(songDuration) - currentTimeF);
+                var songDuration = ParseTimeString(AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist));
+                currentTime = (int)(songProgressPercent * songDuration);
+                remainingDuration = (int)((1 - songProgressPercent) * songDuration);
             } else { // ... otherwise just use the timestamps provided by Apple Music
                 currentTime = ParseTimeString(currentTimeElement!.Current.Name);
                 remainingDuration = ParseTimeString(remainingDurationElement!.Current.Name);
             }
 
+            // convert into Unix timestamps for Discord
+            amInfo.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime);
+            amInfo.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration);
+
             // check if the song is paused or not
             var playPauseButton = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportControl_PlayPauseStop"));
             amInfo.IsPaused = playPauseButton.Current.Name == "Play";
 
-            amInfo.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime);
-            amInfo.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration);
 
             // ================================================
             //  Get song cover art
