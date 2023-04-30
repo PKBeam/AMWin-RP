@@ -9,7 +9,7 @@ namespace AMWin_RichPresence {
     public partial class App : Application {
 
         private TaskbarIcon? taskbarIcon;
-        private AppleMusicScraper amScraper;
+        private AppleMusicClientScraper amScraper;
         private AppleMusicDiscordClient discordClient;
         private AppleMusicScrobbler scrobblerClient;
         public App() {

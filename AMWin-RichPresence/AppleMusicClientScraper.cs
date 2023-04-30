@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Timers;
 using System.Windows.Automation;
-using System.Web;
-using HtmlAgilityPack;
-using System.Net.Http;
 
 namespace AMWin_RichPresence {
 
@@ -29,6 +25,10 @@ namespace AMWin_RichPresence {
             return amInfo;
         }
 
+        public override int GetHashCode() {
+            return $"{SongName}{SongSubTitle}".GetHashCode();
+        }
+
         public override string ToString() {
             return $"""
                 AppleMusicInfo: 
@@ -47,7 +47,7 @@ namespace AMWin_RichPresence {
         }
     }
 
-    internal class AppleMusicScraper {
+    internal class AppleMusicClientScraper {
 
         public delegate void RefreshHandler(AppleMusicInfo? newInfo);
         
@@ -55,7 +55,10 @@ namespace AMWin_RichPresence {
 
         RefreshHandler refreshHandler;
 
-        public AppleMusicScraper(int refreshPeriodInSec, RefreshHandler refreshHandler) {
+        int? currentSongID;
+        DateTime currentSongPlaybackStarted;
+
+        public AppleMusicClientScraper(int refreshPeriodInSec, RefreshHandler refreshHandler) {
             this.refreshHandler = refreshHandler;
             timer = new Timer(refreshPeriodInSec * 1000);
             timer.Elapsed += Refresh;
@@ -90,17 +93,27 @@ namespace AMWin_RichPresence {
             return null;
         }
 
-        public static AppleMusicInfo? GetAppleMusicInfo(AutomationElement amWindow) {
+        public AppleMusicInfo? GetAppleMusicInfo(AutomationElement amWindow) {
+            
+            var amInfo = new AppleMusicInfo();
+
+            // ================================================
+            //  Check if there is a song playing
+            // ------------------------------------------------
 
             var amWinChild = amWindow.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.NameProperty, "DesktopChildSiteBridge"));
             var songFields = amWinChild.FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
 
             if (songFields.Count != 2) {
                 return AppleMusicInfo.NoSong();
+            } else {
+                amInfo.HasSong = true;
             }
 
-            // Get song info
-
+            // ================================================
+            //  Get song info
+            // ------------------------------------------------
+            
             var songNameElement = songFields[0];
             var songAlbumArtistElement = songFields[1];
 
@@ -113,32 +126,56 @@ namespace AMWin_RichPresence {
 
             var songName = songNameElement.Current.Name;
             var songAlbumArtist = songAlbumArtistElement.Current.Name;
-
+            
             // this is the U+2014 emdash, not the standard "-" character on the keyboard!
             var songArtist = songAlbumArtist.Split(" — ")[0]; 
             var songAlbum = songAlbumArtist.Split(" — ")[1];
+            
+            amInfo.SongName = songName;
+            amInfo.SongSubTitle = songAlbumArtist;
+            amInfo.SongArtist = songArtist;
+            amInfo.SongAlbum = songAlbum;
+
+            // check if a new song just started playing
+            if (amInfo.GetHashCode() != currentSongID) {
+                // update currently playing song information
+                currentSongID = amInfo.GetHashCode();
+                currentSongPlaybackStarted = DateTime.Now;
+            }
+
+            // ================================================
+            //  Get song timestamps
+            // ------------------------------------------------
 
             var currentTimeElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "CurrentTime"));
             var remainingDurationElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "Duration"));
-            
-            var currentTime = ParseTimeString(currentTimeElement?.Current.Name ?? "0:00");
-            var remainingDuration = ParseTimeString(remainingDurationElement?.Current.Name ?? "0:00");
+
+            int currentTime;
+            int remainingDuration;
+
+            // if the timestamps are being hidden by Apple Music, we fall back to independent timestamp calculation
+            if (currentTimeElement == null || remainingDurationElement == null) {
+                var songDuration = AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist);
+                var currentTimeF = (DateTime.Now - currentSongPlaybackStarted).TotalSeconds;
+                currentTime = (int)currentTimeF;
+                remainingDuration = (int)(ParseTimeString(songDuration) - currentTimeF);
+            } else { // ... otherwise just use the timestamps provided by Apple Music
+                currentTime = ParseTimeString(currentTimeElement!.Current.Name);
+                remainingDuration = ParseTimeString(remainingDurationElement!.Current.Name);
+            }
 
             // check if the song is paused or not
             var playPauseButton = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportControl_PlayPauseStop"));
-            var songIsPaused = playPauseButton.Current.Name == "Play";
+            amInfo.IsPaused = playPauseButton.Current.Name == "Play";
 
-            var amInfo = new AppleMusicInfo() {
-                HasSong = true,
-                IsPaused = songIsPaused,
-                SongName = songName,
-                SongSubTitle = songAlbumArtist,
-                SongAlbum = songAlbum,
-                SongArtist = songArtist,
-                PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime),
-                PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration),
-                CoverArtUrl = GetAlbumArtUrl(songName, songAlbum, songArtist)
-            };
+            amInfo.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime);
+            amInfo.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration);
+
+            // ================================================
+            //  Get song cover art
+            // ------------------------------------------------
+
+            amInfo.CoverArtUrl = AppleMusicWebScraper.GetAlbumArtUrl(songName, songAlbum, songArtist);
 
             return amInfo;
         }
@@ -155,58 +192,6 @@ namespace AMWin_RichPresence {
             int sec = int.Parse(time.Split(":")[1]);
 
             return min * 60 + sec;
-        }
-
-        private static string? GetAlbumArtUrl(string songName, string songAlbum, string songArtist) {
-
-            // search on the Apple Music website for the song
-            var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
-            var client = new HttpClient();
-            var res = client.GetStringAsync(url).Result;
-            HtmlDocument doc = new HtmlDocument(); 
-            doc.LoadHtml(res); 
-
-            try {
-
-                // scrape search results
-                var list = doc.DocumentNode
-                    .Descendants("ul")
-                    .Where(x => x.Attributes["class"].Value.Contains("grid--top-results"))
-                    .ToList();
-
-                // try each result until we find one that looks correct
-                foreach (var result in list[0].ChildNodes) {
-
-                    var imgSources = result
-                        .Descendants("source")
-                        .Where(x => x.Attributes["type"].Value == "image/jpeg")
-                        .ToList();
-
-                    var x = imgSources[0].Attributes["srcset"].Value;
-
-                    var searchResultTitle = result
-                        .Descendants("li")
-                        .First(x => x.Attributes["data-testid"].Value == "top-search-result-title")
-                        .InnerHtml;
-
-                    var searchResultSubtitle = result
-                        .Descendants("li")
-                        .First(x => x.Attributes["data-testid"].Value == "top-search-result-subtitle")
-                        .InnerHtml;
-
-                    // need to decode html to avoid instances like "&amp;" instead of "&"
-                    searchResultTitle = HttpUtility.HtmlDecode(searchResultTitle);
-                    searchResultSubtitle = HttpUtility.HtmlDecode(searchResultSubtitle);
-
-                    // check that the first result actually is the song
-                    if (searchResultTitle == songName && searchResultSubtitle == $"Song · {songArtist}") {
-                        return x.Split(' ')[0];
-                    } 
-                }
-                return null;
-            } catch {
-                return null;
-            }
         }
     }
 }
