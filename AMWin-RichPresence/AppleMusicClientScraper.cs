@@ -68,8 +68,8 @@ namespace AMWin_RichPresence {
                 if (appleMusicWindow != null) {
                     appleMusicInfo = GetAppleMusicInfo(appleMusicWindow);
                 }
-            } catch (Exception e) {
-                Trace.WriteLine($"Something went wrong while scraping: {e}");
+            } catch (Exception ex) {
+                Trace.WriteLine($"Something went wrong while scraping: {ex}");
             }
             refreshHandler(appleMusicInfo);
         }

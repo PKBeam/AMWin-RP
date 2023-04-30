@@ -27,6 +27,7 @@ namespace AMWin_RichPresence {
             try {
 
                 // scrape search results for "Top Results" section
+                // TODO: scrape rest of search page too
                 var list = doc.DocumentNode
                     .Descendants("ul")
                     .Where(x => x.Attributes["class"].Value.Contains("grid--top-results"))
