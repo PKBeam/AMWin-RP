@@ -26,10 +26,10 @@ namespace AMWin_RichPresence {
             amScraper = new(Constants.RefreshPeriod, (newInfo) => {
                 bool userEnabledRP = AMWin_RichPresence.Properties.Settings.Default.EnableDiscordRP;
                 // disable RPC when requested by the user, and also when Apple Music is paused/not open
-                if (userEnabledRP && newInfo != null && ((AppleMusicInfo)newInfo).HasSong && !((AppleMusicInfo)newInfo).IsPaused) {
+                if (userEnabledRP && newInfo != null && newInfo != null && !newInfo.IsPaused) {
                     discordClient.Enable();
-                    discordClient.SetPresence((AppleMusicInfo)newInfo, AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon);
-                    scrobblerClient.Scrobbleit((AppleMusicInfo)newInfo, scrobblerClient.GetLastFmScrobbler());
+                    discordClient.SetPresence(newInfo, AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon);
+                    scrobblerClient.Scrobbleit(newInfo, scrobblerClient.GetLastFmScrobbler());
                 } else {
                     discordClient.Disable();
                 }

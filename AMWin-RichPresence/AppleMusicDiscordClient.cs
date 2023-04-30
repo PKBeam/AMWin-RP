@@ -27,7 +27,7 @@ internal class AppleMusicDiscordClient {
     }
 
     public void SetPresence(AppleMusicInfo amInfo, bool showSmallImage) {
-        if (!enabled || !amInfo.HasSong) {
+        if (!enabled) {
             return;
         }
 

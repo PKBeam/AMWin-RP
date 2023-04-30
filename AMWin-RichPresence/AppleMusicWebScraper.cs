@@ -109,11 +109,11 @@ namespace AMWin_RichPresence {
                     .First(x => x.Attributes.Contains("aria-label") && x.Attributes["aria-label"].Value == "Songs")
                     .Descendants("ul")
                     .First(x => x.Attributes["data-testid"].Value == "shelf-item-list")
-                    .Descendants("li")
-                    .First();
+                    .ChildNodes
+                    .Where(x => x.Name == "li");
 
                 // try each result until we find one that looks correct
-                foreach (var result in list.ChildNodes) {
+                foreach (var result in list) {
 
                     var searchResultTitle = result
                         .Descendants("li")

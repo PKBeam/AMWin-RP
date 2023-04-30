@@ -6,37 +6,37 @@ using System.Windows.Automation.Provider;
 
 namespace AMWin_RichPresence {
 
-    internal struct AppleMusicInfo {
-        public bool HasSong;
-
+    internal class AppleMusicInfo {
         // the following fields are only valid if HasSong is true.
         // DateTimes are in UTC.
-        public bool     IsPaused;
         public string   SongName;
         public string   SongSubTitle;
         public string   SongAlbum;
         public string   SongArtist;
-        public DateTime PlaybackStart;
-        public DateTime PlaybackEnd;
-        public string?  CoverArtUrl;
+        public bool     IsPaused = true;
+        public int?     SongDuration = null;
+        public DateTime PlaybackStart = DateTime.MinValue;
+        public DateTime PlaybackEnd = DateTime.MinValue;
+        public string?  CoverArtUrl = null;
 
-        public static AppleMusicInfo NoSong() {
-            var amInfo = new AppleMusicInfo();
-            amInfo.HasSong = false;
-            return amInfo;
+        public AppleMusicInfo(string songName, string songSubTitle, string songAlbum, string songArtist) {
+            this.SongName = songName;
+            this.SongSubTitle = songSubTitle;
+            this.SongAlbum = songAlbum;
+            this.SongArtist = songArtist;
         }
 
         public override string ToString() {
+            var t = 5.ToString("D2");
             return $"""
-                AppleMusicInfo: 
-                - HasSong: {HasSong},
-                - IsPaused: {IsPaused},
-                - SongName: {SongName},
-                - SongAlbum: {SongAlbum},
-                - SongArtist: {SongArtist},
-                - PlaybackStart: {PlaybackStart},
-                - PlaybackEnd: {PlaybackEnd},
-                - CoverArtUrl: {CoverArtUrl}
+                [AppleMusicInfo] 
+                _________________________________________________
+                |  {SongName} ({(SongDuration == null ? "" : $"{SongDuration / 60}:{((int)SongDuration % 60).ToString("D2")} min")}{(IsPaused ? ", paused" : "")})
+                |  by {SongArtist} on {SongAlbum},
+                |------------------------------------------------
+                |  Playback: {PlaybackStart} to {PlaybackEnd},
+                |  Cover Art URL: {CoverArtUrl},
+                -------------------------------------------------
                 """;
         }
         public void Print() {
@@ -50,6 +50,7 @@ namespace AMWin_RichPresence {
      
         Timer timer;
         RefreshHandler refreshHandler;
+        AppleMusicInfo? currentSong;
 
         public AppleMusicClientScraper(int refreshPeriodInSec, RefreshHandler refreshHandler) {
             this.refreshHandler = refreshHandler;
@@ -87,8 +88,6 @@ namespace AMWin_RichPresence {
         }
 
         public AppleMusicInfo? GetAppleMusicInfo(AutomationElement amWindow) {
-            
-            var amInfo = new AppleMusicInfo();
 
             // ================================================
             //  Check if there is a song playing
@@ -98,9 +97,7 @@ namespace AMWin_RichPresence {
             var songFields = amWinChild.FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
 
             if (songFields.Count != 2) {
-                return AppleMusicInfo.NoSong();
-            } else {
-                amInfo.HasSong = true;
+                return null;
             }
 
             // ================================================
@@ -123,11 +120,11 @@ namespace AMWin_RichPresence {
             // this is the U+2014 emdash, not the standard "-" character on the keyboard!
             var songArtist = songAlbumArtist.Split(" — ")[0]; 
             var songAlbum = songAlbumArtist.Split(" — ")[1];
-            
-            amInfo.SongName = songName;
-            amInfo.SongSubTitle = songAlbumArtist;
-            amInfo.SongArtist = songArtist;
-            amInfo.SongAlbum = songAlbum;
+
+            // if this is a new song, clear out the current song
+            if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongSubTitle != songAlbumArtist) {
+                currentSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
+            }
 
             // ================================================
             //  Get song timestamps
@@ -147,7 +144,10 @@ namespace AMWin_RichPresence {
 
             // if the timestamps are being hidden by Apple Music, we fall back to independent timestamp calculation
             if (currentTimeElement == null || remainingDurationElement == null) {
-                var songDuration = ParseTimeString(AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist));
+                if (currentSong.SongDuration == null) {
+                    currentSong.SongDuration = ParseTimeString(AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist));
+                }
+                var songDuration = currentSong.SongDuration;
                 currentTime = (int)(songProgressPercent * songDuration);
                 remainingDuration = (int)((1 - songProgressPercent) * songDuration);
             } else { // ... otherwise just use the timestamps provided by Apple Music
@@ -156,21 +156,22 @@ namespace AMWin_RichPresence {
             }
 
             // convert into Unix timestamps for Discord
-            amInfo.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime);
-            amInfo.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration);
+            currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime);
+            currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration);
 
             // check if the song is paused or not
             var playPauseButton = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportControl_PlayPauseStop"));
-            amInfo.IsPaused = playPauseButton.Current.Name == "Play";
+            currentSong.IsPaused = playPauseButton.Current.Name == "Play";
 
 
             // ================================================
             //  Get song cover art
             // ------------------------------------------------
+            if (currentSong.CoverArtUrl == null) {
+                currentSong.CoverArtUrl = AppleMusicWebScraper.GetAlbumArtUrl(songName, songAlbum, songArtist);
+            }
 
-            amInfo.CoverArtUrl = AppleMusicWebScraper.GetAlbumArtUrl(songName, songAlbum, songArtist);
-
-            return amInfo;
+            return currentSong;
         }
 
         // e.g. parse "-1:30" to 90 seconds
