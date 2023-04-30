@@ -1,6 +1,8 @@
 ﻿using HtmlAgilityPack;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.ExceptionServices;
+using System.Collections.Generic;
 using System.Web;
 
 namespace AMWin_RichPresence {
@@ -64,7 +66,7 @@ namespace AMWin_RichPresence {
                 return null;
             }
         }
-        private static string GetSongDurationFromAlbumPage(string url, string songName) {
+        private static string? GetSongDurationFromAlbumPage(string url, string songName) {
             HtmlDocument doc = GetURL(url);
             try {
                 var list = doc.DocumentNode
@@ -91,12 +93,12 @@ namespace AMWin_RichPresence {
                         return duration; 
                     }
                 }
-                return "0:00";
+                return null;
             } catch {
-                return "0:00";
+                return null;
             }
         }
-        public static string GetSongDuration(string songName, string songAlbum, string songArtist) {
+        public static string? GetSongDuration(string songName, string songAlbum, string songArtist) {
 
             // search on the Apple Music website for the song
             var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
@@ -122,12 +124,15 @@ namespace AMWin_RichPresence {
                         .First()
                         .InnerHtml;
 
-                    var searchResultSubtitle = result
+                    var searchResultSubtitles = result
                         .Descendants("span")
-                        .First(x => x.Attributes["data-testid"].Value == "track-lockup-subtitle")
-                        .Descendants("span")
-                        .First()
-                        .InnerHtml;
+                        .Where(x => x.Attributes.Contains("data-testid") && x.Attributes["data-testid"].Value == "track-lockup-subtitle");
+
+                    var searchResultSubtitlesList = new List<string>() { };
+                    foreach (var span in searchResultSubtitles) {
+                        searchResultSubtitlesList.Add(span.Descendants("span").First().InnerHtml);
+                    }
+                    var searchResultSubtitle = string.Join(", ", searchResultSubtitlesList);
 
                     var searchResultUrl = result
                         .Descendants("li")
@@ -142,13 +147,14 @@ namespace AMWin_RichPresence {
                     searchResultSubtitle = HttpUtility.HtmlDecode(searchResultSubtitle);
 
                     // check that the result actually is the song
-                    if (searchResultTitle == songName && searchResultSubtitle == $"{songArtist}") {
+                    // (Apple Music web search's "Song" section replaces ampersands with commas in the artist list)
+                    if (searchResultTitle == songName && searchResultSubtitle == songArtist.Replace(" & ", ", ")) {
                         return GetSongDurationFromAlbumPage(searchResultUrl, songName);
                     }
                 }
-                return "0:00";
+                return null;
             } catch {
-                return "0:00";
+                return null;
             }
         }
     }

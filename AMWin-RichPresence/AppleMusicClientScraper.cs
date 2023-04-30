@@ -64,12 +64,15 @@ namespace AMWin_RichPresence {
             AutomationElement? appleMusicWindow;
 
             appleMusicWindow = FindAppleMusicWindow();
-            if (appleMusicWindow != null) {
-                appleMusicInfo = GetAppleMusicInfo(appleMusicWindow);
+            try {
+                if (appleMusicWindow != null) {
+                    appleMusicInfo = GetAppleMusicInfo(appleMusicWindow);
+                }
+            } catch (Exception e) {
+                Trace.WriteLine($"Something went wrong while scraping: {e}");
             }
             refreshHandler(appleMusicInfo);
         }
-
         public static AutomationElement? FindAppleMusicWindow() {
             try {
                 var allWindows = AutomationElement.RootElement.FindAll(TreeScope.Children, Condition.TrueCondition);
@@ -115,10 +118,18 @@ namespace AMWin_RichPresence {
 
             var songName = songNameElement.Current.Name;
             var songAlbumArtist = songAlbumArtistElement.Current.Name;
-            
-            // this is the U+2014 emdash, not the standard "-" character on the keyboard!
-            var songArtist = songAlbumArtist.Split(" — ")[0]; 
-            var songAlbum = songAlbumArtist.Split(" — ")[1];
+
+            string songArtist; 
+            string songAlbum;
+            try {
+                // this is the U+2014 emdash, not the standard "-" character on the keyboard!
+                songArtist = songAlbumArtist.Split(" — ")[0];
+                songAlbum = songAlbumArtist.Split(" — ")[1];
+            } catch {
+                Trace.WriteLine($"Could not parse '{songAlbumArtist}' into artist and album.");
+                songArtist = "";
+                songAlbum = "";
+            }
 
             // if this is a new song, clear out the current song
             if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongSubTitle != songAlbumArtist) {
@@ -133,9 +144,10 @@ namespace AMWin_RichPresence {
             var remainingDurationElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "Duration"));
 
             // grab the seek slider to check song playback progress
-            var songProgressElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCDScrubber"));
-            var songProgressSlider = songProgressElement.GetCurrentPattern(RangeValuePattern.Pattern) as RangeValuePattern;
-            var songProgressPercent = songProgressSlider.Current.Value / songProgressSlider.Current.Maximum;
+            var songProgressSlider = amWinChild
+                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCDScrubber"))? // this may be hidden when a song is initialising
+                .GetCurrentPattern(RangeValuePattern.Pattern) as RangeValuePattern;
+            var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Current.Value / songProgressSlider.Current.Maximum;
 
             // calculate song timestamps
             int currentTime;
@@ -144,7 +156,8 @@ namespace AMWin_RichPresence {
             // if the timestamps are being hidden by Apple Music, we fall back to independent timestamp calculation
             if (currentTimeElement == null || remainingDurationElement == null) {
                 if (currentSong.SongDuration == null) {
-                    currentSong.SongDuration = ParseTimeString(AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist));
+                    string? dur = AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist);
+                    currentSong.SongDuration = dur == null ? 0 : ParseTimeString(dur);
                 }
                 var songDuration = currentSong.SongDuration;
                 currentTime = (int)(songProgressPercent * songDuration);
