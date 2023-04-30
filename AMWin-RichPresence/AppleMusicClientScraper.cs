@@ -27,7 +27,6 @@ namespace AMWin_RichPresence {
         }
 
         public override string ToString() {
-            var t = 5.ToString("D2");
             return $"""
                 [AppleMusicInfo] 
                 _________________________________________________
