@@ -24,7 +24,7 @@ There's no support for iTunes, Apple Music via WSA, or any third-party players.
 The app runs in the background, minimised to the system tray. It can be closed by right-clicking on the tray icon and selecting "Exit".  
 In order for the rich presence to show, the Apple Music app must be open and currently playing music (i.e. not paused).  
 
-For the remaining time of the song to show in Discord RP, you need to go to Apple Music and initialise (mouse over) the text box that tells you how much time is remaining on the song. This has to be done for each new song.
+For the remaining time of the song to show in Discord RP, you need to go to Apple Music and initialise (mouse over) the text box that tells you how much time is remaining on the song. This has to be done for each new song - the next update will bring a workaround for this.
 
 
 If you like, you can set the app to automatically run when Windows starts. You can do this by double clicking on the tray icon and changing the settings.  
