@@ -3,6 +3,7 @@ using IF.Lastfm.Core.Objects;
 using IF.Lastfm.Core.Scrobblers;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -92,7 +93,11 @@ namespace AMWin_RichPresence
                         if (lastfmAuth != null && lastfmAuth.Authenticated)
                         {
                             Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Scrobbling: {1}", DateTime.UtcNow.ToString(), lastSongID));
-                            var scrobble = new Scrobble(info.SongArtist, info.SongAlbum, Properties.Settings.Default.LastfmCleanSongName ? CleanSongName(info.SongName) : info.SongName, DateTime.UtcNow);
+                            var scrobble = new Scrobble(
+                                Properties.Settings.Default.LastfmScrobblePrimaryArtist ? AppleMusicWebScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist).First() : info.SongArtist, 
+                                info.SongAlbum, 
+                                Properties.Settings.Default.LastfmCleanSongName ? CleanSongName(info.SongName) : info.SongName, 
+                                DateTime.UtcNow);
                             var response = await lastFmScrobbler.ScrobbleAsync(scrobble);
                         }
                         hasScrobbled = true;

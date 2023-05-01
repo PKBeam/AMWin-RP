@@ -191,5 +191,34 @@ namespace AMWin_RichPresence {
                 return null;
             }
         }
+
+        public static List<string> GetArtistList(string songName, string songAlbum, string songArtist) {
+            try {
+                var result = SearchSongs(songName, songAlbum, songArtist);
+                if (result != null) {
+                    var searchResultUrl = result
+                        .Descendants("li")
+                        .First(x => x.Attributes["class"].Value.Contains("track-lockup__title"))
+                        .Descendants("a")
+                        .First()
+                        .Attributes["href"]
+                        .Value;
+
+                    var searchResultSubtitles = result
+                        .Descendants("span")
+                        .Where(x => x.Attributes.Contains("data-testid") && x.Attributes["data-testid"].Value == "track-lockup-subtitle");
+
+                    var searchResultSubtitlesList = new List<string>() { };
+                    foreach (var span in searchResultSubtitles) {
+                        searchResultSubtitlesList.Add(span.Descendants("span").First().InnerHtml);
+                    }
+
+                    return searchResultSubtitlesList;
+                }
+                return new();
+            } catch {
+                return new();
+            }
+        }
     }
 }

@@ -2,22 +2,23 @@
 using System.Diagnostics;
 using System.Timers;
 using System.Windows.Automation;
-using System.Windows.Automation.Provider;
+using System.Collections.Generic;
 
 namespace AMWin_RichPresence {
 
     internal class AppleMusicInfo {
         // the following fields are only valid if HasSong is true.
         // DateTimes are in UTC.
-        public string   SongName;
-        public string   SongSubTitle;
-        public string   SongAlbum;
-        public string   SongArtist;
-        public bool     IsPaused = true;
-        public int?     SongDuration = null;
-        public DateTime PlaybackStart = DateTime.MinValue;
-        public DateTime PlaybackEnd = DateTime.MinValue;
-        public string?  CoverArtUrl = null;
+        public string        SongName;
+        public string        SongSubTitle;
+        public string        SongAlbum;
+        public string        SongArtist;
+        public bool          IsPaused = true;
+        public DateTime      PlaybackStart = DateTime.MinValue;
+        public DateTime      PlaybackEnd = DateTime.MinValue;
+        public int?          SongDuration = null;
+        public List<string>? ArtistList = null;
+        public string?       CoverArtUrl = null;
 
         public AppleMusicInfo(string songName, string songSubTitle, string songAlbum, string songArtist) {
             this.SongName = songName;
@@ -134,6 +135,14 @@ namespace AMWin_RichPresence {
             // if this is a new song, clear out the current song
             if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongSubTitle != songAlbumArtist) {
                 currentSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
+            }
+
+            if (currentSong.ArtistList == null) {
+                currentSong.ArtistList = AppleMusicWebScraper.GetArtistList(songName, songAlbum, songArtist);
+
+                if (currentSong.ArtistList.Count == 0) {
+                    currentSong.ArtistList = null;
+                }
             }
 
             // ================================================
