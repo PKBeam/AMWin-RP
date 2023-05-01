@@ -122,9 +122,9 @@ namespace AMWin_RichPresence {
             string songArtist; 
             string songAlbum;
             try {
-                // this is the U+2014 emdash, not the standard "-" character on the keyboard!
-                songArtist = songAlbumArtist.Split(" — ")[0];
-                songAlbum = songAlbumArtist.Split(" — ")[1];
+                // U+2014 is the emdash, not the standard "-" character on the keyboard!
+                songArtist = songAlbumArtist.Split(" \u2014 ")[0];
+                songAlbum = songAlbumArtist.Split(" \u2014 ")[1];
             } catch {
                 Trace.WriteLine($"Could not parse '{songAlbumArtist}' into artist and album.");
                 songArtist = "";

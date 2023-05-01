@@ -44,6 +44,14 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
+        private void CheckBox_LastfmCleanSongName_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
+        private void CheckBox_LastfmScrobblePrimary_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
         private static void AddStartupShortcut() {
             // from https://stackoverflow.com/questions/234231/creating-application-shortcut-in-a-directory
             var t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8")); // Windows Script Host Shell Object

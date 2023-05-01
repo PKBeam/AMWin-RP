@@ -106,5 +106,29 @@ namespace AMWin_RichPresence.Properties {
                 this["EnableDiscordRP"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LastfmCleanSongName {
+            get {
+                return ((bool)(this["LastfmCleanSongName"]));
+            }
+            set {
+                this["LastfmCleanSongName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LastfmScrobblePrimaryArtist {
+            get {
+                return ((bool)(this["LastfmScrobblePrimaryArtist"]));
+            }
+            set {
+                this["LastfmScrobblePrimaryArtist"] = value;
+            }
+        }
     }
 }
