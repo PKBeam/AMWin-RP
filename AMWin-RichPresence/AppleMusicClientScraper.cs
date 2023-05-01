@@ -31,10 +31,9 @@ namespace AMWin_RichPresence {
             return $"""
                 [AppleMusicInfo] 
                 _________________________________________________
-                |  {SongName} ({(SongDuration == null ? "" : $"{SongDuration / 60}:{((int)SongDuration % 60).ToString("D2")} min")}{(IsPaused ? ", paused" : "")})
+                |  {SongName}
                 |  by {SongArtist} on {SongAlbum},
                 |------------------------------------------------
-                |  Playback: {PlaybackStart} to {PlaybackEnd},
                 |  Cover Art URL: {CoverArtUrl},
                 -------------------------------------------------
                 """;
