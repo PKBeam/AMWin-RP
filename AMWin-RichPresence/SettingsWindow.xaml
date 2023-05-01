@@ -75,8 +75,8 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" VerticalAlignment="Top" FontWeight="Bold" Padding="0 3 0 0">Last.FM settings</TextBlock>
 
-                        <TextBlock Grid.Row="1" Grid.Column="0"  Padding="10 0 0 0">Clean song name</TextBlock>
-                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBox_LastfmCleanSongName" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmCleanSongName, Mode=TwoWay}" HorizontalAlignment="Right" Width="120" Click="CheckBox_LastfmCleanSongName_Click"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0"  Padding="10 0 0 0">Clean album name</TextBlock>
+                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBox_LastfmCleanAlbumName" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmCleanAlbumName, Mode=TwoWay}" HorizontalAlignment="Right" Width="120" Click="CheckBox_LastfmCleanAlbumName_Click"/>
 
                         <TextBlock Grid.Row="2" Grid.Column="0" Padding="10 0 0 0">Scrobble primary artist</TextBlock>
                         <CheckBox Grid.Row="2" Grid.Column="1" x:Name="CheckBox_LastfmScrobblePrimary" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmScrobblePrimaryArtist, Mode=TwoWay}" HorizontalAlignment="Right" Width="120" Click="CheckBox_LastfmScrobblePrimary_Click"/>

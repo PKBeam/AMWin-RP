@@ -23,7 +23,7 @@
     <Setting Name="EnableDiscordRP" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="LastfmCleanSongName" Type="System.Boolean" Scope="User">
+    <Setting Name="LastfmCleanAlbumName" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="LastfmScrobblePrimaryArtist" Type="System.Boolean" Scope="User">

@@ -110,12 +110,12 @@ namespace AMWin_RichPresence.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool LastfmCleanSongName {
+        public bool LastfmCleanAlbumName {
             get {
-                return ((bool)(this["LastfmCleanSongName"]));
+                return ((bool)(this["LastfmCleanAlbumName"]));
             }
             set {
-                this["LastfmCleanSongName"] = value;
+                this["LastfmCleanAlbumName"] = value;
             }
         }
         

@@ -20,7 +20,7 @@ namespace AMWin_RichPresence
         private string? lastSongID;
         private bool hasScrobbled;
 
-        private string CleanSongName(string songName) {
+        private string CleanAlbumName(string songName) {
             // Remove " - Single" and " - EP"
             var re = new Regex(@"\s-\s((Single)|(EP))$");
             return re.Replace(songName, new MatchEvaluator((m) => { return ""; }));
@@ -94,9 +94,9 @@ namespace AMWin_RichPresence
                         {
                             Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Scrobbling: {1}", DateTime.UtcNow.ToString(), lastSongID));
                             var scrobble = new Scrobble(
-                                Properties.Settings.Default.LastfmScrobblePrimaryArtist ? AppleMusicWebScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist).First() : info.SongArtist, 
-                                info.SongAlbum, 
-                                Properties.Settings.Default.LastfmCleanSongName ? CleanSongName(info.SongName) : info.SongName, 
+                                Properties.Settings.Default.LastfmScrobblePrimaryArtist ? AppleMusicWebScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist).First() : info.SongArtist,
+                                Properties.Settings.Default.LastfmCleanAlbumName ? CleanAlbumName(info.SongAlbum) : info.SongAlbum, 
+                                info.SongName, 
                                 DateTime.UtcNow);
                             var response = await lastFmScrobbler.ScrobbleAsync(scrobble);
                         }
