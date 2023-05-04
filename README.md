@@ -6,7 +6,7 @@ Last.FM scrobbling is also supported!
 
 ![image](https://i.imgur.com/iCbEQg7.png)
 
-![image](https://user-images.githubusercontent.com/18737124/213862194-e02ec9e7-07ab-481f-9dc5-451b9159c903.png)
+![image](https://user-images.githubusercontent.com/18737124/236110327-fedab9d2-9688-4cf6-b2bb-20c9108712d6.png)
 
 ## Installation
 
