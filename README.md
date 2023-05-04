@@ -4,8 +4,6 @@ Last.FM scrobbling is also supported!
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) 
 
-![image](https://i.imgur.com/iCbEQg7.png)
-
 ![image](https://user-images.githubusercontent.com/18737124/236110327-fedab9d2-9688-4cf6-b2bb-20c9108712d6.png)
 
 ## Installation
