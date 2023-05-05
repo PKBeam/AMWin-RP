@@ -10,6 +10,12 @@ using System.Windows;
 
 namespace AMWin_RichPresence
 {
+    public struct LastFmCredentials {
+        public string apiKey;
+        public string apiSecret;
+        public string username;
+        public string password;
+    }
     internal class AppleMusicScrobbler
     {
 
@@ -26,16 +32,16 @@ namespace AMWin_RichPresence
             return re.Replace(songName, new MatchEvaluator((m) => { return ""; }));
         }
 
-        public async void init(bool showMessageBoxOnSuccess = false)
+        public async void init(LastFmCredentials credentials, bool showMessageBoxOnSuccess = false)
         {
-            if (!String.IsNullOrEmpty(Properties.Settings.Default.LastfmAPIKey) 
-                && !String.IsNullOrEmpty(Properties.Settings.Default.LastfmSecret)
-                && !String.IsNullOrEmpty(Properties.Settings.Default.LastfmUsername))
+            if (!String.IsNullOrEmpty(credentials.apiKey) 
+                && !String.IsNullOrEmpty(credentials.apiSecret)
+                && !String.IsNullOrEmpty(credentials.username))
             {
                 // Use the four pieces of information (API Key, API Secret, Username, Password) to log into Last.FM for Scrobbling
                 httpClient = new HttpClient();
-                lastfmAuth = new LastAuth(Properties.Settings.Default.LastfmAPIKey, Properties.Settings.Default.LastfmSecret);
-                await lastfmAuth.GetSessionTokenAsync(Properties.Settings.Default.LastfmUsername, SettingsWindow.GetLastFMPassword());
+                lastfmAuth = new LastAuth(credentials.apiKey, credentials.apiSecret);
+                await lastfmAuth.GetSessionTokenAsync(credentials.username, credentials.password);
 
                 if (lastfmAuth.Authenticated) {
                     if (showMessageBoxOnSuccess) {
@@ -54,16 +60,16 @@ namespace AMWin_RichPresence
             return lastFmScrobbler;
         }
 
-        public void UpdateCreds(bool showMessageBoxOnSuccess)
+        public void UpdateCreds(LastFmCredentials credentials, bool showMessageBoxOnSuccess)
         {
             httpClient = null;
             lastfmAuth = null;
             lastFmScrobbler = null;
-            init(showMessageBoxOnSuccess);
+            init(credentials, showMessageBoxOnSuccess);
         }
 
 
-        public async void Scrobbleit(AppleMusicInfo info, IScrobbler? lastFmScrobbler)
+        public async void Scrobbleit(AppleMusicInfo info, IScrobbler lastFmScrobbler)
         {
             // This gets called every five seconds (Constants.RefreshPeriod) when a song is playing. There are some rules before we want to scrobble.
             // First, when the song changes, start start "our" timer over at 0.  Every time this gets called, increment by five seconds (RefreshPeriod).

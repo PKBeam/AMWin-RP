@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -11,6 +12,16 @@ namespace AMWin_RichPresence {
         private AppleMusicClientScraper amScraper;
         private AppleMusicDiscordClient discordClient;
         private AppleMusicScrobbler scrobblerClient;
+        public LastFmCredentials lastFmCredentials {
+            get {
+                var creds = new LastFmCredentials();
+                creds.apiKey = AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey;
+                creds.apiSecret = AMWin_RichPresence.Properties.Settings.Default.LastfmSecret;
+                creds.username = AMWin_RichPresence.Properties.Settings.Default.LastfmUsername;
+                creds.password = SettingsWindow.GetLastFMPassword();
+                return creds;
+            }
+        }
         public App() {
 
             // start Discord RPC
@@ -19,7 +30,7 @@ namespace AMWin_RichPresence {
 
             // start Last.FM scrobbler
             scrobblerClient = new AppleMusicScrobbler();
-            scrobblerClient.init();
+            scrobblerClient.init(lastFmCredentials);
 
             // start Apple Music scraper
             amScraper = new(Constants.RefreshPeriod, (newInfo) => {
@@ -36,8 +47,9 @@ namespace AMWin_RichPresence {
                     }
 
                     // Last.FM scrobble update
-                    if (AMWin_RichPresence.Properties.Settings.Default.LastfmEnable) {
-                        scrobblerClient.Scrobbleit(newInfo, scrobblerClient.GetLastFmScrobbler());
+                    var scrobbler = scrobblerClient.GetLastFmScrobbler();
+                    if (AMWin_RichPresence.Properties.Settings.Default.LastfmEnable && scrobbler != null) {
+                        scrobblerClient.Scrobbleit(newInfo, scrobbler);
                     }
                 }
             });
@@ -58,7 +70,7 @@ namespace AMWin_RichPresence {
         }
 
         internal void UpdateLastfmCreds(bool showMessageBoxOnSuccess) {
-            scrobblerClient.UpdateCreds(showMessageBoxOnSuccess);
+            scrobblerClient.UpdateCreds(lastFmCredentials, showMessageBoxOnSuccess);
         }
     }
 }

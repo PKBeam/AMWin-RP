@@ -108,6 +108,7 @@ namespace AMWin_RichPresence {
 
             // Signals the LastFM Scrobbler to re-init with new credentials
             ((App)Application.Current).UpdateLastfmCreds(showMessageBoxOnSuccess: true);
+
            // Close();
         }
 
