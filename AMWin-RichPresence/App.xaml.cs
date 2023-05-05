@@ -51,6 +51,8 @@ namespace AMWin_RichPresence {
                     if (AMWin_RichPresence.Properties.Settings.Default.LastfmEnable && scrobbler != null) {
                         scrobblerClient.Scrobbleit(newInfo, scrobbler);
                     }
+                } else {
+                    discordClient.Disable();
                 }
             });
         }
