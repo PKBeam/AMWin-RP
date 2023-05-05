@@ -14,8 +14,8 @@ namespace AMWin_RichPresence {
         public string        SongAlbum;
         public string        SongArtist;
         public bool          IsPaused = true;
-        public DateTime      PlaybackStart = DateTime.MinValue;
-        public DateTime      PlaybackEnd = DateTime.MinValue;
+        public DateTime?     PlaybackStart;
+        public DateTime?     PlaybackEnd;
         public int?          SongDuration = null;
         public List<string>? ArtistList = null;
         public string?       CoverArtUrl = null;
@@ -158,26 +158,35 @@ namespace AMWin_RichPresence {
             var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Current.Value / songProgressSlider.Current.Maximum;
 
             // calculate song timestamps
-            int currentTime;
-            int remainingDuration;
+            int? currentTime = null;
+            int? remainingDuration = null;
 
             // if the timestamps are being hidden by Apple Music, we fall back to independent timestamp calculation
             if (currentTimeElement == null || remainingDurationElement == null) {
+
+                // try to get song duration if we don't have it
                 if (currentSong.SongDuration == null) {
                     string? dur = AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist);
-                    currentSong.SongDuration = dur == null ? 0 : ParseTimeString(dur);
+                    currentSong.SongDuration = dur == null ? null : ParseTimeString(dur);
                 }
-                var songDuration = currentSong.SongDuration;
-                currentTime = (int)(songProgressPercent * songDuration);
-                remainingDuration = (int)((1 - songProgressPercent) * songDuration);
+
+                // if success, set timestamps
+                if (currentSong.SongDuration != null) {
+                    var songDuration = currentSong.SongDuration;
+                    currentTime = (int)(songProgressPercent * songDuration);
+                    remainingDuration = (int)((1 - songProgressPercent) * songDuration);
+                }
+
             } else { // ... otherwise just use the timestamps provided by Apple Music
                 currentTime = ParseTimeString(currentTimeElement!.Current.Name);
                 remainingDuration = ParseTimeString(remainingDurationElement!.Current.Name);
             }
 
             // convert into Unix timestamps for Discord
-            currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime);
-            currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration);
+            if (currentTime != null && remainingDuration != null) {
+                currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, (int)currentTime);
+                currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, (int)remainingDuration);
+            }
 
             // check if the song is paused or not
             var playPauseButton = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportControl_PlayPauseStop"));

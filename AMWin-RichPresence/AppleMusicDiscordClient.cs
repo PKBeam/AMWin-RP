@@ -35,7 +35,7 @@ internal class AppleMusicDiscordClient {
     }
 
     private string GetTrimmedArtistList(AppleMusicInfo amInfo) {
-        if (amInfo.ArtistList.Count > 1) {
+        if (amInfo.ArtistList?.Count > 1) {
             return $"{amInfo.ArtistList.First()}, Various Artists";
         } else {
             return amInfo.SongArtist; // TODO fix this so it always prevents string length violations
@@ -79,8 +79,9 @@ internal class AppleMusicDiscordClient {
                 rp.Assets.SmallImageKey = (amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey;
             }
 
-            if (!amInfo.IsPaused) {
-                rp = rp.WithTimestamps(new Timestamps(amInfo.PlaybackStart, amInfo.PlaybackEnd));
+            // add timestamps, if they're there
+            if (!amInfo.IsPaused && amInfo.PlaybackStart != null && amInfo.PlaybackEnd != null) {
+                rp = rp.WithTimestamps(new Timestamps((DateTime)amInfo.PlaybackStart, (DateTime)amInfo.PlaybackEnd));
             }
 
             client?.SetPresence(rp);
