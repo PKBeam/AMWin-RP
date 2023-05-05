@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using Hardcodet.Wpf.TaskbarNotification;
 
 namespace AMWin_RichPresence {
@@ -24,14 +23,22 @@ namespace AMWin_RichPresence {
 
             // start Apple Music scraper
             amScraper = new(Constants.RefreshPeriod, (newInfo) => {
-                bool userEnabledRP = AMWin_RichPresence.Properties.Settings.Default.EnableDiscordRP;
-                // disable RPC when requested by the user, and also when Apple Music is paused/not open
-                if (userEnabledRP && newInfo != null && newInfo != null && !newInfo.IsPaused) {
-                    discordClient.Enable();
-                    discordClient.SetPresence(newInfo, AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon);
-                    scrobblerClient.Scrobbleit(newInfo, scrobblerClient.GetLastFmScrobbler());
-                } else {
-                    discordClient.Disable();
+                
+                // don't update scraper if Apple Music is paused or not open
+                if (newInfo != null && newInfo != null && !newInfo.IsPaused) {
+
+                    // Discord RP update
+                    if (AMWin_RichPresence.Properties.Settings.Default.EnableDiscordRP) {
+                        discordClient.Enable();
+                        discordClient.SetPresence(newInfo, AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon);
+                    } else {
+                        discordClient.Disable();
+                    }
+
+                    // Last.FM scrobble update
+                    if (AMWin_RichPresence.Properties.Settings.Default.LastfmEnable) {
+                        scrobblerClient.Scrobbleit(newInfo, scrobblerClient.GetLastFmScrobbler());
+                    }
                 }
             });
         }

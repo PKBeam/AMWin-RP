@@ -130,5 +130,17 @@ namespace AMWin_RichPresence.Properties {
                 this["LastfmScrobblePrimaryArtist"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LastfmEnable {
+            get {
+                return ((bool)(this["LastfmEnable"]));
+            }
+            set {
+                this["LastfmEnable"] = value;
+            }
+        }
     }
 }

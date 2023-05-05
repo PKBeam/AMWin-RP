@@ -44,6 +44,9 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
+        private void CheckBox_LastfmEnable_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
         private void CheckBox_LastfmCleanAlbumName_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }

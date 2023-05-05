@@ -182,7 +182,7 @@ namespace AMWin_RichPresence {
                 remainingDuration = ParseTimeString(remainingDurationElement!.Current.Name);
             }
 
-            // convert into Unix timestamps for Discord
+            // if we have timestamps, convert them into Unix timestamps for Discord
             if (currentTime != null && remainingDuration != null) {
                 currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, (int)currentTime);
                 currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, (int)remainingDuration);
