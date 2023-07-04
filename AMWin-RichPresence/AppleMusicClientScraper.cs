@@ -105,7 +105,7 @@ namespace AMWin_RichPresence {
             // ================================================
             //  Get song info
             // ------------------------------------------------
-            
+
             var songNameElement = songFields[0];
             var songAlbumArtistElement = songFields[1];
 
@@ -130,20 +130,19 @@ namespace AMWin_RichPresence {
                 songArtist = "";
                 songAlbum = "";
             }
-
             // if this is a new song, clear out the current song
             if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongSubTitle != songAlbumArtist) {
                 currentSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
             }
 
             if (currentSong.ArtistList == null) {
-                currentSong.ArtistList = AppleMusicWebScraper.GetArtistList(songName, songAlbum, songArtist);
-
-                if (currentSong.ArtistList.Count == 0) {
-                    currentSong.ArtistList = null;
-                }
+                AppleMusicWebScraper.GetArtistList(songName, songAlbum, songArtist).ContinueWith(t => {
+                    currentSong.ArtistList = t.Result;
+                    if (currentSong.ArtistList.Count == 0) {
+                        currentSong.ArtistList = null;
+                    }
+                });
             }
-
             // ================================================
             //  Get song timestamps
             // ------------------------------------------------
@@ -166,8 +165,10 @@ namespace AMWin_RichPresence {
 
                 // try to get song duration if we don't have it
                 if (currentSong.SongDuration == null) {
-                    string? dur = AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist);
-                    currentSong.SongDuration = dur == null ? null : ParseTimeString(dur);
+                    AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist).ContinueWith(t => {
+                        string? dur = t.Result;
+                        currentSong.SongDuration = dur == null ? null : ParseTimeString(dur);
+                    });
                 }
 
                 // if success, set timestamps
@@ -196,8 +197,11 @@ namespace AMWin_RichPresence {
             // ================================================
             //  Get song cover art
             // ------------------------------------------------
+
             if (currentSong.CoverArtUrl == null) {
-                currentSong.CoverArtUrl = AppleMusicWebScraper.GetAlbumArtUrl(songName, songAlbum, songArtist);
+                AppleMusicWebScraper.GetAlbumArtUrl(songName, songAlbum, songArtist).ContinueWith(t => {
+                    currentSong.CoverArtUrl = t.Result;
+                });
             }
 
             return currentSong;

@@ -100,7 +100,7 @@ namespace AMWin_RichPresence
                         {
                             Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Scrobbling: {1}", DateTime.UtcNow.ToString(), lastSongID));
                             var scrobble = new Scrobble(
-                                Properties.Settings.Default.LastfmScrobblePrimaryArtist ? AppleMusicWebScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist).First() : info.SongArtist,
+                                Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await AppleMusicWebScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist)).First() : info.SongArtist,
                                 Properties.Settings.Default.LastfmCleanAlbumName ? CleanAlbumName(info.SongAlbum) : info.SongAlbum, 
                                 info.SongName, 
                                 DateTime.UtcNow);

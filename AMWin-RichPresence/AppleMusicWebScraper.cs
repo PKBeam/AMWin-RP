@@ -6,21 +6,22 @@ using System.Web;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
 using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 
 namespace AMWin_RichPresence {
     internal class AppleMusicWebScraper {
-        private static HtmlDocument GetURL(string url) {
+        private async static Task<HtmlDocument> GetURL(string url) {
             var client = new HttpClient();
-            var res = client.GetStringAsync(url).Result;
+            var res = await client.GetStringAsync(url);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(res);
             return doc;
         } 
 
-        private static HtmlNode? SearchTopResults(string songName, string songAlbum, string songArtist) {
+        private async static Task<HtmlNode?> SearchTopResults(string songName, string songAlbum, string songArtist) {
             // search on the Apple Music website for the song
             var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
-            HtmlDocument doc = GetURL(url);
+            HtmlDocument doc = await GetURL(url);
 
             try {
                 // scrape search results for "Top Results" section
@@ -59,11 +60,11 @@ namespace AMWin_RichPresence {
                 return null;
             }
         }
-        private static HtmlNode? SearchSongs(string songName, string songAlbum, string songArtist) {
+        private async static Task<HtmlNode?> SearchSongs(string songName, string songAlbum, string songArtist) {
 
             // search on the Apple Music website for the song
             var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
-            HtmlDocument doc = GetURL(url);
+            HtmlDocument doc = await GetURL(url);
 
             try {
                 // scrape search results for "Songs" section
@@ -110,8 +111,8 @@ namespace AMWin_RichPresence {
                 return null;
             }
         }
-        private static string? GetSongDurationFromAlbumPage(string url, string songName) {
-            HtmlDocument doc = GetURL(url);
+        private async static Task<string?> GetSongDurationFromAlbumPage(string url, string songName) {
+            HtmlDocument doc = await GetURL(url);
             try {
                 var list = doc.DocumentNode
                         .Descendants("div")
@@ -152,16 +153,16 @@ namespace AMWin_RichPresence {
 
             return new Regex(@"http\S*?(?= \d{2,3}w)").Matches(imgUrls).Last().Value;
         }
-        public static string? GetAlbumArtUrl(string songName, string songAlbum, string songArtist) {
+        public async static Task<string?> GetAlbumArtUrl(string songName, string songAlbum, string songArtist) {
             try {
                 // scrape search results for "Top Results" section
-                var result = SearchTopResults(songName, songAlbum, songArtist);
+                var result = await SearchTopResults(songName, songAlbum, songArtist);
                 if (result != null) { 
                     return GetLargestImageUrl(result);
                 }
 
                 // now try searching in "Songs" section 
-                result = SearchSongs(songName, songAlbum, songArtist);
+                result = await SearchSongs(songName, songAlbum, songArtist);
                 if (result != null) {
                     return GetLargestImageUrl(result);
                 }
@@ -172,9 +173,9 @@ namespace AMWin_RichPresence {
             }
         }
 
-        public static string? GetSongDuration(string songName, string songAlbum, string songArtist) {
+        public async static Task<string?> GetSongDuration(string songName, string songAlbum, string songArtist) {
             try {
-                var result = SearchSongs(songName, songAlbum, songArtist);
+                var result = await SearchSongs(songName, songAlbum, songArtist);
                 if (result != null) {
                     var searchResultUrl = result
                         .Descendants("li")
@@ -184,7 +185,7 @@ namespace AMWin_RichPresence {
                         .Attributes["href"]
                         .Value;
 
-                    return GetSongDurationFromAlbumPage(searchResultUrl, songName);
+                    return await GetSongDurationFromAlbumPage(searchResultUrl, songName);
                 }    
                 return null;
             } catch {
@@ -192,9 +193,9 @@ namespace AMWin_RichPresence {
             }
         }
 
-        public static List<string> GetArtistList(string songName, string songAlbum, string songArtist) {
+        public async static Task<List<string>> GetArtistList(string songName, string songAlbum, string songArtist) {
             try {
-                var result = SearchSongs(songName, songAlbum, songArtist);
+                var result = await SearchSongs(songName, songAlbum, songArtist);
                 if (result != null) {
                     var searchResultUrl = result
                         .Descendants("li")
