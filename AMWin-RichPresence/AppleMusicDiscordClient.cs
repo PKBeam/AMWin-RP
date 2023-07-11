@@ -71,7 +71,7 @@ internal class AppleMusicDiscordClient {
                 State = subtitle,
                 Assets = new Assets() {
                     LargeImageKey = amInfo.CoverArtUrl ?? Constants.DiscordAppleMusicImageKey,
-                    LargeImageText = songName
+                    LargeImageText = songAlbum
                 }
             };
 
