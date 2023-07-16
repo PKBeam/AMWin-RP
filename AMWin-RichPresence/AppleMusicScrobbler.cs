@@ -25,6 +25,7 @@ namespace AMWin_RichPresence
         private int elapsedSeconds;
         private string? lastSongID;
         private bool hasScrobbled;
+        private double lastSongProgress;
 
         private string CleanAlbumName(string songName) {
             // Remove " - Single" and " - EP"
@@ -73,7 +74,7 @@ namespace AMWin_RichPresence
         {
             // This gets called every five seconds (Constants.RefreshPeriod) when a song is playing. There are some rules before we want to scrobble.
             // First, when the song changes, start start "our" timer over at 0.  Every time this gets called, increment by five seconds (RefreshPeriod).
-            // If we hit the threshhold (Constants.LastFMTimeBeforeScrobbling) then go ahead and Scrobble it.  Note that this works well because this method
+            // If we hit the threshold (Constants.LastFMTimeBeforeScrobbling) then go ahead and Scrobble it.  Note that this works well because this method
             //    never gets called when the song is paused!  Also, make sure that we don't keep re-Scrobbling, so set a variable "hasScrobbled" for each song.
             //
             // Important caveat:  this does not have any "Scrobbler queue" built in - so only real-time Scrobbling will work (no offline capability).  Fair trade-off
@@ -94,6 +95,15 @@ namespace AMWin_RichPresence
                 else
                 {
                     elapsedSeconds += Constants.RefreshPeriod;
+                    double currentSongProgress = GetSongProgress(info);
+
+                    if (hasScrobbled && currentSongProgress < 5 && lastSongProgress > 95)
+                    {
+                        hasScrobbled = false;
+                        elapsedSeconds = 0;
+                        Trace.WriteLine(string.Format("{0} LastFM Scrobbler - New Song: {1}", DateTime.UtcNow.ToString(), lastSongID));
+                    }
+
                     if (IsTimeToScrobble(info, elapsedSeconds) && !hasScrobbled)
                     {
                         if (lastfmAuth != null && lastfmAuth.Authenticated)
@@ -108,6 +118,8 @@ namespace AMWin_RichPresence
                         }
                         hasScrobbled = true;
                     }
+
+                    lastSongProgress = currentSongProgress;
                 }
             }
             catch (Exception ex)
@@ -126,6 +138,16 @@ namespace AMWin_RichPresence
             }
             return elapsedSeconds > Constants.LastFMTimeBeforeScrobbling;
         }
+        private double GetSongProgress(AppleMusicInfo info)
+        {
+            if (info.SongDuration.HasValue)
+            {
+                double songDuration = info.SongDuration.Value;
+                double progress = (elapsedSeconds / songDuration) * 100;
+                return progress;
+            }
 
+            return 0.0;
+        }
     }
 }
