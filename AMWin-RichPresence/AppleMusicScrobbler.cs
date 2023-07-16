@@ -101,7 +101,7 @@ namespace AMWin_RichPresence
                     {
                         hasScrobbled = false;
                         elapsedSeconds = 0;
-                        Trace.WriteLine(string.Format("{0} LastFM Scrobbler - New Song: {1}", DateTime.UtcNow.ToString(), lastSongID));
+                        Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Repeating Song: {1}", DateTime.UtcNow.ToString(), lastSongID));
                     }
 
                     if (IsTimeToScrobble(info, elapsedSeconds) && !hasScrobbled)
@@ -139,11 +139,12 @@ namespace AMWin_RichPresence
             return elapsedSeconds > Constants.LastFMTimeBeforeScrobbling;
         }
         private double GetSongProgress(AppleMusicInfo info)
-        {
-            if (info.SongDuration.HasValue)
+        {     
+            if (info.CurrentTime.HasValue && info.SongDuration.HasValue)
             {
+                double currentTime = info.CurrentTime.Value;
                 double songDuration = info.SongDuration.Value;
-                double progress = (elapsedSeconds / songDuration) * 100;
+                double progress = currentTime / songDuration * 100;
                 return progress;
             }
 

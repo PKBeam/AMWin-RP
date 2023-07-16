@@ -19,6 +19,7 @@ namespace AMWin_RichPresence {
         public int?          SongDuration = null;
         public List<string>? ArtistList = null;
         public string?       CoverArtUrl = null;
+        public int?          CurrentTime = null;
 
         public AppleMusicInfo(string songName, string songSubTitle, string songAlbum, string songArtist) {
             this.SongName = songName;
@@ -182,6 +183,8 @@ namespace AMWin_RichPresence {
                 currentTime = ParseTimeString(currentTimeElement!.Current.Name);
                 remainingDuration = ParseTimeString(remainingDurationElement!.Current.Name);
             }
+
+            currentSong.CurrentTime = currentTime;
 
             // if we have timestamps, convert them into Unix timestamps for Discord
             if (currentTime != null && remainingDuration != null) {
