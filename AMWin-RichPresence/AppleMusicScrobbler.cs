@@ -94,7 +94,7 @@ namespace AMWin_RichPresence
                 else
                 {
                     elapsedSeconds += Constants.RefreshPeriod;
-                    if (elapsedSeconds > Constants.LastFMTimeBeforeScrobbling && !hasScrobbled)
+                    if (IsTimeToScrobble(info, elapsedSeconds) && !hasScrobbled)
                     {
                         if (lastfmAuth != null && lastfmAuth.Authenticated)
                         {
@@ -118,6 +118,14 @@ namespace AMWin_RichPresence
             }
         }
 
+        private bool IsTimeToScrobble(AppleMusicInfo info, int elapsedSeconds)
+        {
+            if (info.SongDuration.HasValue && info.SongDuration.Value >= 30 ) { // we should only scrobble tracks with more than 30 seconds
+                double halfSongDuration = info.SongDuration.Value / 2;
+                return elapsedSeconds >= halfSongDuration || elapsedSeconds >= 240; // half the song has passed or more that 4 minutes
+            }
+            return elapsedSeconds > Constants.LastFMTimeBeforeScrobbling;
+        }
 
     }
 }
