@@ -95,16 +95,15 @@ namespace AMWin_RichPresence
                 else
                 {
                     elapsedSeconds += Constants.RefreshPeriod;
-                    double currentSongProgress = GetSongProgress(info);
 
-                    if (hasScrobbled && currentSongProgress < 5 && lastSongProgress > 95)
+                    if (hasScrobbled && IsRepeating(info))
                     {
                         hasScrobbled = false;
                         elapsedSeconds = 0;
                         Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Repeating Song: {1}", DateTime.UtcNow.ToString(), lastSongID));
                     }
 
-                    if (IsTimeToScrobble(info, elapsedSeconds) && !hasScrobbled)
+                    if (IsTimeToScrobble(info) && !hasScrobbled)
                     {
                         if (lastfmAuth != null && lastfmAuth.Authenticated)
                         {
@@ -119,7 +118,7 @@ namespace AMWin_RichPresence
                         hasScrobbled = true;
                     }
 
-                    lastSongProgress = currentSongProgress;
+                    lastSongProgress = info.CurrentTime ?? 0.0;
                 }
             }
             catch (Exception ex)
@@ -130,25 +129,24 @@ namespace AMWin_RichPresence
             }
         }
 
-        private bool IsTimeToScrobble(AppleMusicInfo info, int elapsedSeconds)
+        private bool IsTimeToScrobble(AppleMusicInfo info)
         {
             if (info.SongDuration.HasValue && info.SongDuration.Value >= 30 ) { // we should only scrobble tracks with more than 30 seconds
                 double halfSongDuration = info.SongDuration.Value / 2;
-                return elapsedSeconds >= halfSongDuration || elapsedSeconds >= 240; // half the song has passed or more that 4 minutes
+                return elapsedSeconds >= halfSongDuration || elapsedSeconds >= 240; // half the song has passed or more than 4 minutes
             }
             return elapsedSeconds > Constants.LastFMTimeBeforeScrobbling;
         }
-        private double GetSongProgress(AppleMusicInfo info)
-        {     
+        private bool IsRepeating(AppleMusicInfo info) {
             if (info.CurrentTime.HasValue && info.SongDuration.HasValue)
             {
                 double currentTime = info.CurrentTime.Value;
                 double songDuration = info.SongDuration.Value;
-                double progress = currentTime / songDuration * 100;
-                return progress;
+                double repeatThreshold =  1.5 * Constants.RefreshPeriod;
+                return currentTime <= repeatThreshold && lastSongProgress >= (songDuration - repeatThreshold);
             }
 
-            return 0.0;
+            return false;
         }
     }
 }
