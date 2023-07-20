@@ -25,6 +25,7 @@ namespace AMWin_RichPresence
         private int elapsedSeconds;
         private string? lastSongID;
         private bool hasScrobbled;
+        private double lastSongProgress;
 
         private string CleanAlbumName(string songName) {
             // Remove " - Single" and " - EP"
@@ -73,7 +74,7 @@ namespace AMWin_RichPresence
         {
             // This gets called every five seconds (Constants.RefreshPeriod) when a song is playing. There are some rules before we want to scrobble.
             // First, when the song changes, start start "our" timer over at 0.  Every time this gets called, increment by five seconds (RefreshPeriod).
-            // If we hit the threshhold (Constants.LastFMTimeBeforeScrobbling) then go ahead and Scrobble it.  Note that this works well because this method
+            // If we hit the threshold (Constants.LastFMTimeBeforeScrobbling) then go ahead and Scrobble it.  Note that this works well because this method
             //    never gets called when the song is paused!  Also, make sure that we don't keep re-Scrobbling, so set a variable "hasScrobbled" for each song.
             //
             // Important caveat:  this does not have any "Scrobbler queue" built in - so only real-time Scrobbling will work (no offline capability).  Fair trade-off
@@ -94,7 +95,15 @@ namespace AMWin_RichPresence
                 else
                 {
                     elapsedSeconds += Constants.RefreshPeriod;
-                    if (IsTimeToScrobble(info, elapsedSeconds) && !hasScrobbled)
+
+                    if (hasScrobbled && IsRepeating(info))
+                    {
+                        hasScrobbled = false;
+                        elapsedSeconds = 0;
+                        Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Repeating Song: {1}", DateTime.UtcNow.ToString(), lastSongID));
+                    }
+
+                    if (IsTimeToScrobble(info) && !hasScrobbled)
                     {
                         if (lastfmAuth != null && lastfmAuth.Authenticated)
                         {
@@ -108,6 +117,8 @@ namespace AMWin_RichPresence
                         }
                         hasScrobbled = true;
                     }
+
+                    lastSongProgress = info.CurrentTime ?? 0.0;
                 }
             }
             catch (Exception ex)
@@ -118,14 +129,24 @@ namespace AMWin_RichPresence
             }
         }
 
-        private bool IsTimeToScrobble(AppleMusicInfo info, int elapsedSeconds)
+        private bool IsTimeToScrobble(AppleMusicInfo info)
         {
             if (info.SongDuration.HasValue && info.SongDuration.Value >= 30 ) { // we should only scrobble tracks with more than 30 seconds
                 double halfSongDuration = info.SongDuration.Value / 2;
-                return elapsedSeconds >= halfSongDuration || elapsedSeconds >= 240; // half the song has passed or more that 4 minutes
+                return elapsedSeconds >= halfSongDuration || elapsedSeconds >= 240; // half the song has passed or more than 4 minutes
             }
             return elapsedSeconds > Constants.LastFMTimeBeforeScrobbling;
         }
+        private bool IsRepeating(AppleMusicInfo info) {
+            if (info.CurrentTime.HasValue && info.SongDuration.HasValue)
+            {
+                double currentTime = info.CurrentTime.Value;
+                double songDuration = info.SongDuration.Value;
+                double repeatThreshold =  1.5 * Constants.RefreshPeriod;
+                return currentTime <= repeatThreshold && lastSongProgress >= (songDuration - repeatThreshold);
+            }
 
+            return false;
+        }
     }
 }
