@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
         mc:Ignorable="d"
         Icon="/Resources/AMWinRP.ico"
-        Title="AMWin-RichPresence" Height="485" Width="440" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="AMWin-RichPresence" Height="510" Width="440" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <DockPanel>
             <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
