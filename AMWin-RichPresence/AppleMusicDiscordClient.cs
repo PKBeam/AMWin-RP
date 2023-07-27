@@ -75,7 +75,9 @@ internal class AppleMusicDiscordClient {
                 }
             };
 
-            if (showSmallImage) {
+            if (amInfo.IsPaused) {
+                rp.Assets.SmallImageKey = Constants.DiscordAppleMusicPauseImageKey;
+            } else if (showSmallImage) {
                 rp.Assets.SmallImageKey = (amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey;
             }
 

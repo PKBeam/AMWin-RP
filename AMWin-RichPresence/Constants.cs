@@ -28,7 +28,7 @@ namespace AMWin_RichPresence {
         public static string  DiscordClientID = "1066220978406953012";
         public static string  DiscordAppleMusicImageKey = "applemusic1024x";
         public static string  DiscordAppleMusicPlayImageKey = "applemusicplay1024x";
-
+        public static string  DiscordAppleMusicPauseImageKey = "applemusicpause1024x";
         public static string LastFMCredentialTargetName = "Last FM Password";
         public static int LastFMTimeBeforeScrobbling = 20; // seconds
 

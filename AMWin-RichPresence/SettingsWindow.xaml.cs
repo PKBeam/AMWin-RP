@@ -33,6 +33,10 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
+        private void CheckBox_ShowRPWhenMusicPaused_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
         private void CheckBox_ShowAppleMusicIcon_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }

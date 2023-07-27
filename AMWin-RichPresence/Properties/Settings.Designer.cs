@@ -142,5 +142,17 @@ namespace AMWin_RichPresence.Properties {
                 this["LastfmEnable"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowRPWhenMusicPaused {
+            get {
+                return ((bool)(this["ShowRPWhenMusicPaused"]));
+            }
+            set {
+                this["ShowRPWhenMusicPaused"] = value;
+            }
+        }
     }
 }
