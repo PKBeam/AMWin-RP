@@ -12,7 +12,8 @@ namespace AMWin_RichPresence {
     internal class AppleMusicWebScraper {
         private async static Task<HtmlDocument> GetURL(string url) {
             var client = new HttpClient();
-            var res = await client.GetStringAsync(url);
+            var cleanUrl = url.Replace("&", " ");
+            var res = await client.GetStringAsync(cleanUrl);
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(res);
             return doc;
@@ -20,7 +21,7 @@ namespace AMWin_RichPresence {
 
         private async static Task<HtmlNode?> SearchTopResults(string songName, string songAlbum, string songArtist) {
             // search on the Apple Music website for the song
-            var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
+            var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";     
             HtmlDocument doc = await GetURL(url);
 
             try {
@@ -134,7 +135,7 @@ namespace AMWin_RichPresence {
                         .InnerHtml;
 
                     // check that the result actually is the song
-                    if (songTitle == songName) {
+                    if (HttpUtility.HtmlDecode(songTitle) == songName) {
                         return duration;
                     }
                 }
