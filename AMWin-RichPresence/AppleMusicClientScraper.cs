@@ -47,13 +47,14 @@ namespace AMWin_RichPresence {
     internal class AppleMusicClientScraper {
 
         public delegate void RefreshHandler(AppleMusicInfo? newInfo);
-     
+        string lastFmApiKey;
         Timer timer;
         RefreshHandler refreshHandler;
         AppleMusicInfo? currentSong;
 
-        public AppleMusicClientScraper(int refreshPeriodInSec, RefreshHandler refreshHandler) {
+        public AppleMusicClientScraper(string lastFmApiKey, int refreshPeriodInSec, RefreshHandler refreshHandler) {
             this.refreshHandler = refreshHandler;
+            this.lastFmApiKey = lastFmApiKey;
             timer = new Timer(refreshPeriodInSec * 1000);
             timer.Elapsed += Refresh;
             Refresh(this, null);
@@ -166,7 +167,7 @@ namespace AMWin_RichPresence {
 
                 // try to get song duration if we don't have it
                 if (currentSong.SongDuration == null) {
-                    AppleMusicWebScraper.GetSongDuration(songName, songAlbum, songArtist).ContinueWith(t => {
+                    AppleMusicWebScraper.GetSongDuration(lastFmApiKey, songName, songAlbum, songArtist).ContinueWith(t => {
                         string? dur = t.Result;
                         currentSong.SongDuration = dur == null ? null : ParseTimeString(dur);
                     });
@@ -202,7 +203,7 @@ namespace AMWin_RichPresence {
             // ------------------------------------------------
 
             if (currentSong.CoverArtUrl == null) {
-                AppleMusicWebScraper.GetAlbumArtUrl(songName, songAlbum, songArtist).ContinueWith(t => {
+                AppleMusicWebScraper.GetAlbumArtUrl(lastFmApiKey, songName, songAlbum, songArtist).ContinueWith(t => {
                     currentSong.CoverArtUrl = t.Result;
                 });
             }

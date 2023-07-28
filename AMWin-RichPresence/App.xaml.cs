@@ -33,7 +33,7 @@ namespace AMWin_RichPresence {
             scrobblerClient.init(lastFmCredentials);
 
             // start Apple Music scraper
-            amScraper = new(Constants.RefreshPeriod, (newInfo) => {
+            amScraper = new(AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey, Constants.RefreshPeriod, (newInfo) => {
                 
                 // don't update scraper if Apple Music is paused or not open
                 if (newInfo != null && newInfo != null && (AMWin_RichPresence.Properties.Settings.Default.ShowRPWhenMusicPaused || !newInfo.IsPaused)) {

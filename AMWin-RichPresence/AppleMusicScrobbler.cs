@@ -27,7 +27,7 @@ namespace AMWin_RichPresence
         private bool hasScrobbled;
         private double lastSongProgress;
 
-        private string CleanAlbumName(string songName) {
+        public static string CleanAlbumName(string songName) {
             // Remove " - Single" and " - EP"
             var re = new Regex(@"\s-\s((Single)|(EP))$");
             return re.Replace(songName, new MatchEvaluator((m) => { return ""; }));
