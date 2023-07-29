@@ -3,19 +3,23 @@ using System.Linq;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Web;
-using System.Windows.Controls;
 using System.Text.RegularExpressions;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Text.Json;
 using System.Diagnostics;
+using System;
 
 namespace AMWin_RichPresence {
     internal class AppleMusicWebScraper {
         private async static Task<HtmlDocument> GetURL(string url) {
             var client = new HttpClient();
-            var cleanUrl = url.Replace("&", " ");
+            // Apple Music web search doesn't like ampersands... even if they're HTML-escaped?
+            var cleanUrl = HttpUtility.HtmlEncode(url.Replace("&", " "));
+            Trace.WriteLine($"Starting HTTP GET for {cleanUrl}");
+            var stopwatch = Stopwatch.StartNew();
             var res = await client.GetStringAsync(cleanUrl);
+            stopwatch.Stop();
+            Trace.WriteLine($"HTTP GET for {cleanUrl} took {stopwatch.ElapsedMilliseconds}ms");
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(res);
             return doc;
@@ -165,7 +169,7 @@ namespace AMWin_RichPresence {
             }
         }
         public async static Task<string?> GetAlbumArtUrlLastFm(string apiKey, string songAlbum, string songArtist) {
-            var j = await GetURLJson($"http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={apiKey}&artist={songArtist}&album={AppleMusicScrobbler.CleanAlbumName(songAlbum)}&format=json");
+            var j = await GetURLJson($"http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={apiKey}&artist={Uri.EscapeDataString(songArtist)}&album={Uri.EscapeDataString(AppleMusicScrobbler.CleanAlbumName(songAlbum))}&format=json");
             var imgs = j.RootElement.GetProperty("album").GetProperty("image");
             foreach (var img in imgs.EnumerateArray()) {
                 if (img.GetProperty("size").ToString() == "mega") {
@@ -216,9 +220,10 @@ namespace AMWin_RichPresence {
             }
         }
         public async static Task<string?> GetSongDurationLastFm(string apiKey, string songName, string songArtist) {
-            var j = await GetURLJson($"http://ws.audioscrobbler.com/2.0/?method=track.getinfo&api_key={apiKey}&artist={songArtist}&track={songName}&format=json");
+            var url = $"http://ws.audioscrobbler.com/2.0/?method=track.getinfo&api_key={apiKey}&artist={Uri.EscapeDataString(songArtist)}&track={Uri.EscapeDataString(songName)}&format=json";
+            var j = await GetURLJson(url);
             var dur = int.Parse(j.RootElement.GetProperty("track").GetProperty("duration").ToString())/1000;
-            return $"{dur / 60}:{$"{dur % 60}".PadLeft(2, '0')}";
+            return dur == 0 ? null : $"{dur / 60}:{$"{dur % 60}".PadLeft(2, '0')}";
         }
         public async static Task<string?> GetSongDurationAppleMusic(string songName, string songAlbum, string songArtist) {
             try {
