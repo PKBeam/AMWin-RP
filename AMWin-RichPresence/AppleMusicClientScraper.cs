@@ -97,8 +97,13 @@ namespace AMWin_RichPresence {
             //  Check if there is a song playing
             // ------------------------------------------------
 
-            var amWinChild = amWindow.FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportBar"));
-            var songFields = amWinChild.FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
+            var amWinChild = amWindow
+                .FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportBar"));
+
+            var songFields = amWinChild
+                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCD"))
+                .FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
+
 
             if (songFields.Count != 2) {
                 return null;
