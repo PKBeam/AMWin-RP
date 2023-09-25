@@ -173,7 +173,8 @@ namespace AMWin_RichPresence {
             var imgs = j.RootElement.GetProperty("album").GetProperty("image");
             foreach (var img in imgs.EnumerateArray()) {
                 if (img.GetProperty("size").ToString() == "mega") {
-                    return img.GetProperty("#text").ToString();
+                    var imgUrl = img.GetProperty("#text").ToString();
+                    return imgUrl == "" ? null : imgUrl;
                 }
             }
             return null;
