@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Timers;
 using System.Windows.Automation;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AMWin_RichPresence {
 
@@ -51,14 +53,16 @@ namespace AMWin_RichPresence {
         Timer timer;
         RefreshHandler refreshHandler;
         AppleMusicInfo? currentSong;
+        public bool composerAsArtist; // for classical music, treat composer (not performer) as artist
 
-        public AppleMusicClientScraper(string lastFmApiKey, int refreshPeriodInSec, RefreshHandler refreshHandler) {
+        public AppleMusicClientScraper(string lastFmApiKey, int refreshPeriodInSec, bool composerAsArtist, RefreshHandler refreshHandler) {
             this.refreshHandler = refreshHandler;
             this.lastFmApiKey = lastFmApiKey;
             timer = new Timer(refreshPeriodInSec * 1000);
             timer.Elapsed += Refresh;
             Refresh(this, null);
             timer.Start();
+            this.composerAsArtist = composerAsArtist;
         }
 
         public void Refresh(object? source, ElapsedEventArgs? e) {
@@ -129,24 +133,42 @@ namespace AMWin_RichPresence {
             var songName = songNameElement.Current.Name;
             var songAlbumArtist = songAlbumArtistElement.Current.Name;
 
-            string songArtist; 
+            string songArtist;
             string songAlbum;
+
+            // some classical songs add "By " before the composer's name
+            string songComposer = null;
+            string songPerformer = null; 
+            var composerPerformerRegex = new Regex(@"By\s.*?\s\u2014");
+            var songComposerPerformer = composerPerformerRegex.Matches(songAlbumArtist);
             try {
-                // U+2014 is the emdash, not the standard "-" character on the keyboard!
-                songArtist = songAlbumArtist.Split(" \u2014 ")[0];
-                songAlbum = songAlbumArtist.Split(" \u2014 ")[1];
+                if (songComposerPerformer.Count > 0) {
+                    songComposer = songAlbumArtist.Split(" \u2014 ")[0].Remove(0, 3);
+                    songPerformer = songAlbumArtist.Split(" \u2014 ")[1];
+                    songArtist = composerAsArtist ? songComposer : songPerformer;
+                    songAlbum = songAlbumArtist.Split(" \u2014 ")[2];
+                } else {
+                    // U+2014 is the emdash used by the Apple Music app, not the standard "-" character on the keyboard!
+                    songArtist = songAlbumArtist.Split(" \u2014 ")[0];
+                    songAlbum = songAlbumArtist.Split(" \u2014 ")[1];
+                }
             } catch {
                 Trace.WriteLine($"Could not parse '{songAlbumArtist}' into artist and album.");
                 songArtist = "";
                 songAlbum = "";
             }
+
+            // when searching for song info, use the performer as the artist instead of composer
+            string songSearchArtist = songPerformer ?? songArtist;
+
             // if this is a new song, clear out the current song
-            if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongSubTitle != songAlbumArtist) {
+            if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongArtist != songArtist || currentSong?.SongSubTitle != songAlbumArtist) {
                 currentSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
             }
-
-            if (currentSong.ArtistList == null) {
-                AppleMusicWebScraper.GetArtistList(songName, songAlbum, songArtist).ContinueWith(t => {
+            
+            // find artist list... unless it's a classical song
+            if (currentSong.ArtistList == null && songComposer == null) {
+                AppleMusicWebScraper.GetArtistList(songName, songAlbum, songSearchArtist).ContinueWith(t => {
                     currentSong.ArtistList = t.Result;
                     if (currentSong.ArtistList.Count == 0) {
                         currentSong.ArtistList = null;
@@ -176,7 +198,7 @@ namespace AMWin_RichPresence {
 
                 // try to get song duration if we don't have it
                 if (currentSong.SongDuration == null) {
-                    AppleMusicWebScraper.GetSongDuration(lastFmApiKey, songName, songAlbum, songArtist).ContinueWith(t => {
+                    AppleMusicWebScraper.GetSongDuration(lastFmApiKey, songName, songAlbum, songSearchArtist).ContinueWith(t => {
                         string? dur = t.Result;
                         currentSong.SongDuration = dur == null ? null : ParseTimeString(dur);
                     });
@@ -214,7 +236,7 @@ namespace AMWin_RichPresence {
             // ------------------------------------------------
 
             if (currentSong.CoverArtUrl == null) {
-                AppleMusicWebScraper.GetAlbumArtUrl(lastFmApiKey, songName, songAlbum, songArtist).ContinueWith(t => {
+                AppleMusicWebScraper.GetAlbumArtUrl(lastFmApiKey, songName, songAlbum, songSearchArtist).ContinueWith(t => {
                     currentSong.CoverArtUrl = t.Result;
                 });
             }

@@ -29,6 +29,10 @@ namespace AMWin_RichPresence {
 
             SaveSettings();
         }
+        private void CheckBox_ClassicalComposerAsArtist_Click(object sender, RoutedEventArgs e) {
+            ((App)Application.Current).UpdateScraperPreferences(CheckBox_ClassicalComposerAsArtist.IsChecked == true);
+            SaveSettings();
+        }
         private void CheckBox_EnableDiscordRP_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }

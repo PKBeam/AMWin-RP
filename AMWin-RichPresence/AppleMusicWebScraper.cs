@@ -33,7 +33,8 @@ namespace AMWin_RichPresence {
         // Apple Music web search functions
         private async static Task<HtmlNode?> SearchTopResults(string songName, string songAlbum, string songArtist) {
             // search on the Apple Music website for the song
-            var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";     
+            var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
+            var url = $"https://music.apple.com/us/search?term={searchTerm}";
             HtmlDocument doc = await GetURL(url);
 
             try {
@@ -76,7 +77,8 @@ namespace AMWin_RichPresence {
         private async static Task<HtmlNode?> SearchSongs(string songName, string songAlbum, string songArtist) {
 
             // search on the Apple Music website for the song
-            var url = $"https://music.apple.com/us/search?term={songName} {songAlbum} {songArtist}";
+            var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
+            var url = $"https://music.apple.com/us/search?term={searchTerm}";
             HtmlDocument doc = await GetURL(url);
 
             try {
@@ -223,8 +225,13 @@ namespace AMWin_RichPresence {
         public async static Task<string?> GetSongDurationLastFm(string apiKey, string songName, string songArtist) {
             var url = $"http://ws.audioscrobbler.com/2.0/?method=track.getinfo&api_key={apiKey}&artist={Uri.EscapeDataString(songArtist)}&track={Uri.EscapeDataString(songName)}&format=json";
             var j = await GetURLJson(url);
-            var dur = int.Parse(j.RootElement.GetProperty("track").GetProperty("duration").ToString())/1000;
-            return dur == 0 ? null : $"{dur / 60}:{$"{dur % 60}".PadLeft(2, '0')}";
+            var track = j.RootElement.GetProperty("track");
+            try {
+                var dur = int.Parse(track.GetProperty("duration").ToString()) / 1000;
+                return dur == 0 ? null : $"{dur / 60}:{$"{dur % 60}".PadLeft(2, '0')}";
+            } catch {
+                return null;
+            }
         }
         public async static Task<string?> GetSongDurationAppleMusic(string songName, string songAlbum, string songArtist) {
             try {

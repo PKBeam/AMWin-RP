@@ -154,5 +154,17 @@ namespace AMWin_RichPresence.Properties {
                 this["ShowRPWhenMusicPaused"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ClassicalComposerAsArtist {
+            get {
+                return ((bool)(this["ClassicalComposerAsArtist"]));
+            }
+            set {
+                this["ClassicalComposerAsArtist"] = value;
+            }
+        }
     }
 }

@@ -26,6 +26,7 @@ namespace AMWin_RichPresence {
 
             // start Discord RPC
             var subtitleOptions = (AppleMusicDiscordClient.RPSubtitleDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPSubtitleChoice;
+            var classicalComposerAsArtist = AMWin_RichPresence.Properties.Settings.Default.ClassicalComposerAsArtist;
             discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions);
 
             // start Last.FM scrobbler
@@ -33,7 +34,7 @@ namespace AMWin_RichPresence {
             scrobblerClient.init(lastFmCredentials);
 
             // start Apple Music scraper
-            amScraper = new(AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey, Constants.RefreshPeriod, (newInfo) => {
+            amScraper = new(AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey, Constants.RefreshPeriod, classicalComposerAsArtist, (newInfo) => {
                 
                 // don't update scraper if Apple Music is paused or not open
                 if (newInfo != null && newInfo != null && (AMWin_RichPresence.Properties.Settings.Default.ShowRPWhenMusicPaused || !newInfo.IsPaused)) {
@@ -73,6 +74,9 @@ namespace AMWin_RichPresence {
 
         internal void UpdateLastfmCreds(bool showMessageBoxOnSuccess) {
             scrobblerClient.UpdateCreds(lastFmCredentials, showMessageBoxOnSuccess);
+        }
+        internal void UpdateScraperPreferences(bool composerAsArtist) {
+            amScraper.composerAsArtist = composerAsArtist;
         }
     }
 }

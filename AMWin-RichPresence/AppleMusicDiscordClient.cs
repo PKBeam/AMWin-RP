@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 using System.Linq;
 using AMWin_RichPresence;
 using DiscordRPC;
@@ -64,6 +65,10 @@ internal class AppleMusicDiscordClient {
             case RPSubtitleDisplayOptions.AlbumOnly:
                 subtitle = songAlbum;
                 break;
+        }
+        if (ASCIIEncoding.Unicode.GetByteCount(subtitle) > 128) {
+            // TODO fix this to account for multibyte unicode characters
+            subtitle = subtitle.Substring(0, 60) + "...";
         }
         try {
             var rp = new RichPresence() {
