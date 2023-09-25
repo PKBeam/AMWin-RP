@@ -93,19 +93,20 @@ namespace AMWin_RichPresence {
 
         public AppleMusicInfo? GetAppleMusicInfo(AutomationElement amWindow) {
 
-            // ================================================
-            //  Check if there is a song playing
-            // ------------------------------------------------
-
-            var amWinChild = amWindow
-                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ClassNameProperty,    "Microsoft.UI.Content.DesktopChildSiteBridge"))
+            var amWinTransportBar = amWindow
+                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ClassNameProperty, "Microsoft.UI.Content.DesktopChildSiteBridge"))
                 .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "NavView"))
                 .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportBar"));
 
-            var songFields = amWinChild
-                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCD"))
-                .FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
+            var amWinLCD = amWinTransportBar
+                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCD"));
 
+            var songFields = amWinLCD
+                .FindAll  (TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
+
+            // ================================================
+            //  Check if there is a song playing
+            // ------------------------------------------------
 
             if (songFields.Count != 2) {
                 return null;
@@ -156,13 +157,14 @@ namespace AMWin_RichPresence {
             //  Get song timestamps
             // ------------------------------------------------
 
-            var currentTimeElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "CurrentTime"));
-            var remainingDurationElement = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "Duration"));
+            var currentTimeElement       = amWinLCD.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "CurrentTime"));
+            var remainingDurationElement = amWinLCD.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "Duration"));
 
             // grab the seek slider to check song playback progress
-            var songProgressSlider = amWinChild
+            var songProgressSlider = amWinLCD
                 .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCDScrubber"))? // this may be hidden when a song is initialising
                 .GetCurrentPattern(RangeValuePattern.Pattern) as RangeValuePattern;
+
             var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Current.Value / songProgressSlider.Current.Maximum;
 
             // calculate song timestamps
@@ -201,7 +203,9 @@ namespace AMWin_RichPresence {
             }
 
             // check if the song is paused or not
-            var playPauseButton = amWinChild.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportControl_PlayPauseStop"));
+            var playPauseButton = amWinTransportBar
+                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportControl_PlayPauseStop"));
+
             currentSong.IsPaused = playPauseButton.Current.Name == "Play";
 
 
