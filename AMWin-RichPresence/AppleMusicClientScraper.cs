@@ -98,7 +98,9 @@ namespace AMWin_RichPresence {
             // ------------------------------------------------
 
             var amWinChild = amWindow
-                .FindFirst(TreeScope.Descendants, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportBar"));
+                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ClassNameProperty,    "Microsoft.UI.Content.DesktopChildSiteBridge"))
+                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "NavView"))
+                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportBar"));
 
             var songFields = amWinChild
                 .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCD"))
