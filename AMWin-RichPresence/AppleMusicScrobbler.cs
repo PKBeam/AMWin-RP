@@ -21,6 +21,7 @@ namespace AMWin_RichPresence
 
         private LastAuth? lastfmAuth;
         private IScrobbler? lastFmScrobbler;
+        private ITrackApi? trackApi;
         private HttpClient? httpClient;
         private int elapsedSeconds;
         private string? lastSongID;
@@ -53,6 +54,7 @@ namespace AMWin_RichPresence
                 }
 
                 lastFmScrobbler = new MemoryScrobbler(lastfmAuth, httpClient);
+                trackApi = new TrackApi(lastfmAuth, httpClient);
             }
         }
 
@@ -61,16 +63,21 @@ namespace AMWin_RichPresence
             return lastFmScrobbler;
         }
 
+        public ITrackApi? GetTrackApi()
+        {
+            return trackApi;
+        }
+
         public void UpdateCreds(LastFmCredentials credentials, bool showMessageBoxOnSuccess)
         {
             httpClient = null;
             lastfmAuth = null;
             lastFmScrobbler = null;
+            trackApi = null;
             init(credentials, showMessageBoxOnSuccess);
         }
 
-
-        public async void Scrobbleit(AppleMusicInfo info, IScrobbler lastFmScrobbler)
+        public async void Scrobbleit(AppleMusicInfo info, IScrobbler lastFmScrobbler, ITrackApi trackApi)
         {
             // This gets called every five seconds (Constants.RefreshPeriod) when a song is playing. There are some rules before we want to scrobble.
             // First, when the song changes, start start "our" timer over at 0.  Every time this gets called, increment by five seconds (RefreshPeriod).
@@ -80,10 +87,14 @@ namespace AMWin_RichPresence
             // Important caveat:  this does not have any "Scrobbler queue" built in - so only real-time Scrobbling will work (no offline capability).  Fair trade-off
             //    until an official Scrobbler is released.
 
-
             try
             {
-                string thisSongID = info.SongArtist + info.SongName + info.SongAlbum;
+                var thisSongID = info.SongArtist + info.SongName + info.SongAlbum;
+                var scrobble = new Scrobble(
+                    Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await AppleMusicWebScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist)).FirstOrDefault(info.SongArtist) : info.SongArtist,
+                    Properties.Settings.Default.LastfmCleanAlbumName ? CleanAlbumName(info.SongAlbum) : info.SongAlbum,
+                    info.SongName,
+                    DateTime.UtcNow);
 
                 if (thisSongID != lastSongID)
                 {
@@ -91,6 +102,9 @@ namespace AMWin_RichPresence
                     elapsedSeconds = 0;
                     hasScrobbled = false;
                     Trace.WriteLine(string.Format("{0} LastFM Scrobbler - New Song: {1}", DateTime.UtcNow.ToString(), lastSongID));
+
+                    await trackApi.UpdateNowPlayingAsync(scrobble);
+                    Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Updated now playing: {1}", DateTime.UtcNow.ToString(), lastSongID));
                 }
                 else
                 {
@@ -108,11 +122,7 @@ namespace AMWin_RichPresence
                         if (lastfmAuth != null && lastfmAuth.Authenticated)
                         {
                             Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Scrobbling: {1}", DateTime.UtcNow.ToString(), lastSongID));
-                            var scrobble = new Scrobble(
-                                Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await AppleMusicWebScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist)).FirstOrDefault(info.SongArtist) : info.SongArtist,
-                                Properties.Settings.Default.LastfmCleanAlbumName ? CleanAlbumName(info.SongAlbum) : info.SongAlbum, 
-                                info.SongName, 
-                                DateTime.UtcNow);
+                            
                             var response = await lastFmScrobbler.ScrobbleAsync(scrobble);
                         }
                         hasScrobbled = true;
