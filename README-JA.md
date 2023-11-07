@@ -11,7 +11,7 @@ Apple MusicのネイティブWindowsアプリ向けのDiscord Rich Presenceク�
 
 リリースは[こちら](https://github.com/PKBeam/AMWin-RP/releases)で見つけることができます。
 
-もし、[.NET7.0ランタイム](https://dotnet.microsoft.com/ja-jp/download/dotnet/7.0)を持っているか、インストール可能であれば、NoRuntime リリースをダウンロードできます。
+    もし、[.NET7.0ランタイム](https://dotnet.microsoft.com/ja-jp/download/dotnet/7.0)をインストールしているか、インストール可能であれば、NoRuntime リリースをダウンロードできます。
 
 それ以外の場合は、NoRuntimeとラベル付されていない別のリリースをダウンロードしてください。
 このリリースは、アプリケーションの実行に必要な.NET 7.0のコンポーネントをバンドルしているため、ファイルサイズが大きくなっています。
