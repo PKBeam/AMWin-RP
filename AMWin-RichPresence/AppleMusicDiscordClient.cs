@@ -43,7 +43,7 @@ internal class AppleMusicDiscordClient {
         }
     }
 
-    public void SetPresence(AppleMusicInfo amInfo, bool showSmallImage) {
+    public void SetPresence(AppleMusicInfo amInfo, bool showSmallImage, bool showBigImage) {
         if (!enabled) {
             return;
         }
@@ -75,7 +75,7 @@ internal class AppleMusicDiscordClient {
                 Details = songName,
                 State = subtitle,
                 Assets = new Assets() {
-                    LargeImageKey = amInfo.CoverArtUrl ?? Constants.DiscordAppleMusicImageKey,
+                    LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey,
                     LargeImageText = songAlbum
                 }
             };
@@ -83,7 +83,7 @@ internal class AppleMusicDiscordClient {
             if (amInfo.IsPaused) {
                 rp.Assets.SmallImageKey = Constants.DiscordAppleMusicPauseImageKey;
             } else if (showSmallImage) {
-                rp.Assets.SmallImageKey = (amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey;
+                rp.Assets.SmallImageKey = (!showBigImage || amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey;
             }
 
             // add timestamps, if they're there

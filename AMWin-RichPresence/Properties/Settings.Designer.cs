@@ -166,5 +166,17 @@ namespace AMWin_RichPresence.Properties {
                 this["ClassicalComposerAsArtist"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableRPCoverImages {
+            get {
+                return ((bool)(this["EnableRPCoverImages"]));
+            }
+            set {
+                this["EnableRPCoverImages"] = value;
+            }
+        }
     }
 }

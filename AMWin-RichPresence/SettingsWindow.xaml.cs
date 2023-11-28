@@ -33,6 +33,10 @@ namespace AMWin_RichPresence {
             ((App)Application.Current).UpdateScraperPreferences(CheckBox_ClassicalComposerAsArtist.IsChecked == true);
             SaveSettings();
         }
+
+        private void CheckBox_EnableRPCoverImages_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
         private void CheckBox_EnableDiscordRP_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
@@ -154,5 +158,7 @@ namespace AMWin_RichPresence {
             String plainStr = new System.Net.NetworkCredential(string.Empty, secureStr).Password;
             return plainStr;
         }
+
+
     }
 }

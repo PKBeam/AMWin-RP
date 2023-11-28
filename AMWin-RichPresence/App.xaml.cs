@@ -42,7 +42,7 @@ namespace AMWin_RichPresence {
                     // Discord RP update
                     if (AMWin_RichPresence.Properties.Settings.Default.EnableDiscordRP) {
                         discordClient.Enable();
-                        discordClient.SetPresence(newInfo, AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon);
+                        discordClient.SetPresence(newInfo, AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon, AMWin_RichPresence.Properties.Settings.Default.EnableRPCoverImages);
                     } else {
                         discordClient.Disable();
                     }
