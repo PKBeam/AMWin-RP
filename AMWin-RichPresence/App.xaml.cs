@@ -48,9 +48,9 @@ namespace AMWin_RichPresence {
                     }
 
                     // Last.FM scrobble update
-                    var scrobbler = scrobblerClient.GetLastFmScrobbler();
+                    var scrobbler = scrobblerClient?.GetLastFmScrobbler();
                     if (AMWin_RichPresence.Properties.Settings.Default.LastfmEnable && scrobbler != null) {
-                        scrobblerClient.Scrobbleit(newInfo, scrobbler);
+                        scrobblerClient?.Scrobbleit(newInfo, scrobbler);
                     }
                 } else {
                     discordClient.Disable();

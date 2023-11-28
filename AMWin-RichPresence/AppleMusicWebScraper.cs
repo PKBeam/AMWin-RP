@@ -68,7 +68,6 @@ namespace AMWin_RichPresence {
                         return result;
                     }
                 }
-
                 return null;
             } catch {
                 return null;

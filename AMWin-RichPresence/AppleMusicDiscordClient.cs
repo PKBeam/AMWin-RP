@@ -122,6 +122,7 @@ internal class AppleMusicDiscordClient {
     private void DeinitClient() {
         if (client != null) {
             client.Deinitialize();
+            client.Dispose();
             client = null;
         }
     }

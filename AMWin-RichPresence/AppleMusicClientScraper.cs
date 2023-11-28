@@ -65,6 +65,10 @@ namespace AMWin_RichPresence {
             this.composerAsArtist = composerAsArtist;
         }
 
+        ~AppleMusicClientScraper() {
+            timer.Elapsed -= Refresh;
+        }
+
         public void Refresh(object? source, ElapsedEventArgs? e) {
             AppleMusicInfo? appleMusicInfo = null;
             AutomationElement? appleMusicWindow;
@@ -89,6 +93,7 @@ namespace AMWin_RichPresence {
                         return element;
                     }
                 }
+                allWindows = null;
             } catch (ElementNotAvailableException) {
                 return null;
             }
