@@ -163,7 +163,7 @@ namespace AMWin_RichPresence {
         // Supported APIs: Last.FM, Apple Music web search
         public async static Task<string?> GetAlbumArtUrl(string lastFmApiKey, string songName, string songAlbum, string songArtist) {
             try {
-                var lastFmImg = await GetAlbumArtUrlLastFm(lastFmApiKey, songAlbum, songArtist);
+                var lastFmImg = (lastFmApiKey == "") ? null : await GetAlbumArtUrlLastFm(lastFmApiKey, songAlbum, songArtist);
                 return lastFmImg ?? await GetAlbumArtUrlAppleMusic(songName, songAlbum, songArtist);
             } catch {
                 return null;
@@ -215,7 +215,7 @@ namespace AMWin_RichPresence {
         // Supported APIs: Last.FM, Apple Music web search
         public async static Task<string?> GetSongDuration(string lastFmApiKey, string songName, string songAlbum, string songArtist) {
             try {
-                var lastFmDur = await GetSongDurationLastFm(lastFmApiKey, songName, songArtist);
+                var lastFmDur = (lastFmApiKey == "") ? null : await GetSongDurationLastFm(lastFmApiKey, songName, songArtist);
                 return lastFmDur ?? await GetSongDurationAppleMusic(songName, songAlbum, songArtist);
             } catch {
                 return null;
