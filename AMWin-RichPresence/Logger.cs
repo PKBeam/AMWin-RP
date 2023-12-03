@@ -10,16 +10,15 @@ namespace AMWin_RichPresence {
 
         public Logger() {
             var date = DateTime.Now.ToString("yyyy-MM-dd");
-            var appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), Constants.AppDataFolderName);
 
             // delete old logs
-            var logFiles = Directory.GetFiles(appDataPath).Where(f => f.EndsWith(".log"));
+            var logFiles = Directory.GetFiles(Constants.AppDataFolder).Where(f => f.EndsWith(".log"));
             if (logFiles.Count() > Constants.MaxLogFiles) {
                 File.Delete(logFiles.Order().First());
             }
 
             // open new log file
-            logFile = Path.Combine(appDataPath, $"{date}.log");
+            logFile = Path.Combine(Constants.AppDataFolder, $"{date}.log");
         }
 
         public void Log(string s) {

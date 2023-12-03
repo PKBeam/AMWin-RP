@@ -158,8 +158,8 @@ namespace AMWin_RichPresence {
                     songArtist = songAlbumArtist.Split(" \u2014 ")[0];
                     songAlbum = songAlbumArtist.Split(" \u2014 ")[1];
                 }
-            } catch {
-                logger?.Log($"Could not parse '{songAlbumArtist}' into artist and album.");
+            } catch (Exception ex) {
+                logger?.Log($"Could not parse '{songAlbumArtist}' into artist and album: {ex}");
                 songArtist = "";
                 songAlbum = "";
             }
