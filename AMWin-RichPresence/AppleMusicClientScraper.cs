@@ -54,6 +54,7 @@ namespace AMWin_RichPresence {
 
         public AppleMusicClientScraper(string lastFmApiKey, int refreshPeriodInSec, bool composerAsArtist, RefreshHandler refreshHandler, Logger? logger = null) {
             this.refreshHandler = refreshHandler;
+            this.logger = logger;
             this.lastFmApiKey = lastFmApiKey;
             timer = new Timer(refreshPeriodInSec * 1000);
             timer.Elapsed += Refresh;
@@ -110,6 +111,11 @@ namespace AMWin_RichPresence {
 
             var amWinLCD = amWinTransportBar
                 .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCD"));
+
+            // song panel not initialised
+            if (amWinLCD == null) {
+                return null;
+            }
 
             var songFields = amWinLCD
                 .FindAll  (TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));

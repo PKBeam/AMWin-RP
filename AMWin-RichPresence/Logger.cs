@@ -22,7 +22,7 @@ namespace AMWin_RichPresence {
         }
 
         public void Log(string s) {
-            var newMsg = $"[{DateTime.Now.ToString("HH:mm:ss")}] {s}";
+            var newMsg = $"[{DateTime.Now.ToString("HH:mm:ss")}] {s}\n";
 #if DEBUG
             Trace.WriteLine(newMsg);
 #endif
