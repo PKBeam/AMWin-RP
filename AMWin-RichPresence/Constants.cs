@@ -36,7 +36,7 @@ namespace AMWin_RichPresence {
 
         public static string WindowsStartupFolder => Environment.GetFolderPath(Environment.SpecialFolder.Startup);
         public static string WindowsAppDataFolder => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        public static string AppDataFolder => Path.Combine(Constants.WindowsAppDataFolder, Constants.AppDataFolderName);
+        public static string AppDataFolder => Path.Combine(WindowsAppDataFolder, AppDataFolderName);
         public static string AppShortcutPath => Path.Join(WindowsStartupFolder, "AMWin-RP.lnk");
         public static string? ExePath => Process.GetCurrentProcess().MainModule?.FileName;         
     }
