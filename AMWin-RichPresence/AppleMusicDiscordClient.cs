@@ -18,13 +18,14 @@ internal class AppleMusicDiscordClient {
     DiscordRpcClient? client;
     string discordClientID;
     bool enabled = false;
-
+    Logger? logger;
     int maxStringLength = 127;
 
-    public AppleMusicDiscordClient(string discordClientID, bool enabled = true, RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistAlbum) {
+    public AppleMusicDiscordClient(string discordClientID, bool enabled = true, RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistAlbum, Logger? logger = null) {
         this.discordClientID = discordClientID;
         this.enabled = enabled;
         this.subtitleOptions = subtitleOptions;
+        this.logger = logger;
 
         if (enabled) {
             InitClient();
@@ -93,10 +94,10 @@ internal class AppleMusicDiscordClient {
 
             client?.SetPresence(rp);
 
-            Trace.WriteLine($"Set Discord RP to:\n{amInfo}\n");
+            logger?.Log($"Set Discord RP to:\n{amInfo}\n");
 
         } catch (Exception ex) {
-            Trace.WriteLine($"Couldn't set Discord RP:\n{ex}");
+            logger?.Log($"Couldn't set Discord RP:\n{ex}");
         }
 
     }

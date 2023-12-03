@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -12,6 +11,8 @@ namespace AMWin_RichPresence {
         private AppleMusicClientScraper amScraper;
         private AppleMusicDiscordClient discordClient;
         private AppleMusicScrobbler scrobblerClient;
+        private Logger logger;
+
         public LastFmCredentials lastFmCredentials {
             get {
                 var creds = new LastFmCredentials();
@@ -24,10 +25,14 @@ namespace AMWin_RichPresence {
         }
         public App() {
 
+            // make logger
+            logger = new Logger();
+            logger.Log("Application started");
+
             // start Discord RPC
             var subtitleOptions = (AppleMusicDiscordClient.RPSubtitleDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPSubtitleChoice;
             var classicalComposerAsArtist = AMWin_RichPresence.Properties.Settings.Default.ClassicalComposerAsArtist;
-            discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions);
+            discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, logger: logger);
 
             // start Last.FM scrobbler
             scrobblerClient = new AppleMusicScrobbler();
@@ -50,13 +55,13 @@ namespace AMWin_RichPresence {
                     // Last.FM scrobble update
                     var scrobbler = scrobblerClient.GetLastFmScrobbler();
                     var trackApi = scrobblerClient.GetTrackApi();
-                    if (AMWin_RichPresence.Properties.Settings.Default.LastfmEnable && scrobbler != null) {
+                    if (AMWin_RichPresence.Properties.Settings.Default.LastfmEnable && scrobbler != null && trackApi != null) {
                         scrobblerClient.Scrobbleit(newInfo, scrobbler, trackApi);
                     }
                 } else {
                     discordClient.Disable();
                 }
-            });
+            }, logger);
         }
         
         protected override void OnStartup(StartupEventArgs e) {

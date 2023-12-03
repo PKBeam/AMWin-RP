@@ -32,13 +32,9 @@ namespace AMWin_RichPresence {
 
         public override string ToString() {
             return $"""
-                [AppleMusicInfo] 
-                _________________________________________________
-                |  {SongName}
-                |  by {SongArtist} on {SongAlbum},
-                |------------------------------------------------
-                |  Cover Art URL: {CoverArtUrl},
-                -------------------------------------------------
+                [AppleMusicInfo] {SongName} by {SongArtist} on {SongAlbum}
+                | Duration:  {SongDuration} sec
+                | Album art: {CoverArtUrl}
                 """;
         }
         public void Print() {
@@ -54,8 +50,9 @@ namespace AMWin_RichPresence {
         RefreshHandler refreshHandler;
         AppleMusicInfo? currentSong;
         public bool composerAsArtist; // for classical music, treat composer (not performer) as artist
+        Logger? logger;
 
-        public AppleMusicClientScraper(string lastFmApiKey, int refreshPeriodInSec, bool composerAsArtist, RefreshHandler refreshHandler) {
+        public AppleMusicClientScraper(string lastFmApiKey, int refreshPeriodInSec, bool composerAsArtist, RefreshHandler refreshHandler, Logger? logger = null) {
             this.refreshHandler = refreshHandler;
             this.lastFmApiKey = lastFmApiKey;
             timer = new Timer(refreshPeriodInSec * 1000);
@@ -79,28 +76,32 @@ namespace AMWin_RichPresence {
                     appleMusicInfo = GetAppleMusicInfo(appleMusicWindow);
                 }
             } catch (Exception ex) {
-                Trace.WriteLine($"Something went wrong while scraping: {ex}");
+                logger?.Log($"Something went wrong while scraping: {ex}");
             }
             refreshHandler(appleMusicInfo);
         }
-        public static AutomationElement? FindAppleMusicWindow() {
+        public AutomationElement? FindAppleMusicWindow() {
             try {
                 var allWindows = AutomationElement.RootElement.FindAll(TreeScope.Children, Condition.TrueCondition);
                 foreach (AutomationElement element in allWindows) {
                     var elementProperties = element.Current;
                     // TODO - How do we tell it's the actual Windows-native Apple Music application and not some other one?
                     if (elementProperties.Name == "Apple Music" && elementProperties.ClassName == "WinUIDesktopWin32WindowClass") {
+                        logger?.Log("Found Apple Music window");
                         return element;
                     }
                 }
                 allWindows = null;
-            } catch (ElementNotAvailableException) {
+            } catch (ElementNotAvailableException ex) {
+                logger?.Log($"Desktop windows not available: {ex}");
                 return null;
             }
             return null;
         }
 
         public AppleMusicInfo? GetAppleMusicInfo(AutomationElement amWindow) {
+
+            var webScraper = new AppleMusicWebScraper(logger, lastFmApiKey);
 
             var amWinTransportBar = amWindow
                 .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ClassNameProperty, "Microsoft.UI.Content.DesktopChildSiteBridge"))
@@ -142,8 +143,8 @@ namespace AMWin_RichPresence {
             string songAlbum;
 
             // some classical songs add "By " before the composer's name
-            string songComposer = null;
-            string songPerformer = null; 
+            string? songComposer = null;
+            string? songPerformer = null; 
             var composerPerformerRegex = new Regex(@"By\s.*?\s\u2014");
             var songComposerPerformer = composerPerformerRegex.Matches(songAlbumArtist);
             try {
@@ -158,7 +159,7 @@ namespace AMWin_RichPresence {
                     songAlbum = songAlbumArtist.Split(" \u2014 ")[1];
                 }
             } catch {
-                Trace.WriteLine($"Could not parse '{songAlbumArtist}' into artist and album.");
+                logger?.Log($"Could not parse '{songAlbumArtist}' into artist and album.");
                 songArtist = "";
                 songAlbum = "";
             }
@@ -173,7 +174,7 @@ namespace AMWin_RichPresence {
             
             // find artist list... unless it's a classical song
             if (currentSong.ArtistList == null && songComposer == null) {
-                AppleMusicWebScraper.GetArtistList(songName, songAlbum, songSearchArtist).ContinueWith(t => {
+                webScraper.GetArtistList(songName, songAlbum, songSearchArtist).ContinueWith(t => {
                     currentSong.ArtistList = t.Result;
                     if (currentSong.ArtistList.Count == 0) {
                         currentSong.ArtistList = null;
@@ -203,7 +204,7 @@ namespace AMWin_RichPresence {
 
                 // try to get song duration if we don't have it
                 if (currentSong.SongDuration == null) {
-                    AppleMusicWebScraper.GetSongDuration(lastFmApiKey, songName, songAlbum, songSearchArtist).ContinueWith(t => {
+                    webScraper.GetSongDuration(songName, songAlbum, songSearchArtist).ContinueWith(t => {
                         string? dur = t.Result;
                         currentSong.SongDuration = dur == null ? null : ParseTimeString(dur);
                     });
@@ -241,7 +242,7 @@ namespace AMWin_RichPresence {
             // ------------------------------------------------
 
             if (currentSong.CoverArtUrl == null) {
-                AppleMusicWebScraper.GetAlbumArtUrl(lastFmApiKey, songName, songAlbum, songSearchArtist).ContinueWith(t => {
+                webScraper.GetAlbumArtUrl(songName, songAlbum, songSearchArtist).ContinueWith(t => {
                     currentSong.CoverArtUrl = t.Result;
                 });
             }

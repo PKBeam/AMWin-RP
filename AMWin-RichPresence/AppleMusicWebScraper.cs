@@ -11,27 +11,38 @@ using System;
 
 namespace AMWin_RichPresence {
     internal class AppleMusicWebScraper {
-        private async static Task<HtmlDocument> GetURL(string url) {
+        Logger? logger;
+        string lastFmApiKey;
+        public AppleMusicWebScraper(Logger? logger = null, string? lastFmApiKey = null) {
+            this.logger = logger;
+            this.lastFmApiKey = lastFmApiKey ?? "";
+            logger?.Log($"WebScraper created with Last FM API key {lastFmApiKey}");
+        }
+        private async Task<HtmlDocument> GetURL(string url) {
             var client = new HttpClient();
             // Apple Music web search doesn't like ampersands... even if they're HTML-escaped?
             var cleanUrl = HttpUtility.HtmlEncode(url.Replace("&", " "));
-            Trace.WriteLine($"Starting HTTP GET for {cleanUrl}");
+            logger?.Log($"Starting HTTP GET for {cleanUrl}");
             var stopwatch = Stopwatch.StartNew();
             var res = await client.GetStringAsync(cleanUrl);
             stopwatch.Stop();
-            Trace.WriteLine($"HTTP GET for {cleanUrl} took {stopwatch.ElapsedMilliseconds}ms");
+            logger?.Log($"HTTP GET for {cleanUrl} took {stopwatch.ElapsedMilliseconds}ms");
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(res);
             return doc;
         }
-        private async static Task<JsonDocument> GetURLJson(string url) {
+        private async Task<JsonDocument> GetURLJson(string url) {
             var client = new HttpClient();
+            logger?.Log($"Starting HTTP GET for {url}");
+            var stopwatch = Stopwatch.StartNew();
             var res = await client.GetStringAsync(url);
+            stopwatch.Stop();
+            logger?.Log($"HTTP GET for {url} took {stopwatch.ElapsedMilliseconds}ms");
             return JsonDocument.Parse(res);
         }
 
         // Apple Music web search functions
-        private async static Task<HtmlNode?> SearchTopResults(string songName, string songAlbum, string songArtist) {
+        private async Task<HtmlNode?> SearchTopResults(string songName, string songAlbum, string songArtist) {
             // search on the Apple Music website for the song
             var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
             var url = $"https://music.apple.com/us/search?term={searchTerm}";
@@ -69,11 +80,12 @@ namespace AMWin_RichPresence {
                     }
                 }
                 return null;
-            } catch {
+            } catch (Exception ex) {
+                logger?.Log($"[SearchTopResults] An exception occurred: {ex}"); 
                 return null;
             }
         }
-        private async static Task<HtmlNode?> SearchSongs(string songName, string songAlbum, string songArtist) {
+        private async Task<HtmlNode?> SearchSongs(string songName, string songAlbum, string songArtist) {
 
             // search on the Apple Music website for the song
             var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
@@ -121,7 +133,8 @@ namespace AMWin_RichPresence {
                     }
                 }
                 return null;
-            } catch {
+            } catch (Exception ex) {
+                logger?.Log($"[SearchSongs] An exception occurred: {ex}");
                 return null;
             }
         }
@@ -129,7 +142,7 @@ namespace AMWin_RichPresence {
         // Get list of artists for a song
         // -----------------------------------------------
         // Supported APIs: Apple Music web search
-        public async static Task<List<string>> GetArtistList(string songName, string songAlbum, string songArtist) {
+        public async Task<List<string>> GetArtistList(string songName, string songAlbum, string songArtist) {
             try {
                 var result = await SearchSongs(songName, songAlbum, songArtist);
                 if (result != null) {
@@ -153,7 +166,8 @@ namespace AMWin_RichPresence {
                     return searchResultSubtitlesList;
                 }
                 return new();
-            } catch {
+            } catch (Exception ex) {
+                logger?.Log($"[GetArtistList] An exception occurred: {ex}"); 
                 return new();
             }
         }
@@ -161,16 +175,20 @@ namespace AMWin_RichPresence {
         // Get album artwork image
         // -----------------------------------------------
         // Supported APIs: Last.FM, Apple Music web search
-        public async static Task<string?> GetAlbumArtUrl(string lastFmApiKey, string songName, string songAlbum, string songArtist) {
+        public async Task<string?> GetAlbumArtUrl(string songName, string songAlbum, string songArtist) {
             try {
-                var lastFmImg = (lastFmApiKey == "") ? null : await GetAlbumArtUrlLastFm(lastFmApiKey, songAlbum, songArtist);
+                var lastFmImg = (lastFmApiKey == "") ? null : await GetAlbumArtUrlLastFm(songAlbum, songArtist);
+                if (lastFmImg == null) {
+                    logger?.Log($"[GetAlbumArtUrl] LastFM lookup failed, falling back to Apple Music Web");
+                }
                 return lastFmImg ?? await GetAlbumArtUrlAppleMusic(songName, songAlbum, songArtist);
-            } catch {
-                return null;
+            } catch (Exception ex) { 
+                logger?.Log($"[GetAlbumArtUrl] An exception occurred: {ex}"); 
+                return null; 
             }
         }
-        public async static Task<string?> GetAlbumArtUrlLastFm(string apiKey, string songAlbum, string songArtist) {
-            var j = await GetURLJson($"http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={apiKey}&artist={Uri.EscapeDataString(songArtist)}&album={Uri.EscapeDataString(AppleMusicScrobbler.CleanAlbumName(songAlbum))}&format=json");
+        private async Task<string?> GetAlbumArtUrlLastFm(string songAlbum, string songArtist) {
+            var j = await GetURLJson($"http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={lastFmApiKey}&artist={Uri.EscapeDataString(songArtist)}&album={Uri.EscapeDataString(AppleMusicScrobbler.CleanAlbumName(songAlbum))}&format=json");
             var imgs = j.RootElement.GetProperty("album").GetProperty("image");
             foreach (var img in imgs.EnumerateArray()) {
                 if (img.GetProperty("size").ToString() == "mega") {
@@ -180,7 +198,7 @@ namespace AMWin_RichPresence {
             }
             return null;
         }
-        public async static Task<string?> GetAlbumArtUrlAppleMusic(string songName, string songAlbum, string songArtist) {
+        private async Task<string?> GetAlbumArtUrlAppleMusic(string songName, string songAlbum, string songArtist) {
             try {
                 // scrape search results for "Top Results" section
                 var result = await SearchTopResults(songName, songAlbum, songArtist);
@@ -195,11 +213,12 @@ namespace AMWin_RichPresence {
                 }
                 // TODO: search in "Albums" section?
                 return null;
-            } catch {
+            } catch (Exception ex) {
+                logger?.Log($"[GetAlbumArtUrlAppleMusic] An exception occurred: {ex}"); 
                 return null;
             }
         }
-        private static string GetLargestImageUrl(HtmlNode nodeWithSource) {
+        private string GetLargestImageUrl(HtmlNode nodeWithSource) {
             var imgSources = nodeWithSource
                 .Descendants("source")
                 .Where(x => x.Attributes["type"].Value == "image/jpeg")
@@ -213,26 +232,31 @@ namespace AMWin_RichPresence {
         // Get song duration
         // -----------------------------------------------
         // Supported APIs: Last.FM, Apple Music web search
-        public async static Task<string?> GetSongDuration(string lastFmApiKey, string songName, string songAlbum, string songArtist) {
+        public async Task<string?> GetSongDuration(string songName, string songAlbum, string songArtist) {
             try {
-                var lastFmDur = (lastFmApiKey == "") ? null : await GetSongDurationLastFm(lastFmApiKey, songName, songArtist);
+                var lastFmDur = (lastFmApiKey == "") ? null : await GetSongDurationLastFm(songName, songArtist);
+                if (lastFmDur == null) {
+                    logger?.Log($"[GetSongDuration] LastFM lookup failed, falling back to Apple Music Web");
+                }
                 return lastFmDur ?? await GetSongDurationAppleMusic(songName, songAlbum, songArtist);
-            } catch {
+            } catch (Exception ex) {
+                logger?.Log($"[GetSongDuration] An exception occurred: {ex}");
                 return null;
             }
         }
-        public async static Task<string?> GetSongDurationLastFm(string apiKey, string songName, string songArtist) {
-            var url = $"http://ws.audioscrobbler.com/2.0/?method=track.getinfo&api_key={apiKey}&artist={Uri.EscapeDataString(songArtist)}&track={Uri.EscapeDataString(songName)}&format=json";
+        private async Task<string?> GetSongDurationLastFm(string songName, string songArtist) {
+            var url = $"http://ws.audioscrobbler.com/2.0/?method=track.getinfo&api_key={lastFmApiKey}&artist={Uri.EscapeDataString(songArtist)}&track={Uri.EscapeDataString(songName)}&format=json";
             var j = await GetURLJson(url);
             var track = j.RootElement.GetProperty("track");
             try {
                 var dur = int.Parse(track.GetProperty("duration").ToString()) / 1000;
                 return dur == 0 ? null : $"{dur / 60}:{$"{dur % 60}".PadLeft(2, '0')}";
-            } catch {
+            } catch (Exception ex) {
+                logger?.Log($"[GetSongDurationLastFm] An exception occurred: {ex}");
                 return null;
             }
         }
-        public async static Task<string?> GetSongDurationAppleMusic(string songName, string songAlbum, string songArtist) {
+        private async Task<string?> GetSongDurationAppleMusic(string songName, string songAlbum, string songArtist) {
             try {
                 var result = await SearchSongs(songName, songAlbum, songArtist);
                 if (result != null) {
@@ -247,11 +271,12 @@ namespace AMWin_RichPresence {
                     return await GetSongDurationFromAlbumPage(searchResultUrl, songName);
                 }    
                 return null;
-            } catch {
+            } catch (Exception ex) {
+                logger?.Log($"[GetSongDurationAppleMusic] An exception occurred: {ex}");
                 return null;
             }
         }
-        private async static Task<string?> GetSongDurationFromAlbumPage(string url, string songName) {
+        private async Task<string?> GetSongDurationFromAlbumPage(string url, string songName) {
             HtmlDocument doc = await GetURL(url);
             try {
                 var list = doc.DocumentNode
@@ -279,7 +304,8 @@ namespace AMWin_RichPresence {
                     }
                 }
                 return null;
-            } catch {
+            } catch (Exception ex) {
+                logger?.Log($"[GetSongDurationFromAlbumPage] An exception occurred: {ex}");
                 return null;
             }
         }

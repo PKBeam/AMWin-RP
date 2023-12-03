@@ -90,8 +90,9 @@ namespace AMWin_RichPresence
             try
             {
                 var thisSongID = info.SongArtist + info.SongName + info.SongAlbum;
+                var webScraper = new AppleMusicWebScraper();
                 var scrobble = new Scrobble(
-                    Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await AppleMusicWebScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist)).FirstOrDefault(info.SongArtist) : info.SongArtist,
+                    Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await webScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist)).FirstOrDefault(info.SongArtist) : info.SongArtist,
                     Properties.Settings.Default.LastfmCleanAlbumName ? CleanAlbumName(info.SongAlbum) : info.SongAlbum,
                     info.SongName,
                     DateTime.UtcNow);
