@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace AMWin_RichPresence
@@ -27,35 +28,40 @@ namespace AMWin_RichPresence
         private string? lastSongID;
         private bool hasScrobbled;
         private double lastSongProgress;
+        private Logger? logger;
 
+        public AppleMusicScrobbler(Logger? logger = null) { 
+            this.logger = logger; 
+        }           
+        
         public static string CleanAlbumName(string songName) {
             // Remove " - Single" and " - EP"
             var re = new Regex(@"\s-\s((Single)|(EP))$");
             return re.Replace(songName, new MatchEvaluator((m) => { return ""; }));
         }
 
-        public async void init(LastFmCredentials credentials, bool showMessageBoxOnSuccess = false)
+        public async Task<bool> init(LastFmCredentials credentials)
         {
-            if (!String.IsNullOrEmpty(credentials.apiKey) 
-                && !String.IsNullOrEmpty(credentials.apiSecret)
-                && !String.IsNullOrEmpty(credentials.username))
-            {
-                // Use the four pieces of information (API Key, API Secret, Username, Password) to log into Last.FM for Scrobbling
-                httpClient = new HttpClient();
-                lastfmAuth = new LastAuth(credentials.apiKey, credentials.apiSecret);
-                await lastfmAuth.GetSessionTokenAsync(credentials.username, credentials.password);
-
-                if (lastfmAuth.Authenticated) {
-                    if (showMessageBoxOnSuccess) {
-                        MessageBox.Show("The Last.FM credentials were successfully authenticated.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                } else {
-                    MessageBox.Show("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-
-                lastFmScrobbler = new MemoryScrobbler(lastfmAuth, httpClient);
-                trackApi = new TrackApi(lastfmAuth, httpClient);
+            if (string.IsNullOrEmpty(credentials.apiKey)
+                || string.IsNullOrEmpty(credentials.apiSecret)
+                || string.IsNullOrEmpty(credentials.username)) {
+                return false;
             }
+            // Use the four pieces of information (API Key, API Secret, Username, Password) to log into Last.FM for Scrobbling
+            httpClient = new HttpClient();
+            lastfmAuth = new LastAuth(credentials.apiKey, credentials.apiSecret);
+            await lastfmAuth.GetSessionTokenAsync(credentials.username, credentials.password);
+
+            lastFmScrobbler = new MemoryScrobbler(lastfmAuth, httpClient);
+            trackApi = new TrackApi(lastfmAuth, httpClient);
+
+            if (lastfmAuth.Authenticated) {
+                logger?.Log("Last.FM authentication succeeded");
+            } else {
+                logger?.Log("Last.FM authentication failed");
+            }
+
+            return lastfmAuth.Authenticated;
         }
 
         public IScrobbler? GetLastFmScrobbler()
@@ -68,13 +74,13 @@ namespace AMWin_RichPresence
             return trackApi;
         }
 
-        public void UpdateCreds(LastFmCredentials credentials, bool showMessageBoxOnSuccess)
-        {
+        public async Task<bool> UpdateCredsAsync(LastFmCredentials credentials) {
+            logger?.Log("[Last.FM scrobbler] Updating credentials");
             httpClient = null;
             lastfmAuth = null;
             lastFmScrobbler = null;
             trackApi = null;
-            init(credentials, showMessageBoxOnSuccess);
+            return await init(credentials);
         }
 
         public async void Scrobbleit(AppleMusicInfo info, IScrobbler lastFmScrobbler, ITrackApi trackApi)
@@ -90,9 +96,9 @@ namespace AMWin_RichPresence
             try
             {
                 var thisSongID = info.SongArtist + info.SongName + info.SongAlbum;
-                var webScraper = new AppleMusicWebScraper();
+                var webScraper = new AppleMusicWebScraper(info.SongName, info.SongAlbum, info.SongArtist);
                 var scrobble = new Scrobble(
-                    Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await webScraper.GetArtistList(info.SongName, info.SongAlbum, info.SongArtist)).FirstOrDefault(info.SongArtist) : info.SongArtist,
+                    Properties.Settings.Default.LastfmScrobblePrimaryArtist ? webScraper.GetArtistList().FirstOrDefault(info.SongArtist) : info.SongArtist,
                     Properties.Settings.Default.LastfmCleanAlbumName ? CleanAlbumName(info.SongAlbum) : info.SongAlbum,
                     info.SongName,
                     DateTime.UtcNow);
@@ -102,10 +108,10 @@ namespace AMWin_RichPresence
                     lastSongID = thisSongID;
                     elapsedSeconds = 0;
                     hasScrobbled = false;
-                    Trace.WriteLine(string.Format("{0} LastFM Scrobbler - New Song: {1}", DateTime.UtcNow.ToString(), lastSongID));
+                    logger?.Log($"[Last.FM scrobbler] New Song: {lastSongID}");
 
                     await trackApi.UpdateNowPlayingAsync(scrobble);
-                    Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Updated now playing: {1}", DateTime.UtcNow.ToString(), lastSongID));
+                    logger?.Log($"[Last.FM scrobbler] Updated now playing: {lastSongID}");
                 }
                 else
                 {
@@ -115,14 +121,14 @@ namespace AMWin_RichPresence
                     {
                         hasScrobbled = false;
                         elapsedSeconds = 0;
-                        Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Repeating Song: {1}", DateTime.UtcNow.ToString(), lastSongID));
+                        logger?.Log($"[Last.FM scrobbler] Repeating Song: {lastSongID}");
                     }
 
                     if (IsTimeToScrobble(info) && !hasScrobbled)
                     {
                         if (lastfmAuth != null && lastfmAuth.Authenticated)
                         {
-                            Trace.WriteLine(string.Format("{0} LastFM Scrobbler - Scrobbling: {1}", DateTime.UtcNow.ToString(), lastSongID));
+                            logger?.Log($"[Last.FM scrobbler] Scrobbling: {lastSongID}");
                             
                             var response = await lastFmScrobbler.ScrobbleAsync(scrobble);
                         }
@@ -134,9 +140,7 @@ namespace AMWin_RichPresence
             }
             catch (Exception ex)
             {
-                Trace.WriteLine(ex.Message);
-                Trace.WriteLine(ex.StackTrace);
-
+                logger?.Log($"[Last.FM scrobbler] An error occurred while scrobbling: {ex}");
             }
         }
 

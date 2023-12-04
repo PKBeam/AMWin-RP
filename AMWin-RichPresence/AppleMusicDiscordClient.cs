@@ -94,7 +94,7 @@ internal class AppleMusicDiscordClient {
 
             client?.SetPresence(rp);
 
-            logger?.Log($"Set Discord RP to:\n{amInfo}\n");
+            logger?.Log($"Set Discord RP to:\n{amInfo}");
 
         } catch (Exception ex) {
             logger?.Log($"Couldn't set Discord RP:\n{ex}");

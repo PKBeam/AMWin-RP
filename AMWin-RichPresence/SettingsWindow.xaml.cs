@@ -119,9 +119,14 @@ namespace AMWin_RichPresence {
             SaveSettings(); // The other three values are just stored in Settings
 
             // Signals the LastFM Scrobbler to re-init with new credentials
-            ((App)Application.Current).UpdateLastfmCreds(showMessageBoxOnSuccess: true);
-
-           // Close();
+            var task = ((App)Application.Current).UpdateLastfmCreds();
+            task.Wait();
+            if (task.Result) {
+                MessageBox.Show("The Last.FM credentials were successfully authenticated.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
+            } else {
+                MessageBox.Show("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            // Close();
         }
 
         private SecureString ConvertToSecureString(string password)

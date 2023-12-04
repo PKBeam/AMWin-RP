@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
+using IF.Lastfm.Core.Api;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -36,10 +38,16 @@ namespace AMWin_RichPresence {
 
             // start Last.FM scrobbler
             scrobblerClient = new AppleMusicScrobbler();
-            scrobblerClient.init(lastFmCredentials);
+            _ = scrobblerClient.init(lastFmCredentials);
+
+            var lastFMApiKey = AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey;
+
+            if (lastFMApiKey == null || lastFMApiKey == "") {
+                logger.Log("No Last.FM API key found");
+            }
 
             // start Apple Music scraper
-            amScraper = new(AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey, Constants.RefreshPeriod, classicalComposerAsArtist, (newInfo) => {
+            amScraper = new(lastFMApiKey, Constants.RefreshPeriod, classicalComposerAsArtist, (newInfo) => {
                 
                 // don't update scraper if Apple Music is paused or not open
                 if (newInfo != null && newInfo != null && (AMWin_RichPresence.Properties.Settings.Default.ShowRPWhenMusicPaused || !newInfo.IsPaused)) {
@@ -72,14 +80,15 @@ namespace AMWin_RichPresence {
         private void Application_Exit(object sender, ExitEventArgs e) {
             taskbarIcon?.Dispose();
             discordClient.Disable();
+            logger.Log("Application finished");
         }
 
         internal void UpdateRPSubtitleDisplay(AppleMusicDiscordClient.RPSubtitleDisplayOptions newVal) {
             discordClient.subtitleOptions = newVal;
         }
 
-        internal void UpdateLastfmCreds(bool showMessageBoxOnSuccess) {
-            scrobblerClient.UpdateCreds(lastFmCredentials, showMessageBoxOnSuccess);
+        internal async Task<bool> UpdateLastfmCreds() {
+            return await scrobblerClient.UpdateCredsAsync(lastFmCredentials);
         }
         internal void UpdateScraperPreferences(bool composerAsArtist) {
             amScraper.composerAsArtist = composerAsArtist;
