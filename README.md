@@ -1,12 +1,12 @@
 # AMWin-RP
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total)  
+
 A Discord Rich Presence client for Apple Music's native Windows app.  
 Last.FM scrobbling is also supported!
 
-[日本語(japanese)](https://github.com/PKBeam/AMWin-RP/blob/master/README-JA.md)
+[日本語 (Japanese README)](https://github.com/PKBeam/AMWin-RP/blob/master/README-JA.md)
 
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) 
-
-![image](https://user-images.githubusercontent.com/18737124/236110561-e11eabf5-d2c4-4fb3-a743-3152a1aef916.png)
+![image](https://github.com/PKBeam/AMWin-RP/assets/18737124/75267b99-add1-499e-ac34-034a48e2414f)
 
 ![image](https://user-images.githubusercontent.com/18737124/213862194-e02ec9e7-07ab-481f-9dc5-451b9159c903.png)
 
@@ -19,21 +19,26 @@ If you have (or are able to install) the [.NET 7.0 runtime](https://dotnet.micro
 Otherwise, download the other release (the one that isn't labelled as `NoRuntime`).  
 This release is larger in size as it bundles the components of .NET 7.0 that are needed for the app to run.
 
+## Reporting Bugs
+Before creating a new issue, please make sure your problem does not fall under an existing one.
+
+If you are reporting a problem, please attach all relevant `.log` files (found in `C:\Users\your_username\AppData\Local\AMWin-RichPresence`).
+
 ## Usage
 Only the [Microsoft store version](https://apps.microsoft.com/store/detail/apple-music-preview/9PFHDD62MXS1) of Apple Music is supported.  
 There's no support for iTunes, Apple Music via WSA, or any third-party players.
 
 The app runs in the background, minimised to the system tray. It can be closed by right-clicking on the tray icon and selecting "Exit".  
-In order for the rich presence to show, the Apple Music app must be open and currently playing music (i.e. not paused).  
+By default, the Apple Music app must be open and currently playing music (i.e. not paused) in order for the rich presence to show.  
 
 If you like, you can set the app to automatically run when Windows starts. You can do this by double clicking on the tray icon and changing the settings.  
 
 <hr/>
 
 ## Last.FM Scrobbling
-Scrobbling to Last.FM is supported.  You will need your own Last.FM API Key and Key Secret.  To generate one, go to https://www.last.fm/api and select "Get an API Account."  Use these two pieces of information along with your Last.FM username and password:
-
-![AMWin-RP-Scrobbler_Settings](https://user-images.githubusercontent.com/317772/215867741-2999591c-35eb-442a-a349-b8e9046634fb.png)
+Scrobbling to Last.FM is supported.  You will need your own API Key and API Secret from Last.FM.  
+To generate one, go to https://www.last.fm/api and select "Get an API Account."  
+Enter these in the settings menu with your Last.FM username and password.
 
 The Last.FM password is stored in [Windows Credentials Manager](https://support.microsoft.com/en-us/windows/accessing-credential-manager-1b5c916a-6a16-889f-8581-fc16e8165ac0) under your local Windows account.
 
