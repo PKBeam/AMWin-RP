@@ -93,7 +93,7 @@ namespace AMWin_RichPresence {
             Properties.Settings.Default.Save();
         }
 
-        private void SaveLastFMCreds_Click(object sender, RoutedEventArgs e)
+        private async void SaveLastFMCreds_Click(object sender, RoutedEventArgs e)
         {
             // Store the actual password to the Credential Manager.  Not as good as true Last.FM tokenized authentication,
             //       but better than storing plain-text password in config file
@@ -119,9 +119,8 @@ namespace AMWin_RichPresence {
             SaveSettings(); // The other three values are just stored in Settings
 
             // Signals the LastFM Scrobbler to re-init with new credentials
-            var task = ((App)Application.Current).UpdateLastfmCreds();
-            task.Wait();
-            if (task.Result) {
+            var result = await ((App)Application.Current).UpdateLastfmCreds();
+            if (result) {
                 MessageBox.Show("The Last.FM credentials were successfully authenticated.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
             } else {
                 MessageBox.Show("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Error);

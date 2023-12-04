@@ -37,7 +37,7 @@ namespace AMWin_RichPresence {
             discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, logger: logger);
 
             // start Last.FM scrobbler
-            scrobblerClient = new AppleMusicScrobbler();
+            scrobblerClient = new AppleMusicScrobbler(logger: logger);
             _ = scrobblerClient.init(lastFmCredentials);
 
             var lastFMApiKey = AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey;
