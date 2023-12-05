@@ -14,6 +14,10 @@ namespace AMWin_RichPresence {
         public Logger() {
             var date = DateTime.Now.ToString("yyyy-MM-dd");
 
+            if (!Directory.Exists(Constants.AppDataFolder)) {
+                Directory.CreateDirectory(Constants.AppDataFolder);
+            }
+
             // delete old logs
             var logFiles = Directory.GetFiles(Constants.AppDataFolder).Where(f => f.EndsWith(".log"));
             if (logFiles.Count() > Constants.MaxLogFiles) {
