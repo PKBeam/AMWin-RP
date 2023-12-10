@@ -20,9 +20,11 @@ Otherwise, download the other release (the one that isn't labelled as `NoRuntime
 This release is larger in size as it bundles the components of .NET 7.0 that are needed for the app to run.
 
 ## Reporting Bugs
-Before creating a new issue, please make sure your problem does not fall under an existing one.
-
+Before creating a new issue, please make sure your problem does not fall under an existing issue.  
 If you are reporting a problem, please attach all relevant `.log` files (found in `C:\Users\your_username\AppData\Local\AMWin-RichPresence`).
+
+Before posting, double-check the following:
+- You have RP display enabled in Discord (Settings > Activity Settings > Activity Privacy > Actvity Status).
 
 ## Usage
 Only the [Microsoft store version](https://apps.microsoft.com/store/detail/apple-music-preview/9PFHDD62MXS1) of Apple Music is supported.  
