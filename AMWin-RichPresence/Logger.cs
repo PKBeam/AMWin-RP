@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DiscordRPC.Logging;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
 
 namespace AMWin_RichPresence {
-    internal class Logger {
+    internal class Logger : ILogger {
 
         string? logFile;
         string? lastMsg;
@@ -49,7 +50,7 @@ namespace AMWin_RichPresence {
 
             var newMsg = $"[{DateTime.Now.ToString("HH:mm:ss")}] {msg}";
 #if DEBUG
-            Trace.WriteLine(newMsg);
+            System.Diagnostics.Trace.WriteLine(newMsg);
 #endif
             File.AppendAllText(logFile, $"{newMsg}\n");
         }
@@ -59,6 +60,25 @@ namespace AMWin_RichPresence {
                 WriteLog($"Previous message repeated {msgRepeatCount} times");
                 msgRepeatCount = 0;
             }
+        }
+
+        public LogLevel Level { get { return LogLevel.Error; } set { } }
+
+
+        public void Trace(string message, params object[] args) {
+            Log($"[RPC-TRACE] {string.Format(message, args)}");
+        }
+
+        public void Info(string message, params object[] args) {
+            Log($"[RPC-INFO] {string.Format(message, args)}");
+        }
+
+        public void Warning(string message, params object[] args) {
+            Log($"[RPC-WARN] {string.Format(message, args)}");
+        }
+
+        public void Error(string message, params object[] args) {
+            Log($"[RPC-ERROR] {string.Format(message, args)}");
         }
     }
 }

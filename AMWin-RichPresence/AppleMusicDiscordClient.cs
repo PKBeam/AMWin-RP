@@ -92,9 +92,12 @@ internal class AppleMusicDiscordClient {
                 rp = rp.WithTimestamps(new Timestamps((DateTime)amInfo.PlaybackStart, (DateTime)amInfo.PlaybackEnd));
             }
 
-            client?.SetPresence(rp);
-
-            logger?.Log($"Set Discord RP to:\n{amInfo}");
+            if (client == null) {
+                logger?.Log($"Tried to set Discord RP, but no client");
+            } else {
+                client.SetPresence(rp);
+                logger?.Log($"Set Discord RP to:\n{amInfo}");
+            }
 
         } catch (Exception ex) {
             logger?.Log($"Couldn't set Discord RP:\n{ex}");
@@ -117,7 +120,7 @@ internal class AppleMusicDiscordClient {
         DeinitClient();
     }
     private void InitClient() {
-        client = new DiscordRpcClient(discordClientID);
+        client = new DiscordRpcClient(discordClientID, logger: logger);
         client.Initialize();
     }
     private void DeinitClient() {
