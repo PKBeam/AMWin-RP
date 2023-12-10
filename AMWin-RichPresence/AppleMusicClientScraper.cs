@@ -90,8 +90,10 @@ namespace AMWin_RichPresence {
                 foreach (AutomationElement element in allWindows) {
                     var elementProperties = element.Current;
                     // TODO - How do we tell it's the actual Windows-native Apple Music application and not some other one?
-                    if (elementProperties.Name == "Apple Music" && elementProperties.ClassName == "WinUIDesktopWin32WindowClass") {
+                    if (StringLetterComparison(elementProperties.Name, "Apple Music") && StringLetterComparison(elementProperties.ClassName, "WinUIDesktopWin32WindowClass")) {
                         return element;
+                    } else {
+                        logger?.Log($"-- no match");
                     }
                 }
                 allWindows = null;
@@ -270,6 +272,14 @@ namespace AMWin_RichPresence {
             int sec = int.Parse(time.Split(":")[1]);
 
             return min * 60 + sec;
+        }
+
+        // some localisations of Apple Music have slight differences in element names
+        private static string StringToLetters(string s) {
+            return new string(s.Where(char.IsLetter).ToArray());
+        }
+        private static bool StringLetterComparison(string s1, string s2) {
+            return StringToLetters(s1) == StringToLetters(s2);
         }
     }
 }
