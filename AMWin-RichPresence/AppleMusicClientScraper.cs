@@ -92,8 +92,6 @@ namespace AMWin_RichPresence {
                     // TODO - How do we tell it's the actual Windows-native Apple Music application and not some other one?
                     if (StringLetterComparison(elementProperties.Name, "Apple Music") && StringLetterComparison(elementProperties.ClassName, "WinUIDesktopWin32WindowClass")) {
                         return element;
-                    } else {
-                        logger?.Log($"-- no match");
                     }
                 }
                 allWindows = null;

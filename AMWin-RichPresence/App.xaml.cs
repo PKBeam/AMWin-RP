@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
-using IF.Lastfm.Core.Api;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -13,7 +12,7 @@ namespace AMWin_RichPresence {
         private AppleMusicClientScraper amScraper;
         private AppleMusicDiscordClient discordClient;
         private AppleMusicScrobbler scrobblerClient;
-        private Logger logger;
+        private Logger? logger;
 
         public LastFmCredentials lastFmCredentials {
             get {
@@ -28,8 +27,12 @@ namespace AMWin_RichPresence {
         public App() {
 
             // make logger
-            logger = new Logger();
-            logger.Log("Application started");
+            try {
+                logger = new Logger();
+                logger.Log("Application started");
+            } catch {
+                logger = null;
+            }
 
             // start Discord RPC
             var subtitleOptions = (AppleMusicDiscordClient.RPSubtitleDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPSubtitleChoice;
@@ -43,7 +46,7 @@ namespace AMWin_RichPresence {
             var lastFMApiKey = AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey;
 
             if (lastFMApiKey == null || lastFMApiKey == "") {
-                logger.Log("No Last.FM API key found");
+                logger?.Log("No Last.FM API key found");
             }
 
             // start Apple Music scraper
@@ -80,7 +83,7 @@ namespace AMWin_RichPresence {
         private void Application_Exit(object sender, ExitEventArgs e) {
             taskbarIcon?.Dispose();
             discordClient.Disable();
-            logger.Log("Application finished");
+            logger?.Log("Application finished");
         }
 
         internal void UpdateRPSubtitleDisplay(AppleMusicDiscordClient.RPSubtitleDisplayOptions newVal) {
