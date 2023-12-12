@@ -14,7 +14,10 @@ Last.FM scrobbling is also supported!
 
 Releases can be found [here](https://github.com/PKBeam/AMWin-RP/releases).
 
-If you have (or are able to install) the [.NET 7.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0), you can download the `NoRuntime` release.
+Note that Windows 10 22H2 (or later) is required. 
+
+If you have (or are able to install) the [.NET 7.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0), you can download the `NoRuntime` release.  
+(Note: v1.2.6.2 and later require the [.NET 8.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).)  
 
 Otherwise, download the other release (the one that isn't labelled as `NoRuntime`).  
 This release is larger in size as it bundles the components of .NET 7.0 that are needed for the app to run.
