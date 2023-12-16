@@ -54,8 +54,8 @@ namespace AMWin_RichPresence {
 #endif
             try {
                 File.AppendAllText(logFile, $"{newMsg}\n");
-            } catch {
-                System.Diagnostics.Trace.WriteLine("Could not write to log file");
+            } catch (Exception ex) {
+                System.Diagnostics.Trace.WriteLine($"Could not write to log file: {ex}");
             }
         }
 
@@ -66,21 +66,19 @@ namespace AMWin_RichPresence {
             }
         }
 
-        public LogLevel Level { get { return LogLevel.Warning; } set { } }
+        public LogLevel Level { get { return LogLevel.Error; } set { } }
 
 
         public void Trace(string message, params object[] args) {
-            return;
             //Log($"[RPC-TRACE] {string.Format(message, args)}");
         }
 
         public void Info(string message, params object[] args) {
-            return;
             //Log($"[RPC-INFO] {string.Format(message, args)}");
         }
 
         public void Warning(string message, params object[] args) {
-            Log($"[RPC-WARN] {string.Format(message, args)}");
+            //Log($"[RPC-WARN] {string.Format(message, args)}");
         }
 
         public void Error(string message, params object[] args) {
