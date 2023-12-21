@@ -16,4 +16,4 @@ A clear and concise description of what the bug is.
 Have the symptoms of this bug already been reported in another issue? 
 
 **Log Files**
-Attach application log files here.
+Attach application log files here. If there are no log files, open Event Viewer and look for any relevant errors under Windows Logs > Application.
