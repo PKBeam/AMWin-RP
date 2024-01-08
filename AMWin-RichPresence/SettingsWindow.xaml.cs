@@ -29,6 +29,7 @@ namespace AMWin_RichPresence {
 
             SaveSettings();
         }
+
         private void CheckBox_ClassicalComposerAsArtist_Click(object sender, RoutedEventArgs e) {
             ((App)Application.Current).UpdateScraperPreferences(CheckBox_ClassicalComposerAsArtist.IsChecked == true);
             SaveSettings();
@@ -37,6 +38,7 @@ namespace AMWin_RichPresence {
         private void CheckBox_EnableRPCoverImages_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
+
         private void CheckBox_EnableDiscordRP_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
@@ -59,6 +61,11 @@ namespace AMWin_RichPresence {
         private void CheckBox_LastfmEnable_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
+
+        private void CheckBox_ListenBrainzEnable_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
         private void CheckBox_LastfmCleanAlbumName_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
@@ -93,15 +100,12 @@ namespace AMWin_RichPresence {
             Properties.Settings.Default.Save();
         }
 
-        private async void SaveLastFMCreds_Click(object sender, RoutedEventArgs e)
-        {
+        private async void SaveLastFMCreds_Click(object sender, RoutedEventArgs e) {
             // Store the actual password to the Credential Manager.  Not as good as true Last.FM tokenized authentication,
             //       but better than storing plain-text password in config file
             //       https://stackoverflow.com/questions/32548714/how-to-store-and-retrieve-credentials-on-windows-using-c-sharp
-            try
-            {
-                using (var cred = new SecureCredential())
-                {
+            try {
+                using (var cred = new SecureCredential()) {
 
                     cred.SecurePassword = ConvertToSecureString(LastfmPassword.Password);
                     cred.Target = Constants.LastFMCredentialTargetName;
@@ -109,27 +113,36 @@ namespace AMWin_RichPresence {
                     cred.PersistanceType = PersistanceType.LocalComputer;
                     cred.Save();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Trace.WriteLine(ex.Message);
                 Trace.WriteLine(ex.StackTrace);
 
             }
             SaveSettings(); // The other three values are just stored in Settings
 
-            // Signals the LastFM Scrobbler to re-init with new credentials
-            var result = await ((App)Application.Current).UpdateLastfmCreds();
-            if (result) {
-                MessageBox.Show("The Last.FM credentials were successfully authenticated.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
-            } else {
-                MessageBox.Show("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
+            if (Properties.Settings.Default.LastfmEnable) {
+                // Signals the LastFM Scrobbler to re-init with new credentials
+                var result = await ((App)Application.Current).UpdateLastfmCreds();
+                if (result) {
+                    MessageBox.Show("The Last.FM credentials were successfully authenticated.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
+                } else {
+                    MessageBox.Show("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            if (Properties.Settings.Default.ListenBrainzEnable) {
+                // Signals the ListenBrainz Scrobbler to re-init with new credentials
+                var result = await ((App)Application.Current).UpdateListenBrainzCreds();
+                if (result) {
+                    MessageBox.Show("The ListenBrainz credentials were successfully authenticated.", "ListenBrainz Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
+                } else {
+                    MessageBox.Show("The ListenBrainz credentials could not be authenticated. Please make sure you have entered the correct user token.", "ListenBrainz Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             // Close();
         }
 
-        private SecureString ConvertToSecureString(string password)
-        {
+        private SecureString ConvertToSecureString(string password) {
             var securePassword = new SecureString();
 
             foreach (char c in password) securePassword.AppendChar(c);
@@ -137,32 +150,24 @@ namespace AMWin_RichPresence {
             return securePassword;
         }
 
-        public static string GetLastFMPassword()
-        {
+        public static string GetLastFMPassword() {
             // Read the stored password from Windows Credential Manager and use it to log into Last.FM
-            try
-            {
-                using (var cred = new SecureCredential())
-                {
+            try {
+                using (var cred = new SecureCredential()) {
                     cred.Target = Constants.LastFMCredentialTargetName;
                     cred.Load();
                     return ToPlainString(cred.SecurePassword);
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 Trace.WriteLine(ex.Message);
                 Trace.WriteLine(ex.StackTrace);
                 return String.Empty;
             }
         }
 
-        public static String ToPlainString(System.Security.SecureString secureStr)
-        {
+        public static String ToPlainString(System.Security.SecureString secureStr) {
             String plainStr = new System.Net.NetworkCredential(string.Empty, secureStr).Password;
             return plainStr;
         }
-
-
     }
 }

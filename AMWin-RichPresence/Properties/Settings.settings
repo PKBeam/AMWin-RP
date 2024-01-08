@@ -17,6 +17,9 @@
     <Setting Name="LastfmUsername" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="ListenBrainzUserToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
     <Setting Name="ShowAppleMusicIcon" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -30,6 +33,9 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="LastfmEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ListenBrainzEnable" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ShowRPWhenMusicPaused" Type="System.Boolean" Scope="User">

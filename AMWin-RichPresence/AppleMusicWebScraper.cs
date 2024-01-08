@@ -101,7 +101,7 @@ namespace AMWin_RichPresence {
                 }
                 return null;
             } catch (Exception ex) {
-                logger?.Log($"[SearchTopResults] An exception occurred: {ex}"); 
+                logger?.Log($"[SearchTopResults] An exception occurred: {ex}");
                 return null;
             }
         }
@@ -187,7 +187,7 @@ namespace AMWin_RichPresence {
                 }
                 return new();
             } catch (Exception ex) {
-                logger?.Log($"[GetArtistList] An exception occurred: {ex}"); 
+                logger?.Log($"[GetArtistList] An exception occurred: {ex}");
                 return new();
             }
         }
@@ -202,13 +202,13 @@ namespace AMWin_RichPresence {
                     logger?.Log($"[GetAlbumArtUrl] LastFM lookup failed, falling back to Apple Music Web");
                 }
                 return lastFmImg ?? await GetAlbumArtUrlAppleMusic();
-            } catch (Exception ex) { 
-                logger?.Log($"[GetAlbumArtUrl] An exception occurred: {ex}"); 
-                return null; 
+            } catch (Exception ex) {
+                logger?.Log($"[GetAlbumArtUrl] An exception occurred: {ex}");
+                return null;
             }
         }
         private async Task<string?> GetAlbumArtUrlLastFm() {
-            var url = $"http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={lastFmApiKey}&artist={Uri.EscapeDataString(songArtist)}&album={Uri.EscapeDataString(AppleMusicScrobbler.CleanAlbumName(songAlbum))}&format=json";
+            var url = $"http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key={lastFmApiKey}&artist={Uri.EscapeDataString(songArtist)}&album={Uri.EscapeDataString(AlbumCleaner.CleanAlbumName(songAlbum))}&format=json";
             var j = await GetURLJson(url, "GetAlbumArtUrlLastFm");
             var imgs = j.RootElement.GetProperty("album").GetProperty("image");
             foreach (var img in imgs.EnumerateArray()) {
@@ -221,7 +221,7 @@ namespace AMWin_RichPresence {
         }
         private async Task<string?> GetAlbumArtUrlAppleMusic() {
             try {
-                // try searching in "Songs" section 
+                // try searching in "Songs" section
                 var result = SearchSongs();
                 if (result != null) {
                     return GetLargestImageUrl(result);
@@ -236,7 +236,7 @@ namespace AMWin_RichPresence {
                 // TODO: search in "Albums" section?
                 return null;
             } catch (Exception ex) {
-                logger?.Log($"[GetAlbumArtUrlAppleMusic] An exception occurred: {ex}"); 
+                logger?.Log($"[GetAlbumArtUrlAppleMusic] An exception occurred: {ex}");
                 return null;
             }
         }
@@ -291,7 +291,7 @@ namespace AMWin_RichPresence {
                         .Value;
 
                     return await GetSongDurationFromAlbumPage(searchResultUrl);
-                }    
+                }
                 return null;
             } catch (Exception ex) {
                 logger?.Log($"[GetSongDurationAppleMusic] An exception occurred: {ex}");
@@ -308,7 +308,7 @@ namespace AMWin_RichPresence {
                 var str = desc.Attributes["content"].Value;
                 var songTitle = new Regex(@"(?<=Listen to ).*(?= by)").Matches(str).First().Value;
                 var duration = new Regex(@"(?<=Duration: )\S*$").Matches(str).First().Value;
-                
+
                 // check that the result actually is the song
                 if (HttpUtility.HtmlDecode(songTitle) == songName) {
                     return duration;
