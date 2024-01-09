@@ -170,7 +170,7 @@ namespace AMWin_RichPresence {
         }
 
         protected async override Task UpdateNowPlaying(string artist, string album, string song) {
-            if (trackApi == null || !lastfmAuth?.Authenticated != true) {
+            if (trackApi == null || lastfmAuth?.Authenticated != true) {
                 return;
             }
 
