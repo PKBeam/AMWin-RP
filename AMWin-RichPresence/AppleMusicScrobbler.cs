@@ -185,12 +185,13 @@ namespace AMWin_RichPresence {
         public AppleMusicListenBrainzScrobbler(Logger? logger = null) : base("ListenBrainz", logger) { }
 
         public async override Task<bool> init(ListenBrainzCredentials credentials) {
+            listenBrainzClient = new();
+
             if (string.IsNullOrEmpty(credentials.userToken)) {
                 logger?.Log("No ListenBrainz user token found");
                 return false;
             }
 
-            listenBrainzClient = new();
             var tokenValidation = await listenBrainzClient.ValidateTokenAsync(credentials.userToken);
 
             if (tokenValidation.Valid == true) {
