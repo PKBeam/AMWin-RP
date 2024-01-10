@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Timers;
-using System.Windows.Automation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using FlaUI.UIA3;
+using FlaUI.Core.Conditions;
 
 namespace AMWin_RichPresence {
 
@@ -72,189 +73,158 @@ namespace AMWin_RichPresence {
 
         public void Refresh(object? source, ElapsedEventArgs? e) {
             AppleMusicInfo? appleMusicInfo = null;
-            AutomationElement? appleMusicWindow;
-
-            appleMusicWindow = FindAppleMusicWindow();
             try {
-                if (appleMusicWindow != null) {
-                    appleMusicInfo = GetAppleMusicInfo(appleMusicWindow);
-                }
+                appleMusicInfo = GetAppleMusicInfo();
             } catch (Exception ex) {
                 logger?.Log($"Something went wrong while scraping: {ex}");
             }
             refreshHandler(appleMusicInfo);
         }
-        public AutomationElement? FindAppleMusicWindow() {
-            try {
-                var allWindows = AutomationElement.RootElement.FindAll(TreeScope.Children, Condition.TrueCondition);
-                foreach (AutomationElement element in allWindows) {
-                    var elementProperties = element.Current;
-                    // TODO - How do we tell it's the actual Windows-native Apple Music application and not some other one?
-                    if (StringLetterComparison(elementProperties.Name, "Apple Music") && StringLetterComparison(elementProperties.ClassName, "WinUIDesktopWin32WindowClass")) {
-                        return element;
+
+        public AppleMusicInfo? GetAppleMusicInfo() {
+            var amProcesses = Process.GetProcessesByName("AppleMusic");
+            if (amProcesses.Length == 0) {
+                throw new Exception("Could not find an AppleMusic.exe process");
+            }
+            var app = FlaUI.Core.Application.Attach(amProcesses[0].Id);
+            using (var automation = new UIA3Automation()) {
+                var window = app.GetMainWindow(automation);
+                var amWinTransportBar = window.FindFirstDescendant("TransportBar");
+                var amWinLCD = amWinTransportBar.FindFirstChild("LCD");
+
+                // song panel not initialised
+                if (amWinLCD == null) {
+                    return null;
+                }
+
+                var songFields = amWinLCD.FindAllChildren(new ConditionFactory(new UIA3PropertyLibrary()).ByAutomationId("myScrollViewer"));
+
+                // ================================================
+                //  Check if there is a song playing
+                // ------------------------------------------------
+
+                if (songFields.Length != 2) {
+                    return null;
+                }
+
+                // ================================================
+                //  Get song info
+                // ------------------------------------------------
+
+                var songNameElement = songFields[0];
+                var songAlbumArtistElement = songFields[1];
+
+
+                // the upper rectangle is the song name; the bottom rectangle is the author/album
+                // lower .Bottom = higher up on the screen (?)
+                if (songNameElement.BoundingRectangle.Bottom > songAlbumArtistElement.BoundingRectangle.Bottom) {
+                    songNameElement = songFields[1];
+                    songAlbumArtistElement = songFields[0];
+                }
+
+                var songName = songNameElement.Name;
+                var songAlbumArtist = songAlbumArtistElement.Name;
+
+                string songArtist = "";
+                string songAlbum = "";
+
+                // some classical songs add "By " before the composer's name
+                string? songComposer = null;
+                string? songPerformer = null;
+                var composerPerformerRegex = new Regex(@"By\s.*?\s\u2014");
+                var songComposerPerformer = composerPerformerRegex.Matches(songAlbumArtist);
+                try {
+                    var songInfo = ParseSongAlbumArtist(songAlbumArtist, composerAsArtist);
+                    songArtist = songInfo.Item1;
+                    songAlbum = songInfo.Item2;
+                } catch (Exception ex) {
+                    logger?.Log($"Could not parse '{songAlbumArtist}' into artist and album: {ex}");
+                }
+
+                // when searching for song info, use the performer as the artist instead of composer
+                string songSearchArtist = songPerformer ?? songArtist;
+
+                // if this is a new song, clear out the current song
+                if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongArtist != songArtist || currentSong?.SongSubTitle != songAlbumArtist) {
+                    currentSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
+                }
+
+                // init web scraper
+                var webScraper = new AppleMusicWebScraper(songName, songAlbum, songSearchArtist, logger, lastFmApiKey);
+
+                // find artist list... unless it's a classical song
+                if (currentSong.ArtistList == null && songComposer == null) {
+                    currentSong.ArtistList = webScraper.GetArtistList();
+                    if (currentSong.ArtistList.Count == 0) {
+                        currentSong.ArtistList = null;
                     }
                 }
-                allWindows = null;
-                logger?.Log("Could not find Apple Music window");
-            } catch (Exception ex) {
-                logger?.Log($"Desktop windows not available: {ex}");
-                return null;
-            }
-            return null;
-        }
+                // ================================================
+                //  Get song timestamps
+                // ------------------------------------------------
 
-        public AppleMusicInfo? GetAppleMusicInfo(AutomationElement amWindow) {
+                var currentTimeElement = amWinLCD.FindFirstChild("CurrentTime");
+                var remainingDurationElement = amWinLCD.FindFirstChild("Duration");
 
-            var amWinTransportBar = amWindow
-                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.ClassNameProperty, "Microsoft.UI.Content.DesktopChildSiteBridge"))
-                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "NavView"))
-                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportBar"));
+                // grab the seek slider to check song playback progress
+                var songProgressSlider = amWinLCD
+                    .FindFirstChild("LCDScrubber")? // this may be hidden when a song is initialising
+                    .Patterns.RangeValue.Pattern;
 
-            var amWinLCD = amWinTransportBar
-                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCD"));
+                var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Value / songProgressSlider.Maximum;
 
-            // song panel not initialised
-            if (amWinLCD == null) {
-                return null;
-            }
+                // calculate song timestamps
+                int? currentTime = null;
+                int? remainingDuration = null;
 
-            var songFields = amWinLCD
-                .FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
+                // if the timestamps are being hidden by Apple Music, we fall back to independent timestamp calculation
+                if (currentTimeElement == null || remainingDurationElement == null) {
 
-            // ================================================
-            //  Check if there is a song playing
-            // ------------------------------------------------
+                    // try to get song duration if we don't have it
+                    if (currentSong.SongDuration == null) {
+                        webScraper.GetSongDuration().ContinueWith(t => {
+                            string? dur = t.Result;
+                            currentSong.SongDuration = dur == null ? null : ParseTimeString(dur);
+                        });
+                    }
 
-            if (songFields.Count != 2) {
-                return null;
-            }
+                    // if success, set timestamps
+                    if (currentSong.SongDuration != null) {
+                        var songDuration = currentSong.SongDuration;
+                        currentTime = (int)(songProgressPercent * songDuration);
+                        remainingDuration = (int)((1 - songProgressPercent) * songDuration);
+                    }
 
-            // ================================================
-            //  Get song info
-            // ------------------------------------------------
-
-            var songNameElement = songFields[0];
-            var songAlbumArtistElement = songFields[1];
-
-            // the upper rectangle is the song name; the bottom rectangle is the author/album
-            // lower .Bottom = higher up on the screen (?)
-            if (songNameElement.Current.BoundingRectangle.Bottom > songAlbumArtistElement.Current.BoundingRectangle.Bottom) {
-                songNameElement = songFields[1];
-                songAlbumArtistElement = songFields[0];
-            }
-
-            var songName = songNameElement.Current.Name;
-            var songAlbumArtist = songAlbumArtistElement.Current.Name;
-
-            string songArtist;
-            string songAlbum;
-
-            // some classical songs add "By " before the composer's name
-            string? songComposer = null;
-            string? songPerformer = null;
-            var composerPerformerRegex = new Regex(@"By\s.*?\s\u2014");
-            var songComposerPerformer = composerPerformerRegex.Matches(songAlbumArtist);
-            try {
-                if (songComposerPerformer.Count > 0) {
-                    songComposer = songAlbumArtist.Split(" \u2014 ")[0].Remove(0, 3);
-                    songPerformer = songAlbumArtist.Split(" \u2014 ")[1];
-                    songArtist = composerAsArtist ? songComposer : songPerformer;
-                    songAlbum = songAlbumArtist.Split(" \u2014 ")[2];
-                } else {
-                    // U+2014 is the emdash used by the Apple Music app, not the standard "-" character on the keyboard!
-                    songArtist = songAlbumArtist.Split(" \u2014 ")[0];
-                    songAlbum = songAlbumArtist.Split(" \u2014 ")[1];
+                } else { // ... otherwise just use the timestamps provided by Apple Music
+                    currentTime = ParseTimeString(currentTimeElement!.Name);
+                    remainingDuration = ParseTimeString(remainingDurationElement!.Name);
                 }
-            } catch (Exception ex) {
-                logger?.Log($"Could not parse '{songAlbumArtist}' into artist and album: {ex}");
-                songArtist = "";
-                songAlbum = "";
-            }
 
-            // when searching for song info, use the performer as the artist instead of composer
-            string songSearchArtist = songPerformer ?? songArtist;
+                currentSong.CurrentTime = currentTime;
 
-            // if this is a new song, clear out the current song
-            if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongArtist != songArtist || currentSong?.SongSubTitle != songAlbumArtist) {
-                currentSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
-            }
-
-            // init web scraper
-            var webScraper = new AppleMusicWebScraper(songName, songAlbum, songSearchArtist, logger, lastFmApiKey);
-
-            // find artist list... unless it's a classical song
-            if (currentSong.ArtistList == null && songComposer == null) {
-                currentSong.ArtistList = webScraper.GetArtistList();
-                if (currentSong.ArtistList.Count == 0) {
-                    currentSong.ArtistList = null;
+                // if we have timestamps, convert them into Unix timestamps for Discord
+                if (currentTime != null && remainingDuration != null) {
+                    currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, (int)currentTime);
+                    currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, (int)remainingDuration);
                 }
-            }
-            // ================================================
-            //  Get song timestamps
-            // ------------------------------------------------
 
-            var currentTimeElement = amWinLCD.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "CurrentTime"));
-            var remainingDurationElement = amWinLCD.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "Duration"));
+                // check if the song is paused or not
+                var playPauseButton = amWinTransportBar.FindFirstChild("TransportControl_PlayPauseStop");
 
-            // grab the seek slider to check song playback progress
-            var songProgressSlider = amWinLCD
-                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "LCDScrubber"))? // this may be hidden when a song is initialising
-                .GetCurrentPattern(RangeValuePattern.Pattern) as RangeValuePattern;
+                currentSong.IsPaused = playPauseButton.Name == "Play";
 
-            var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Current.Value / songProgressSlider.Current.Maximum;
 
-            // calculate song timestamps
-            int? currentTime = null;
-            int? remainingDuration = null;
+                // ================================================
+                //  Get song cover art
+                // ------------------------------------------------
 
-            // if the timestamps are being hidden by Apple Music, we fall back to independent timestamp calculation
-            if (currentTimeElement == null || remainingDurationElement == null) {
-
-                // try to get song duration if we don't have it
-                if (currentSong.SongDuration == null) {
-                    webScraper.GetSongDuration().ContinueWith(t => {
-                        string? dur = t.Result;
-                        currentSong.SongDuration = dur == null ? null : ParseTimeString(dur);
+                if (currentSong.CoverArtUrl == null) {
+                    webScraper.GetAlbumArtUrl().ContinueWith(t => {
+                        currentSong.CoverArtUrl = t.Result;
                     });
                 }
 
-                // if success, set timestamps
-                if (currentSong.SongDuration != null) {
-                    var songDuration = currentSong.SongDuration;
-                    currentTime = (int)(songProgressPercent * songDuration);
-                    remainingDuration = (int)((1 - songProgressPercent) * songDuration);
-                }
-
-            } else { // ... otherwise just use the timestamps provided by Apple Music
-                currentTime = ParseTimeString(currentTimeElement!.Current.Name);
-                remainingDuration = ParseTimeString(remainingDurationElement!.Current.Name);
             }
-
-            currentSong.CurrentTime = currentTime;
-
-            // if we have timestamps, convert them into Unix timestamps for Discord
-            if (currentTime != null && remainingDuration != null) {
-                currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, (int)currentTime);
-                currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, (int)remainingDuration);
-            }
-
-            // check if the song is paused or not
-            var playPauseButton = amWinTransportBar
-                .FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "TransportControl_PlayPauseStop"));
-
-            currentSong.IsPaused = playPauseButton.Current.Name == "Play";
-
-
-            // ================================================
-            //  Get song cover art
-            // ------------------------------------------------
-
-            if (currentSong.CoverArtUrl == null) {
-                webScraper.GetAlbumArtUrl().ContinueWith(t => {
-                    currentSong.CoverArtUrl = t.Result;
-                });
-            }
-
             return currentSong;
         }
 
@@ -270,6 +240,28 @@ namespace AMWin_RichPresence {
             int sec = int.Parse(time.Split(":")[1]);
 
             return min * 60 + sec;
+        }
+
+        private static Tuple<string, string> ParseSongAlbumArtist(string songAlbumArtist, bool composerAsArtist) {
+            string songArtist;
+            string songAlbum;
+
+            // some classical songs add "By " before the composer's name
+            string? songComposer = null;
+            string? songPerformer = null;
+            var composerPerformerRegex = new Regex(@"By\s.*?\s\u2014");
+            var songComposerPerformer = composerPerformerRegex.Matches(songAlbumArtist);
+            if (songComposerPerformer.Count > 0) {
+                songComposer = songAlbumArtist.Split(" \u2014 ")[0].Remove(0, 3);
+                songPerformer = songAlbumArtist.Split(" \u2014 ")[1];
+                songArtist = composerAsArtist ? songComposer : songPerformer;
+                songAlbum = songAlbumArtist.Split(" \u2014 ")[2];
+            } else {
+                // U+2014 is the emdash used by the Apple Music app, not the standard "-" character on the keyboard!
+                songArtist = songAlbumArtist.Split(" \u2014 ")[0];
+                songAlbum = songAlbumArtist.Split(" \u2014 ")[1];
+            }
+            return new(songArtist, songAlbum);
         }
 
         // some localisations of Apple Music have slight differences in element names
