@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
         mc:Ignorable="d"
         Icon="/Resources/AMWinRP.ico"
-        Title="AMWin-RichPresence" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Width="470" Height="645">
+        Title="AMWin-RichPresence" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Width="470" Height="660">
     <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <DockPanel>
             <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
@@ -75,47 +75,51 @@
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
-                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="20"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
-                            <RowDefinition Height="15"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
+                            <RowDefinition Height="35"/>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" VerticalAlignment="Top" FontWeight="Bold" Padding="0 3 0 0">Scrobbling settings</TextBlock>
 
                         <TextBlock Grid.Row="1" Grid.Column="0"  Padding="10 0 0 0">Clean album name</TextBlock>
-                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBox_LastfmCleanAlbumName" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmCleanAlbumName, Mode=TwoWay}"  Click="CheckBox_LastfmCleanAlbumName_Click"/>
+                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBox_LastfmCleanAlbumName" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmCleanAlbumName, Mode=TwoWay}"  Click="CheckBox_LastfmCleanAlbumName_Click"/>
 
                         <TextBlock Grid.Row="2" Grid.Column="0" Padding="10 0 0 0">Scrobble primary artist</TextBlock>
-                        <CheckBox Grid.Row="2" Grid.Column="1" x:Name="CheckBox_LastfmScrobblePrimary" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmScrobblePrimaryArtist, Mode=TwoWay}" Click="CheckBox_LastfmScrobblePrimary_Click"/>
+                        <CheckBox Grid.Row="2" Grid.Column="1" x:Name="CheckBox_LastfmScrobblePrimary" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmScrobblePrimaryArtist, Mode=TwoWay}" Click="CheckBox_LastfmScrobblePrimary_Click"/>
 
-                        <TextBlock Grid.Row="4" Grid.Column="0"  Padding="10 0 0 0" VerticalAlignment="Center">Enable Last.FM scrobbling</TextBlock>
-                        <CheckBox Grid.Row="4" Grid.Column="1" x:Name="CheckBox_LastfmEnable" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmEnable, Mode=TwoWay}"  Click="CheckBox_LastfmEnable_Click" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" FontWeight="Bold" Padding="10 0 0 0">Last.FM</TextBlock>
+                        
+                        <TextBlock Grid.Row="4" Grid.Column="0" Padding="20 0 0 0" VerticalAlignment="Center">Enable Last.FM</TextBlock>
+                        <CheckBox Grid.Row="4" Grid.Column="1" x:Name="CheckBox_LastfmEnable"  IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmEnable, Mode=TwoWay}"  Click="CheckBox_LastfmEnable_Click" VerticalAlignment="Center"/>
 
-                        <TextBlock Grid.Row="5" Grid.Column="0" Padding="10 0 0 0" VerticalAlignment="Center">[Last.fm] API Key</TextBlock>
-                        <TextBox Grid.Row="5" Grid.Column="1" x:Name="LastfmAPIKey" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}" TextWrapping="Wrap" FontFamily="Cascadia Code" Width="260" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="5" Grid.Column="0" Padding="20 0 0 0" VerticalAlignment="Center">API Key</TextBlock>
+                        <TextBox Grid.Row="5" Grid.Column="1" x:Name="LastfmAPIKey" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}" HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Cascadia Code" Width="231" VerticalAlignment="Center"/>
 
-                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">[Last.fm] API Secret</TextBlock>
-                        <TextBox Grid.Row="6" Grid.Column="1" x:Name="LastfmSecret" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}" TextWrapping="Wrap" FontFamily="Cascadia Code" VerticalAlignment="Center" Width="260"/>
+                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="20 0 0 0">API Secret</TextBlock>
+                        <TextBox Grid.Row="6" Grid.Column="1" x:Name="LastfmSecret" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}" HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Cascadia Code" VerticalAlignment="Center" Width="231"/>
 
-                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">[Last.fm] Username</TextBlock>
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="20 0 0 0">Username</TextBlock>
                         <TextBox Grid.Row="7" Grid.Column="1" x:Name="LastfmUsername" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmUsername}" TextWrapping="Wrap" VerticalAlignment="Center" Width="260"/>
 
-                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">[Last.fm] Password</TextBlock>
+                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="20 0 0 0">Password</TextBlock>
                         <PasswordBox Grid.Row="8" Grid.Column="1" x:Name="LastfmPassword" VerticalAlignment="Center"/>
 
-                        <TextBlock Grid.Row="10" Grid.Column="0"  Padding="10 0 0 0" VerticalAlignment="Center">Enable ListenBrainz</TextBlock>
-                        <CheckBox Grid.Row="10" Grid.Column="1" x:Name="CheckBox_ListenBrainzEnable" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ListenBrainzEnable, Mode=TwoWay}"  Click="CheckBox_ListenBrainzEnable_Click" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="9" Grid.Column="0" FontWeight="Bold" Padding="10 5 0 0">ListenBrainz</TextBlock>
 
-                        <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">[ListenBrainz] User token</TextBlock>
+                        <TextBlock Grid.Row="10" Grid.Column="0"  Padding="20 0 0 0" VerticalAlignment="Center">Enable ListenBrainz</TextBlock>
+                        <CheckBox Grid.Row="10" Grid.Column="1" x:Name="CheckBox_ListenBrainzEnable" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ListenBrainzEnable, Mode=TwoWay}"  Click="CheckBox_ListenBrainzEnable_Click" VerticalAlignment="Center"/>
+
+                        <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Padding="20 0 0 0">User token</TextBlock>
                         <TextBox Grid.Row="11" Grid.Column="1" x:Name="ListenBrainzUserToken" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.ListenBrainzUserToken, Mode=TwoWay}" TextWrapping="Wrap" FontFamily="Cascadia Code" VerticalAlignment="Center"/>
 
-                        <Button Grid.Row="12" Grid.Column="1" x:Name="SaveLastFMCreds" Content="Save Credentials" VerticalAlignment="Center" Click="SaveLastFMCreds_Click" Margin="150,0,0,0"/>
+                        <Button Grid.Row="12" Grid.Column="1" x:Name="SaveLastFMCreds" Content="Save Credentials" VerticalAlignment="Center" Click="SaveLastFMCreds_Click" Margin="150 10 0 0"/>
                     </Grid>
                 </StackPanel>
             </Border>
