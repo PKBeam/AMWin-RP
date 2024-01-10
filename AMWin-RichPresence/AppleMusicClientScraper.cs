@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using FlaUI.UIA3;
 using FlaUI.Core.Conditions;
+using DiscordRPC.Logging;
+using FlaUI.Core.AutomationElements;
+using System.Xml.Linq;
 
 namespace AMWin_RichPresence {
 
@@ -84,12 +87,17 @@ namespace AMWin_RichPresence {
         public AppleMusicInfo? GetAppleMusicInfo() {
             var amProcesses = Process.GetProcessesByName("AppleMusic");
             if (amProcesses.Length == 0) {
-                throw new Exception("Could not find an AppleMusic.exe process");
+                logger?.Log("Could not find an AppleMusic.exe process");
+                return null;
             }
             var app = FlaUI.Core.Application.Attach(amProcesses[0].Id);
             using (var automation = new UIA3Automation()) {
                 var window = app.GetMainWindow(automation);
-                var amWinTransportBar = window.FindFirstDescendant("TransportBar");
+                var amWinTransportBar = FindFirstDescendantWithAutomationId(window, "TransportBar");
+                if (amWinTransportBar == null) {
+                    logger?.Log("Apple Music song panel is not initialised or missing");
+                    return null;
+                }
                 var amWinLCD = amWinTransportBar.FindFirstChild("LCD");
 
                 // song panel not initialised
@@ -270,6 +278,20 @@ namespace AMWin_RichPresence {
         }
         private static bool StringLetterComparison(string s1, string s2) {
             return StringToLetters(s1) == StringToLetters(s2);
+        }
+
+        // breadth-first search for element with given automation ID.
+        // BFS is preferred as the elements we want to find are generally not too deep in the element tree
+        private static AutomationElement? FindFirstDescendantWithAutomationId(AutomationElement baseElement, string id) {
+            List<AutomationElement> nodes = new() { baseElement };
+            for (var i = 0; i < nodes.Count; i++) {
+                var node = nodes[i];
+                if (node.Properties.AutomationId.IsSupported && node.AutomationId == id) {
+                    return node;
+                }
+                nodes.AddRange(node.FindAllChildren());
+            }
+            return null;
         }
     }
 }
