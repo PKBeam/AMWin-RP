@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
         mc:Ignorable="d"
         Icon="/Resources/AMWinRP.ico"
-        Title="AMWin-RichPresence" Height="560" Width="440" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="AMWin-RichPresence" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Width="470" Height="645">
     <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <DockPanel>
             <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
@@ -24,7 +24,7 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="160"/>
-                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="260"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
@@ -42,23 +42,23 @@
 
                         <TextBlock Grid.Row="1" Grid.Column="0">Treat composer as artist</TextBlock>
                         <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBox_ClassicalComposerAsArtist" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ClassicalComposerAsArtist, Mode=TwoWay}" Click="CheckBox_ClassicalComposerAsArtist_Click"/>
-  
-                        <TextBlock Grid.Row="2" VerticalAlignment="Top" FontWeight="Bold" Padding="0 3 0 0">Discord settings</TextBlock>
+
+                        <TextBlock Grid.Row="2" FontWeight="Bold" Padding="0 3 0 0" VerticalAlignment="Top">Discord settings</TextBlock>
 
                         <TextBlock Grid.Row="3" Grid.Column="0"  Padding="10 0 0 0">Enable Discord RP</TextBlock>
-                        <CheckBox Grid.Row="3" Grid.Column="1" x:Name="CheckBox_EnableDiscordRP" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableDiscordRP, Mode=TwoWay}" Click="CheckBox_EnableDiscordRP_Click" HorizontalAlignment="Right" Width="120"/>
+                        <CheckBox Grid.Row="3" Grid.Column="1" x:Name="CheckBox_EnableDiscordRP" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableDiscordRP, Mode=TwoWay}" Click="CheckBox_EnableDiscordRP_Click"/>
 
                         <TextBlock Grid.Row="4" Grid.Column="0"  Padding="10 0 0 0">Enable cover images</TextBlock>
-                        <CheckBox Grid.Row="4" Grid.Column="1" x:Name="CheckBox_EnableRPCoverImages" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableRPCoverImages, Mode=TwoWay}" Click="CheckBox_EnableRPCoverImages_Click"></CheckBox>
+                        <CheckBox Grid.Row="4" Grid.Column="1" x:Name="CheckBox_EnableRPCoverImages" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableRPCoverImages, Mode=TwoWay}" Click="CheckBox_EnableRPCoverImages_Click"/>
 
                         <TextBlock Grid.Row="5" Grid.Column="0"  Padding="10 0 0 0">RP when music paused</TextBlock>
-                        <CheckBox Grid.Row="5" Grid.Column="1" x:Name="CheckBox_ShowRPWhenMusicPaused" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowRPWhenMusicPaused, Mode=TwoWay}" Click="CheckBox_ShowRPWhenMusicPaused_Click"></CheckBox>
+                        <CheckBox Grid.Row="5" Grid.Column="1" x:Name="CheckBox_ShowRPWhenMusicPaused" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowRPWhenMusicPaused, Mode=TwoWay}" Click="CheckBox_ShowRPWhenMusicPaused_Click"/>
 
                         <TextBlock Grid.Row="6" Grid.Column="0"  Padding="10 0 0 0">Apple Music icon in status</TextBlock>
                         <CheckBox Grid.Row="6" Grid.Column="1" x:Name="CheckBox_ShowAppleMusicIcon" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowAppleMusicIcon, Mode=TwoWay}" Click="CheckBox_ShowAppleMusicIcon_Click"></CheckBox>
 
-                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="0 0 0 2"  Padding="10 0 0 0">Rich Presence subtitle</TextBlock>
-                        <ComboBox Grid.Row="7" Grid.Column="1" x:Name="ComboBox_RPSubtitleChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPSubtitleChoice, Mode=TwoWay}" Height="22" SelectionChanged="ComboBox_RPSubtitleChoice_SelectionChanged">
+                        <TextBlock Grid.Row="7" Grid.Column="0" Margin="0 0 0 2"  Padding="10 0 0 0" VerticalAlignment="Center">Rich Presence subtitle</TextBlock>
+                        <ComboBox Grid.Row="7" Grid.Column="1" x:Name="ComboBox_RPSubtitleChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPSubtitleChoice, Mode=TwoWay}" Height="22" SelectionChanged="ComboBox_RPSubtitleChoice_SelectionChanged" Margin="0,1,145,2">
                             <!-- The order of these items matters! (check the enum in AppleMusicDiscordClient.cs) -->
                             <ComboBoxItem>Artist and album</ComboBoxItem>
                             <ComboBoxItem>Artist only</ComboBoxItem>
@@ -69,44 +69,53 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="160"/>
-                            <ColumnDefinition Width="110"/>
+                            <ColumnDefinition Width="260"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
+                            <RowDefinition Height="15"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="15"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" VerticalAlignment="Top" FontWeight="Bold" Padding="0 3 0 0">Last.FM settings</TextBlock>
+                        <TextBlock Grid.Row="0" VerticalAlignment="Top" FontWeight="Bold" Padding="0 3 0 0">Scrobbling settings</TextBlock>
 
-                        <TextBlock Grid.Row="1" Grid.Column="0"  Padding="10 0 0 0">Enable Last.FM scrobbling</TextBlock>
-                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBox_LastfmEnable" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmEnable, Mode=TwoWay}"  Click="CheckBox_LastfmEnable_Click"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0"  Padding="10 0 0 0">Clean album name</TextBlock>
+                        <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBox_LastfmCleanAlbumName" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmCleanAlbumName, Mode=TwoWay}"  Click="CheckBox_LastfmCleanAlbumName_Click"/>
 
-                        <TextBlock Grid.Row="2" Grid.Column="0"  Padding="10 0 0 0">Clean album name</TextBlock>
-                        <CheckBox Grid.Row="2" Grid.Column="1" x:Name="CheckBox_LastfmCleanAlbumName" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmCleanAlbumName, Mode=TwoWay}"  Click="CheckBox_LastfmCleanAlbumName_Click"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Padding="10 0 0 0">Scrobble primary artist</TextBlock>
+                        <CheckBox Grid.Row="2" Grid.Column="1" x:Name="CheckBox_LastfmScrobblePrimary" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmScrobblePrimaryArtist, Mode=TwoWay}" Click="CheckBox_LastfmScrobblePrimary_Click"/>
 
-                        <TextBlock Grid.Row="3" Grid.Column="0" Padding="10 0 0 0">Scrobble primary artist</TextBlock>
-                        <CheckBox Grid.Row="3" Grid.Column="1" x:Name="CheckBox_LastfmScrobblePrimary" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmScrobblePrimaryArtist, Mode=TwoWay}" Click="CheckBox_LastfmScrobblePrimary_Click"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0"  Padding="10 0 0 0" VerticalAlignment="Center">Enable Last.FM scrobbling</TextBlock>
+                        <CheckBox Grid.Row="4" Grid.Column="1" x:Name="CheckBox_LastfmEnable" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmEnable, Mode=TwoWay}"  Click="CheckBox_LastfmEnable_Click" VerticalAlignment="Center"/>
 
-                        <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">API Key</TextBlock>
-                        <TextBox Grid.Row="4" Grid.Column="1" x:Name="LastfmAPIKey" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}" TextWrapping="Wrap" Margin="0,0,-121,0" FontFamily="Cascadia Code" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="5" Grid.Column="0" Padding="10 0 0 0" VerticalAlignment="Center">[Last.fm] API Key</TextBlock>
+                        <TextBox Grid.Row="5" Grid.Column="1" x:Name="LastfmAPIKey" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}" TextWrapping="Wrap" FontFamily="Cascadia Code" Width="260" VerticalAlignment="Center"/>
 
-                        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">API Secret</TextBlock>
-                        <TextBox Grid.Row="5" Grid.Column="1" x:Name="LastfmSecret" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}" TextWrapping="Wrap" Margin="0,0,-121,0" FontFamily="Cascadia Code" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">[Last.fm] API Secret</TextBlock>
+                        <TextBox Grid.Row="6" Grid.Column="1" x:Name="LastfmSecret" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}" TextWrapping="Wrap" FontFamily="Cascadia Code" VerticalAlignment="Center" Width="260"/>
 
-                        <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">Username</TextBlock>
-                        <TextBox Grid.Row="6" Grid.Column="1" x:Name="LastfmUsername" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmUsername}" TextWrapping="Wrap" Margin="0,0,-121,0" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">[Last.fm] Username</TextBlock>
+                        <TextBox Grid.Row="7" Grid.Column="1" x:Name="LastfmUsername" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmUsername}" TextWrapping="Wrap" VerticalAlignment="Center" Width="260"/>
 
-                        <TextBlock Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">Password</TextBlock>
-                        <PasswordBox Grid.Row="7" Grid.Column="1" x:Name="LastfmPassword" VerticalAlignment="Center" Margin="0,0,-121,0"/>
+                        <TextBlock Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">[Last.fm] Password</TextBlock>
+                        <PasswordBox Grid.Row="8" Grid.Column="1" x:Name="LastfmPassword" VerticalAlignment="Center"/>
 
-                        <Button Grid.Row="8" Grid.Column="1" Content="Button" HorizontalAlignment="Left" Margin="201,10,0,0" VerticalAlignment="Top" Width="0"/>
-                        <Button Grid.Row="8" Grid.Column="1" x:Name="SaveLastFMCreds" Content="Save Credentials" VerticalAlignment="Center" Margin="129,5,-121,0" Click="SaveLastFMCreds_Click"/>
+                        <TextBlock Grid.Row="10" Grid.Column="0"  Padding="10 0 0 0" VerticalAlignment="Center">Enable ListenBrainz</TextBlock>
+                        <CheckBox Grid.Row="10" Grid.Column="1" x:Name="CheckBox_ListenBrainzEnable" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ListenBrainzEnable, Mode=TwoWay}"  Click="CheckBox_ListenBrainzEnable_Click" VerticalAlignment="Center"/>
+
+                        <TextBlock Grid.Row="11" Grid.Column="0" VerticalAlignment="Center" Padding="10 0 0 0">[ListenBrainz] User token</TextBlock>
+                        <TextBox Grid.Row="11" Grid.Column="1" x:Name="ListenBrainzUserToken" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.ListenBrainzUserToken, Mode=TwoWay}" TextWrapping="Wrap" FontFamily="Cascadia Code" VerticalAlignment="Center"/>
+
+                        <Button Grid.Row="12" Grid.Column="1" x:Name="SaveLastFMCreds" Content="Save Credentials" VerticalAlignment="Center" Click="SaveLastFMCreds_Click" Margin="150,0,0,0"/>
                     </Grid>
                 </StackPanel>
             </Border>

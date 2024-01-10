@@ -11,17 +11,17 @@ namespace AMWin_RichPresence {
     internal class AppleMusicInfo {
         // the following fields are only valid if HasSong is true.
         // DateTimes are in UTC.
-        public string        SongName;
-        public string        SongSubTitle;
-        public string        SongAlbum;
-        public string        SongArtist;
-        public bool          IsPaused = true;
-        public DateTime?     PlaybackStart;
-        public DateTime?     PlaybackEnd;
-        public int?          SongDuration = null;
+        public string SongName;
+        public string SongSubTitle;
+        public string SongAlbum;
+        public string SongArtist;
+        public bool IsPaused = true;
+        public DateTime? PlaybackStart;
+        public DateTime? PlaybackEnd;
+        public int? SongDuration = null;
         public List<string>? ArtistList = null;
-        public string?       CoverArtUrl = null;
-        public int?          CurrentTime = null;
+        public string? CoverArtUrl = null;
+        public int? CurrentTime = null;
 
         public AppleMusicInfo(string songName, string songSubTitle, string songAlbum, string songArtist) {
             this.SongName = songName;
@@ -119,7 +119,7 @@ namespace AMWin_RichPresence {
             }
 
             var songFields = amWinLCD
-                .FindAll  (TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
+                .FindAll(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "myScrollViewer"));
 
             // ================================================
             //  Check if there is a song playing
@@ -151,7 +151,7 @@ namespace AMWin_RichPresence {
 
             // some classical songs add "By " before the composer's name
             string? songComposer = null;
-            string? songPerformer = null; 
+            string? songPerformer = null;
             var composerPerformerRegex = new Regex(@"By\s.*?\s\u2014");
             var songComposerPerformer = composerPerformerRegex.Matches(songAlbumArtist);
             try {
@@ -193,7 +193,7 @@ namespace AMWin_RichPresence {
             //  Get song timestamps
             // ------------------------------------------------
 
-            var currentTimeElement       = amWinLCD.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "CurrentTime"));
+            var currentTimeElement = amWinLCD.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "CurrentTime"));
             var remainingDurationElement = amWinLCD.FindFirst(TreeScope.Children, new PropertyCondition(AutomationElement.AutomationIdProperty, "Duration"));
 
             // grab the seek slider to check song playback progress

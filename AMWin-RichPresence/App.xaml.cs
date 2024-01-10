@@ -11,7 +11,8 @@ namespace AMWin_RichPresence {
         private TaskbarIcon? taskbarIcon;
         private AppleMusicClientScraper amScraper;
         private AppleMusicDiscordClient discordClient;
-        private AppleMusicScrobbler scrobblerClient;
+        private AppleMusicLastFmScrobbler lastFmScrobblerClient;
+        private AppleMusicListenBrainzScrobbler listenBrainzScrobblerClient;
         private Logger? logger;
 
         public LastFmCredentials lastFmCredentials {
@@ -24,6 +25,15 @@ namespace AMWin_RichPresence {
                 return creds;
             }
         }
+
+        public ListenBrainzCredentials listenBrainzCredentials {
+            get {
+                var creds = new ListenBrainzCredentials();
+                creds.userToken = AMWin_RichPresence.Properties.Settings.Default.ListenBrainzUserToken;
+                return creds;
+            }
+        }
+
         public App() {
 
             // make logger
@@ -40,20 +50,24 @@ namespace AMWin_RichPresence {
             discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, logger: logger);
 
             // start Last.FM scrobbler
-            scrobblerClient = new AppleMusicScrobbler(logger: logger);
-            _ = scrobblerClient.init(lastFmCredentials);
+            lastFmScrobblerClient = new AppleMusicLastFmScrobbler(logger: logger);
+            _ = lastFmScrobblerClient.init(lastFmCredentials);
 
+            // start ListenBrainz scrobbler
+            listenBrainzScrobblerClient = new AppleMusicListenBrainzScrobbler(logger: logger);
+            _ = listenBrainzScrobblerClient.init(listenBrainzCredentials);
+
+            // start Apple Music scraper
             var lastFMApiKey = AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey;
 
             if (lastFMApiKey == null || lastFMApiKey == "") {
                 logger?.Log("No Last.FM API key found");
             }
 
-            // start Apple Music scraper
             amScraper = new(lastFMApiKey, Constants.RefreshPeriod, classicalComposerAsArtist, (newInfo) => {
-                
+
                 // don't update scraper if Apple Music is paused or not open
-                if (newInfo != null && newInfo != null && (AMWin_RichPresence.Properties.Settings.Default.ShowRPWhenMusicPaused || !newInfo.IsPaused)) {
+                if (newInfo != null && (AMWin_RichPresence.Properties.Settings.Default.ShowRPWhenMusicPaused || !newInfo.IsPaused)) {
 
                     // Discord RP update
                     if (AMWin_RichPresence.Properties.Settings.Default.EnableDiscordRP) {
@@ -64,17 +78,20 @@ namespace AMWin_RichPresence {
                     }
 
                     // Last.FM scrobble update
-                    var scrobbler = scrobblerClient.GetLastFmScrobbler();
-                    var trackApi = scrobblerClient.GetTrackApi();
-                    if (AMWin_RichPresence.Properties.Settings.Default.LastfmEnable && scrobbler != null && trackApi != null) {
-                        scrobblerClient.Scrobbleit(newInfo, scrobbler, trackApi);
+                    if (AMWin_RichPresence.Properties.Settings.Default.LastfmEnable) {
+                        lastFmScrobblerClient.Scrobbleit(newInfo);
+                    }
+
+                    // ListenBrainz scrobble update
+                    if (AMWin_RichPresence.Properties.Settings.Default.ListenBrainzEnable) {
+                        listenBrainzScrobblerClient.Scrobbleit(newInfo);
                     }
                 } else {
                     discordClient.Disable();
                 }
             }, logger);
         }
-        
+
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
             taskbarIcon = (TaskbarIcon)FindResource("TaskbarIcon");
@@ -91,8 +108,13 @@ namespace AMWin_RichPresence {
         }
 
         internal async Task<bool> UpdateLastfmCreds() {
-            return await scrobblerClient.UpdateCredsAsync(lastFmCredentials);
+            return await lastFmScrobblerClient.UpdateCredsAsync(lastFmCredentials);
         }
+
+        internal async Task<bool> UpdateListenBrainzCreds() {
+            return await listenBrainzScrobblerClient.UpdateCredsAsync(listenBrainzCredentials);
+        }
+
         internal void UpdateScraperPreferences(bool composerAsArtist) {
             amScraper.composerAsArtist = composerAsArtist;
         }
