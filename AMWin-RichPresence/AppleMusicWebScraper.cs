@@ -39,12 +39,11 @@ namespace AMWin_RichPresence {
             this.songArtist = songArtist;
         }
         private async Task<HtmlDocument> GetURL(string url, string? callingFunction = null) {
-            var client = new HttpClient();
             // Apple Music web search doesn't like ampersands... even if they're HTML-escaped?
             var cleanUrl = HttpUtility.HtmlEncode(url.Replace("&", " "));
             logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {cleanUrl}");
             var stopwatch = Stopwatch.StartNew();
-            var res = await client.GetStringAsync(cleanUrl);
+            var res = await Constants.HttpClient.GetStringAsync(cleanUrl);
             stopwatch.Stop();
             logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {cleanUrl} took {stopwatch.ElapsedMilliseconds}ms");
             HtmlDocument doc = new HtmlDocument();
@@ -52,10 +51,9 @@ namespace AMWin_RichPresence {
             return doc;
         }
         private async Task<JsonDocument> GetURLJson(string url, string? callingFunction = null) {
-            var client = new HttpClient();
             logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {url}");
             var stopwatch = Stopwatch.StartNew();
-            var res = await client.GetStringAsync(url);
+            var res = await Constants.HttpClient.GetStringAsync(url);
             stopwatch.Stop();
             logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {url} took {stopwatch.ElapsedMilliseconds}ms");
             return JsonDocument.Parse(res);

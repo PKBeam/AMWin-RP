@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 
 namespace AMWin_RichPresence {
     internal static class Constants {
@@ -38,6 +39,8 @@ namespace AMWin_RichPresence {
         public static string WindowsAppDataFolder => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         public static string AppDataFolder => Path.Combine(WindowsAppDataFolder, AppDataFolderName);
         public static string AppShortcutPath => Path.Join(WindowsStartupFolder, "AMWin-RP.lnk");
-        public static string? ExePath => Process.GetCurrentProcess().MainModule?.FileName;         
+        public static string? ExePath => Process.GetCurrentProcess().MainModule?.FileName;
+
+        public static readonly HttpClient HttpClient = new HttpClient();
     }
 }
