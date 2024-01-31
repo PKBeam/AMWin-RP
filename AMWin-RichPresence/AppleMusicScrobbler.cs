@@ -26,10 +26,11 @@ namespace AMWin_RichPresence {
 
     internal class AlbumCleaner {
 
+        private static readonly Regex AlbumCleanerRegex = new Regex(@"\s-\s((Single)|(EP))$", RegexOptions.Compiled);
+
         public static string CleanAlbumName(string songName) {
             // Remove " - Single" and " - EP"
-            var re = new Regex(@"\s-\s((Single)|(EP))$");
-            return re.Replace(songName, new MatchEvaluator((m) => { return ""; }));
+            return AlbumCleanerRegex.Replace(songName, new MatchEvaluator((m) => { return ""; }));
         }
 
     }

@@ -10,7 +10,11 @@ using System.Diagnostics;
 using System;
 
 namespace AMWin_RichPresence {
-    internal class AppleMusicWebScraper {
+    internal class AppleMusicWebScraper
+    {
+        private static readonly Regex SongTitleRegex = new Regex(@"(?<=Listen to ).*(?= by)", RegexOptions.Compiled);
+        private static readonly Regex DurationRegex = new Regex(@"(?<=Duration: )\S*$", RegexOptions.Compiled);
+        private static readonly Regex ImageUrlRegex = new Regex(@"http\S*?(?= \d{2,3}w)", RegexOptions.Compiled);
         Logger? logger;
         string? lastFmApiKey;
         string songName;
@@ -164,6 +168,7 @@ namespace AMWin_RichPresence {
             try {
                 var result = SearchSongs();
                 if (result != null) {
+                    /*
                     var searchResultUrl = result
                         .Descendants("li")
                         .First(x => x.Attributes["class"].Value.Contains("track-lockup__title"))
@@ -171,6 +176,7 @@ namespace AMWin_RichPresence {
                         .First()
                         .Attributes["href"]
                         .Value;
+                    */
 
                     var searchResultSubtitles = result
                         .Descendants("span")
@@ -246,7 +252,7 @@ namespace AMWin_RichPresence {
 
             var imgUrls = imgSources[0].Attributes["srcset"].Value;
 
-            return new Regex(@"http\S*?(?= \d{2,3}w)").Matches(imgUrls).Last().Value;
+            return ImageUrlRegex.Matches(imgUrls).Last().Value;
         }
 
         // Get song duration
@@ -304,8 +310,8 @@ namespace AMWin_RichPresence {
                     .First(x => x.Attributes.Contains("name") && x.Attributes["name"].Value == "description");
 
                 var str = desc.Attributes["content"].Value;
-                var songTitle = new Regex(@"(?<=Listen to ).*(?= by)").Matches(str).First().Value;
-                var duration = new Regex(@"(?<=Duration: )\S*$").Matches(str).First().Value;
+                var songTitle = SongTitleRegex.Matches(str).First().Value;
+                var duration = DurationRegex.Matches(str).First().Value;
 
                 // check that the result actually is the song
                 if (HttpUtility.HtmlDecode(songTitle) == songName) {
