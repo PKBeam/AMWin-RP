@@ -26,10 +26,11 @@ namespace AMWin_RichPresence {
 
     internal class AlbumCleaner {
 
+        private static readonly Regex AlbumCleanerRegex = new Regex(@"\s-\s((Single)|(EP))$", RegexOptions.Compiled);
+
         public static string CleanAlbumName(string songName) {
             // Remove " - Single" and " - EP"
-            var re = new Regex(@"\s-\s((Single)|(EP))$");
-            return re.Replace(songName, new MatchEvaluator((m) => { return ""; }));
+            return AlbumCleanerRegex.Replace(songName, new MatchEvaluator((m) => { return ""; }));
         }
 
     }
@@ -124,7 +125,6 @@ namespace AMWin_RichPresence {
         private LastAuth? lastfmAuth;
         private IScrobbler? lastFmScrobbler;
         private ITrackApi? trackApi;
-        private HttpClient? httpClient;
 
         public AppleMusicLastFmScrobbler(Logger? logger = null) : base("Last.FM", logger) { }
 
@@ -135,12 +135,11 @@ namespace AMWin_RichPresence {
                 return false;
             }
             // Use the four pieces of information (API Key, API Secret, Username, Password) to log into Last.FM for Scrobbling
-            httpClient = new HttpClient();
             lastfmAuth = new LastAuth(credentials.apiKey, credentials.apiSecret);
             await lastfmAuth.GetSessionTokenAsync(credentials.username, credentials.password);
 
-            lastFmScrobbler = new MemoryScrobbler(lastfmAuth, httpClient);
-            trackApi = new TrackApi(lastfmAuth, httpClient);
+            lastFmScrobbler = new MemoryScrobbler(lastfmAuth, Constants.HttpClient);
+            trackApi = new TrackApi(lastfmAuth, Constants.HttpClient);
 
             if (lastfmAuth.Authenticated) {
                 logger?.Log("Last.FM authentication succeeded");
@@ -153,7 +152,6 @@ namespace AMWin_RichPresence {
 
         public async override Task<bool> UpdateCredsAsync(LastFmCredentials credentials) {
             logger?.Log("[Last.FM scrobbler] Updating credentials");
-            httpClient = null;
             lastfmAuth = null;
             lastFmScrobbler = null;
             trackApi = null;
