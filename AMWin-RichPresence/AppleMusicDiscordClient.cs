@@ -80,6 +80,16 @@ internal class AppleMusicDiscordClient {
                     LargeImageText = songAlbum
                 }
             };
+            
+            if (amInfo.SongUrl != null) {
+                rp.Buttons = new Button[] {
+                    new Button()
+                    {
+                        Label = "Listen on Apple Music", 
+                        Url = amInfo.SongUrl
+                    }
+                };
+            }
 
             if (amInfo.IsPaused) {
                 rp.Assets.SmallImageKey = Constants.DiscordAppleMusicPauseImageKey;

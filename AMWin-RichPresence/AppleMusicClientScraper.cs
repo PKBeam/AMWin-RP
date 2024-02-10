@@ -23,6 +23,7 @@ namespace AMWin_RichPresence {
         public int? SongDuration = null;
         public List<string>? ArtistList = null;
         public string? CoverArtUrl = null;
+        public string? SongUrl = null;
         public int? CurrentTime = null;
 
         public AppleMusicInfo(string songName, string songSubTitle, string songAlbum, string songArtist) {
@@ -228,6 +229,16 @@ namespace AMWin_RichPresence {
                 if (currentSong.CoverArtUrl == null) {
                     webScraper.GetAlbumArtUrl().ContinueWith(t => {
                         currentSong.CoverArtUrl = t.Result;
+                    });
+                }
+                
+                // ================================================
+                // Get music url
+                // ------------------------------------------------
+                
+                if (currentSong.SongUrl == null) {
+                    webScraper.GetMusicUrl().ContinueWith(t => {
+                        currentSong.SongUrl = t.Result;
                     });
                 }
 
