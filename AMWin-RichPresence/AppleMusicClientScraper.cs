@@ -95,13 +95,14 @@ namespace AMWin_RichPresence {
                 var window = app.GetMainWindow(automation);
                 var amWinTransportBar = FindFirstDescendantWithAutomationId(window, "TransportBar");
                 if (amWinTransportBar == null) {
-                    logger?.Log("Apple Music song panel is not initialised or missing");
+                    logger?.Log("Apple Music song panel (TransportBar) is not initialised or missing");
                     return null;
                 }
                 var amWinLCD = amWinTransportBar.FindFirstChild("LCD");
 
                 // song panel not initialised
                 if (amWinLCD == null) {
+                    logger?.Log("Apple Music song panel (LCD) is not initialised or missing");
                     return null;
                 }
 
@@ -255,8 +256,8 @@ namespace AMWin_RichPresence {
             string songAlbum;
 
             // some classical songs add "By " before the composer's name
-            string? songComposer = null;
-            string? songPerformer = null;
+            string? songComposer;
+            string? songPerformer;
             var composerPerformerRegex = new Regex(@"By\s.*?\s\u2014");
             var songComposerPerformer = composerPerformerRegex.Matches(songAlbumArtist);
             if (songComposerPerformer.Count > 0) {

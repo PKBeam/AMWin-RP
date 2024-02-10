@@ -24,15 +24,15 @@ namespace AMWin_RichPresence {
 #else
         public static string  ProgramVersion = ProgramVersionBase;
 #endif                        
-        public static int    MaxLogFiles = 10;
-        public static int    RefreshPeriod = 5; // seconds
-        public static string AppDataFolderName = "AMWin-RichPresence";
-        public static string DiscordClientID = "1066220978406953012";
-        public static string DiscordAppleMusicImageKey = "applemusic1024x";
-        public static string DiscordAppleMusicPlayImageKey = "applemusicplay1024x";
+        public static int    MaxLogFiles                    = 10;
+        public static int    RefreshPeriod                  = 5; // seconds
+        public static string AppDataFolderName              = "AMWin-RichPresence";
+        public static string DiscordClientID                = "1066220978406953012";
+        public static string DiscordAppleMusicImageKey      = "applemusic1024x";
+        public static string DiscordAppleMusicPlayImageKey  = "applemusicplay1024x";
         public static string DiscordAppleMusicPauseImageKey = "applemusicpause1024x";
-        public static string LastFMCredentialTargetName = "Last FM Password";
-        public static int    LastFMTimeBeforeScrobbling = 20; // seconds
+        public static string LastFMCredentialTargetName     = "Last FM Password";
+        public static int    LastFMTimeBeforeScrobbling     = 20; // seconds
 
         public static string WindowsStartupFolder => Environment.GetFolderPath(Environment.SpecialFolder.Startup);
         public static string WindowsAppDataFolder => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
