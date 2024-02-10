@@ -10,7 +10,11 @@ using System.Diagnostics;
 using System;
 
 namespace AMWin_RichPresence {
-    internal class AppleMusicWebScraper {
+    internal class AppleMusicWebScraper
+    {
+        private static readonly Regex SongTitleRegex = new Regex(@"(?<=Listen to ).*(?= by)", RegexOptions.Compiled);
+        private static readonly Regex DurationRegex = new Regex(@"(?<=Duration: )\S*$", RegexOptions.Compiled);
+        private static readonly Regex ImageUrlRegex = new Regex(@"http\S*?(?= \d{2,3}w)", RegexOptions.Compiled);
         Logger? logger;
         string? lastFmApiKey;
         string songName;
@@ -39,12 +43,11 @@ namespace AMWin_RichPresence {
             this.songArtist = songArtist;
         }
         private async Task<HtmlDocument> GetURL(string url, string? callingFunction = null) {
-            var client = new HttpClient();
             // Apple Music web search doesn't like ampersands... even if they're HTML-escaped?
             var cleanUrl = HttpUtility.HtmlEncode(url.Replace("&", " "));
             logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {cleanUrl}");
             var stopwatch = Stopwatch.StartNew();
-            var res = await client.GetStringAsync(cleanUrl);
+            var res = await Constants.HttpClient.GetStringAsync(cleanUrl);
             stopwatch.Stop();
             logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {cleanUrl} took {stopwatch.ElapsedMilliseconds}ms");
             HtmlDocument doc = new HtmlDocument();
@@ -52,10 +55,9 @@ namespace AMWin_RichPresence {
             return doc;
         }
         private async Task<JsonDocument> GetURLJson(string url, string? callingFunction = null) {
-            var client = new HttpClient();
             logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {url}");
             var stopwatch = Stopwatch.StartNew();
-            var res = await client.GetStringAsync(url);
+            var res = await Constants.HttpClient.GetStringAsync(url);
             stopwatch.Stop();
             logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {url} took {stopwatch.ElapsedMilliseconds}ms");
             return JsonDocument.Parse(res);
@@ -166,6 +168,7 @@ namespace AMWin_RichPresence {
             try {
                 var result = SearchSongs();
                 if (result != null) {
+                    /*
                     var searchResultUrl = result
                         .Descendants("li")
                         .First(x => x.Attributes["class"].Value.Contains("track-lockup__title"))
@@ -173,6 +176,7 @@ namespace AMWin_RichPresence {
                         .First()
                         .Attributes["href"]
                         .Value;
+                    */
 
                     var searchResultSubtitles = result
                         .Descendants("span")
@@ -248,7 +252,7 @@ namespace AMWin_RichPresence {
 
             var imgUrls = imgSources[0].Attributes["srcset"].Value;
 
-            return new Regex(@"http\S*?(?= \d{2,3}w)").Matches(imgUrls).Last().Value;
+            return ImageUrlRegex.Matches(imgUrls).Last().Value;
         }
 
         // Get song duration
@@ -306,8 +310,8 @@ namespace AMWin_RichPresence {
                     .First(x => x.Attributes.Contains("name") && x.Attributes["name"].Value == "description");
 
                 var str = desc.Attributes["content"].Value;
-                var songTitle = new Regex(@"(?<=Listen to ).*(?= by)").Matches(str).First().Value;
-                var duration = new Regex(@"(?<=Duration: )\S*$").Matches(str).First().Value;
+                var songTitle = SongTitleRegex.Matches(str).First().Value;
+                var duration = DurationRegex.Matches(str).First().Value;
 
                 // check that the result actually is the song
                 if (HttpUtility.HtmlDecode(songTitle) == songName) {

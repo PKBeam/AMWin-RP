@@ -6,9 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using FlaUI.UIA3;
 using FlaUI.Core.Conditions;
-using DiscordRPC.Logging;
 using FlaUI.Core.AutomationElements;
-using System.Xml.Linq;
 
 namespace AMWin_RichPresence {
 
@@ -50,6 +48,7 @@ namespace AMWin_RichPresence {
     }
 
     internal class AppleMusicClientScraper {
+        private static readonly Regex ComposerPerformerRegex = new Regex(@"By\s.*?\s\u2014", RegexOptions.Compiled);
 
         public delegate void RefreshHandler(AppleMusicInfo? newInfo);
         string? lastFmApiKey;
@@ -140,8 +139,7 @@ namespace AMWin_RichPresence {
                 // some classical songs add "By " before the composer's name
                 string? songComposer = null;
                 string? songPerformer = null;
-                var composerPerformerRegex = new Regex(@"By\s.*?\s\u2014");
-                var songComposerPerformer = composerPerformerRegex.Matches(songAlbumArtist);
+                //var songComposerPerformer = ComposerPerformerRegex.Matches(songAlbumArtist);
                 try {
                     var songInfo = ParseSongAlbumArtist(songAlbumArtist, composerAsArtist);
                     songArtist = songInfo.Item1;
@@ -256,10 +254,9 @@ namespace AMWin_RichPresence {
             string songAlbum;
 
             // some classical songs add "By " before the composer's name
-            string? songComposer;
-            string? songPerformer;
-            var composerPerformerRegex = new Regex(@"By\s.*?\s\u2014");
-            var songComposerPerformer = composerPerformerRegex.Matches(songAlbumArtist);
+            string? songComposer = null;
+            string? songPerformer = null;
+            var songComposerPerformer = ComposerPerformerRegex.Matches(songAlbumArtist);
             if (songComposerPerformer.Count > 0) {
                 songComposer = songAlbumArtist.Split(" \u2014 ")[0].Remove(0, 3);
                 songPerformer = songAlbumArtist.Split(" \u2014 ")[1];
