@@ -195,6 +195,41 @@ namespace AMWin_RichPresence {
                 return new();
             }
         }
+        
+        // Get song URL
+        // -----------------------------------------------
+        // Supported APIs: Apple Music web search
+        public async Task<string?> GetMusicUrl()
+        {
+            try {
+                return await GetMusicUrlAppleMusic();
+            } catch (Exception ex) {
+                logger?.Log($"[GetMusicUrl] An exception occurred: {ex}");
+                return null;
+            }
+        }
+        
+        private async Task<string?> GetMusicUrlAppleMusic()
+        {
+            try
+            {
+                var result = SearchSongs();
+                if (result != null)
+                {
+                    return GetMusicUrl(result);
+                }
+                
+                result = await SearchTopResults();
+                if (result != null)
+                {
+                    return GetMusicUrl(result);
+                }
+                return null;
+            } catch (Exception ex) {
+                logger?.Log($"[GetMusicUrlAppleMusic] An exception occurred: {ex}");
+                return null;
+            }
+        }
 
         // Get album artwork image
         // -----------------------------------------------
@@ -249,10 +284,16 @@ namespace AMWin_RichPresence {
                 .Descendants("source")
                 .Where(x => x.Attributes["type"].Value == "image/jpeg")
                 .ToList();
-
             var imgUrls = imgSources[0].Attributes["srcset"].Value;
 
             return ImageUrlRegex.Matches(imgUrls).Last().Value;
+        }
+
+        private string? GetMusicUrl(HtmlNode nodeWithSource)
+        {
+            var musicLinkNode = nodeWithSource.SelectSingleNode(".//a[@data-testid='click-action']");
+
+            return musicLinkNode?.GetAttributeValue("href", "");
         }
 
         // Get song duration
