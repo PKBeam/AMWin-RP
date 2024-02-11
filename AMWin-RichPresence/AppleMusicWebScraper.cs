@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using System.Diagnostics;
 using System;
+using System.Drawing;
 
 namespace AMWin_RichPresence {
     internal class AppleMusicWebScraper
@@ -22,17 +23,35 @@ namespace AMWin_RichPresence {
         string songArtist;
 
         HtmlNode? cachedSongSearchResults;
-        private HtmlNode? SearchSongs() {
+        private async Task<HtmlNode?> SearchSongs() {
             if (cachedSongSearchResults == null) {
-                var t = _SearchSongs();
-                t.Wait();
-                cachedSongSearchResults = t.Result;
-                logger?.Log($"[SearchSongs] Caching result for {songName}");
+                var t = await _SearchSongs();
+                if (t != null) {
+                    cachedSongSearchResults = t;
+                    logger?.Log($"[SearchSongs] Caching result for {songName}");
+                } else {
+                    logger?.Log($"[SearchSongs] No result found for {songName}");
+                }
             } else {
                 logger?.Log($"[SearchSongs] Using cached result for {songName}");
-
             }
             return cachedSongSearchResults;
+        }
+
+        HtmlNode? cachedSongSearchTopResults;
+        private async Task<HtmlNode?> SearchTopResults() {
+            if (cachedSongSearchTopResults == null) {
+                var t = await _SearchTopResults();
+                if (t != null) {
+                    cachedSongSearchTopResults = t;
+                    logger?.Log($"[SearchTopResults] Caching result for {songName}");
+                } else {
+                    logger?.Log($"[SearchTopResults] No result found for {songName}");
+                }
+            } else {
+                logger?.Log($"[SearchTopResults] Using cached result for {songName}");
+            }
+            return cachedSongSearchTopResults;
         }
 
         public AppleMusicWebScraper(string songName, string songAlbum, string songArtist, Logger? logger = null, string? lastFmApiKey = null) {
@@ -64,7 +83,64 @@ namespace AMWin_RichPresence {
         }
 
         // Apple Music web search functions
-        private async Task<HtmlNode?> SearchTopResults() {
+        private async Task<HtmlNode?> _SearchSongs() {
+
+            // search on the Apple Music website for the song
+            var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
+            var url = $"https://music.apple.com/us/search?term={searchTerm}";
+            HtmlDocument doc = await GetURL(url, "SearchSongs");
+
+            try {
+                // scrape search results for "Songs" section
+                var list = doc.DocumentNode
+                    .Descendants("div")
+                    .First(x => x.Attributes.Contains("aria-label") && x.Attributes["aria-label"].Value == "Songs")
+                    .Descendants("ul")
+                    .First(x => x.Attributes["data-testid"].Value == "shelf-item-list")
+                    .ChildNodes
+                    .Where(x => x.Name == "li");
+
+                // try each result until we find one that looks correct
+                foreach (var result in list) {
+
+                    if (result.InnerHtml == "") {
+                        continue;
+                    }
+
+                    var searchResultTitle = result
+                            .Descendants("li")
+                            .First(x => x.Attributes["data-testid"].Value == "track-lockup-title")
+                            .Descendants("a")
+                            .First()
+                            .InnerHtml;
+
+                    var searchResultSubtitles = result
+                        .Descendants("span")
+                        .Where(x => x.Attributes.Contains("data-testid") && x.Attributes["data-testid"].Value == "track-lockup-subtitle");
+
+                    var searchResultSubtitlesList = new List<string>() { };
+                    foreach (var span in searchResultSubtitles) {
+                        searchResultSubtitlesList.Add(span.Descendants("span").First().InnerHtml);
+                    }
+                    var searchResultSubtitle = string.Join(", ", searchResultSubtitlesList);
+
+                    // need to decode html to avoid instances like "&amp;" instead of "&"
+                    searchResultTitle = HttpUtility.HtmlDecode(searchResultTitle);
+                    searchResultSubtitle = HttpUtility.HtmlDecode(searchResultSubtitle);
+
+                    // check that the result actually is the song
+                    // (Apple Music web search's "Song" section replaces ampersands with commas in the artist list)
+                    if (searchResultTitle == songName && searchResultSubtitle == songArtist.Replace(" & ", ", ")) {
+                        return result;
+                    }
+                }
+                return null;
+            } catch (Exception ex) {
+                logger?.Log($"[SearchSongs] An exception occurred: {ex}");
+                return null;
+            }
+        }
+        private async Task<HtmlNode?> _SearchTopResults() {
             // search on the Apple Music website for the song
             var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
             var url = $"https://music.apple.com/us/search?term={searchTerm}";
@@ -107,66 +183,13 @@ namespace AMWin_RichPresence {
                 return null;
             }
         }
-        private async Task<HtmlNode?> _SearchSongs() {
-
-            // search on the Apple Music website for the song
-            var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
-            var url = $"https://music.apple.com/us/search?term={searchTerm}";
-            HtmlDocument doc = await GetURL(url, "SearchSongs");
-
-            try {
-                // scrape search results for "Songs" section
-                var list = doc.DocumentNode
-                    .Descendants("div")
-                    .First(x => x.Attributes.Contains("aria-label") && x.Attributes["aria-label"].Value == "Songs")
-                    .Descendants("ul")
-                    .First(x => x.Attributes["data-testid"].Value == "shelf-item-list")
-                    .ChildNodes
-                    .Where(x => x.Name == "li");
-
-                // try each result until we find one that looks correct
-                foreach (var result in list) {
-
-                    var searchResultTitle = result
-                        .Descendants("li")
-                        .First(x => x.Attributes["data-testid"].Value == "track-lockup-title")
-                        .Descendants("a")
-                        .First()
-                        .InnerHtml;
-
-                    var searchResultSubtitles = result
-                        .Descendants("span")
-                        .Where(x => x.Attributes.Contains("data-testid") && x.Attributes["data-testid"].Value == "track-lockup-subtitle");
-
-                    var searchResultSubtitlesList = new List<string>() { };
-                    foreach (var span in searchResultSubtitles) {
-                        searchResultSubtitlesList.Add(span.Descendants("span").First().InnerHtml);
-                    }
-                    var searchResultSubtitle = string.Join(", ", searchResultSubtitlesList);
-
-                    // need to decode html to avoid instances like "&amp;" instead of "&"
-                    searchResultTitle = HttpUtility.HtmlDecode(searchResultTitle);
-                    searchResultSubtitle = HttpUtility.HtmlDecode(searchResultSubtitle);
-
-                    // check that the result actually is the song
-                    // (Apple Music web search's "Song" section replaces ampersands with commas in the artist list)
-                    if (searchResultTitle == songName && searchResultSubtitle == songArtist.Replace(" & ", ", ")) {
-                        return result;
-                    }
-                }
-                return null;
-            } catch (Exception ex) {
-                logger?.Log($"[SearchSongs] An exception occurred: {ex}");
-                return null;
-            }
-        }
 
         // Get list of artists for a song
         // -----------------------------------------------
         // Supported APIs: Apple Music web search
-        public List<string> GetArtistList() {
+        public async Task<List<string>> GetArtistList() {
             try {
-                var result = SearchSongs();
+                var result = await SearchSongs();
                 if (result != null) {
                     /*
                     var searchResultUrl = result
@@ -189,40 +212,36 @@ namespace AMWin_RichPresence {
 
                     return searchResultSubtitlesList;
                 }
-                return new();
+                return [];
             } catch (Exception ex) {
                 logger?.Log($"[GetArtistList] An exception occurred: {ex}");
-                return new();
+                return [];
             }
         }
         
         // Get song URL
         // -----------------------------------------------
         // Supported APIs: Apple Music web search
-        public async Task<string?> GetMusicUrl()
+        public async Task<string?> GetSongUrl()
         {
             try {
-                return await GetMusicUrlAppleMusic();
+                return await GetSongUrlAppleMusic();
             } catch (Exception ex) {
                 logger?.Log($"[GetMusicUrl] An exception occurred: {ex}");
                 return null;
             }
         }
-        
-        private async Task<string?> GetMusicUrlAppleMusic()
+        private async Task<string?> GetSongUrlAppleMusic()
         {
-            try
-            {
-                var result = SearchSongs();
-                if (result != null)
-                {
-                    return GetMusicUrl(result);
+            try {
+                var result = await SearchSongs();
+                if (result != null) {
+                    return GetSongUrl(result);
                 }
                 
                 result = await SearchTopResults();
-                if (result != null)
-                {
-                    return GetMusicUrl(result);
+                if (result != null) {
+                    return GetSongUrl(result);
                 }
                 return null;
             } catch (Exception ex) {
@@ -261,7 +280,7 @@ namespace AMWin_RichPresence {
         private async Task<string?> GetAlbumArtUrlAppleMusic() {
             try {
                 // try searching in "Songs" section
-                var result = SearchSongs();
+                var result = await SearchSongs();
                 if (result != null) {
                     return GetLargestImageUrl(result);
                 }
@@ -289,10 +308,8 @@ namespace AMWin_RichPresence {
             return ImageUrlRegex.Matches(imgUrls).Last().Value;
         }
 
-        private string? GetMusicUrl(HtmlNode nodeWithSource)
-        {
+        private string? GetSongUrl(HtmlNode nodeWithSource) {
             var musicLinkNode = nodeWithSource.SelectSingleNode(".//a[@data-testid='click-action']");
-
             return musicLinkNode?.GetAttributeValue("href", "");
         }
 
@@ -325,7 +342,7 @@ namespace AMWin_RichPresence {
         }
         private async Task<string?> GetSongDurationAppleMusic() {
             try {
-                var result = SearchSongs();
+                var result = await SearchSongs();
                 if (result != null) {
                     var searchResultUrl = result
                         .Descendants("li")

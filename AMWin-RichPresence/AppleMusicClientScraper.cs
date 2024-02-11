@@ -138,9 +138,6 @@ namespace AMWin_RichPresence {
                 string songAlbum = "";
 
                 // some classical songs add "By " before the composer's name
-                string? songComposer = null;
-                string? songPerformer = null;
-                //var songComposerPerformer = ComposerPerformerRegex.Matches(songAlbumArtist);
                 try {
                     var songInfo = ParseSongAlbumArtist(songAlbumArtist, composerAsArtist);
                     songArtist = songInfo.Item1;
@@ -150,7 +147,7 @@ namespace AMWin_RichPresence {
                 }
 
                 // when searching for song info, use the performer as the artist instead of composer
-                string songSearchArtist = songPerformer ?? songArtist;
+                string songSearchArtist = songArtist;
 
                 // if this is a new song, clear out the current song
                 if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongArtist != songArtist || currentSong?.SongSubTitle != songAlbumArtist) {
@@ -161,11 +158,13 @@ namespace AMWin_RichPresence {
                 var webScraper = new AppleMusicWebScraper(songName, songAlbum, songSearchArtist, logger, lastFmApiKey);
 
                 // find artist list... unless it's a classical song
-                if (currentSong.ArtistList == null && songComposer == null) {
-                    currentSong.ArtistList = webScraper.GetArtistList();
-                    if (currentSong.ArtistList.Count == 0) {
-                        currentSong.ArtistList = null;
-                    }
+                if (currentSong.ArtistList == null) {
+                    webScraper.GetArtistList().ContinueWith(t => {
+                        currentSong.ArtistList = t.Result;
+                        if (currentSong.ArtistList.Count == 0) {
+                            currentSong.ArtistList = null;
+                        }
+                    });
                 }
                 // ================================================
                 //  Get song timestamps
@@ -237,11 +236,10 @@ namespace AMWin_RichPresence {
                 // ------------------------------------------------
                 
                 if (currentSong.SongUrl == null) {
-                    webScraper.GetMusicUrl().ContinueWith(t => {
+                    webScraper.GetSongUrl().ContinueWith(t => {
                         currentSong.SongUrl = t.Result;
                     });
                 }
-
             }
             return currentSong;
         }
@@ -265,18 +263,23 @@ namespace AMWin_RichPresence {
             string songAlbum;
 
             // some classical songs add "By " before the composer's name
-            string? songComposer = null;
-            string? songPerformer = null;
             var songComposerPerformer = ComposerPerformerRegex.Matches(songAlbumArtist);
             if (songComposerPerformer.Count > 0) {
-                songComposer = songAlbumArtist.Split(" \u2014 ")[0].Remove(0, 3);
-                songPerformer = songAlbumArtist.Split(" \u2014 ")[1];
+                var songComposer = songAlbumArtist.Split(" \u2014 ")[0].Remove(0, 3);
+                var songPerformer = songAlbumArtist.Split(" \u2014 ")[1];
                 songArtist = composerAsArtist ? songComposer : songPerformer;
                 songAlbum = songAlbumArtist.Split(" \u2014 ")[2];
             } else {
                 // U+2014 is the emdash used by the Apple Music app, not the standard "-" character on the keyboard!
-                songArtist = songAlbumArtist.Split(" \u2014 ")[0];
-                songAlbum = songAlbumArtist.Split(" \u2014 ")[1];
+                var songSplit = songAlbumArtist.Split(" \u2014 ");
+                if (songSplit.Length > 1) {
+                    songArtist = songSplit[0];
+                    songAlbum = songSplit[1];
+                } else { // no emdash, probably custom music
+                    // TODO find a better way to handle this?
+                    songArtist = songSplit[0];
+                    songAlbum = songSplit[0];
+                }
             }
             return new(songArtist, songAlbum);
         }

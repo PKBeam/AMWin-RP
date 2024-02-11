@@ -82,13 +82,10 @@ internal class AppleMusicDiscordClient {
             };
             
             if (amInfo.SongUrl != null) {
-                rp.Buttons = new Button[] {
-                    new Button()
-                    {
-                        Label = "Listen on Apple Music", 
-                        Url = amInfo.SongUrl
-                    }
-                };
+                rp.Buttons = [new() {
+                    Label = "Listen on Apple Music", 
+                    Url = amInfo.SongUrl
+                }];
             }
 
             if (amInfo.IsPaused) {

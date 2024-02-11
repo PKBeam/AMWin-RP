@@ -87,7 +87,7 @@ namespace AMWin_RichPresence {
             try {
                 var thisSongID = info.SongArtist + info.SongName + info.SongAlbum;
                 var webScraper = new AppleMusicWebScraper(info.SongName, info.SongAlbum, info.SongArtist);
-                var artist = Properties.Settings.Default.LastfmScrobblePrimaryArtist ? webScraper.GetArtistList().FirstOrDefault(info.SongArtist) : info.SongArtist;
+                var artist = Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await webScraper.GetArtistList()).FirstOrDefault(info.SongArtist) : info.SongArtist;
                 var album = Properties.Settings.Default.LastfmCleanAlbumName ? AlbumCleaner.CleanAlbumName(info.SongAlbum) : info.SongAlbum;
 
                 if (thisSongID != lastSongID) {
