@@ -5,7 +5,7 @@ using System.Net.Http;
 
 namespace AMWin_RichPresence {
     internal static class Constants {
-        private static string ProgramVersionBase {
+        public static string ProgramVersionBase {
             get {
                 try {
                     var exePath = Process.GetCurrentProcess().MainModule?.FileName;
@@ -34,13 +34,14 @@ namespace AMWin_RichPresence {
         public static string DiscordAppleMusicPauseImageKey = "applemusicpause1024x";
         public static string LastFMCredentialTargetName     = "Last FM Password";
         public static int    LastFMTimeBeforeScrobbling     = 20; // seconds
-
+        public static string GithubReleasesApiUrl =         "https://api.github.com/repos/PKBeam/AMWin-RP/releases/latest";
+        public static string GithubReleasesUrl =            "https://github.com/PKBeam/AMWin-RP/releases";
         public static string WindowsStartupFolder => Environment.GetFolderPath(Environment.SpecialFolder.Startup);
         public static string WindowsAppDataFolder => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         public static string AppDataFolder => Path.Combine(WindowsAppDataFolder, AppDataFolderName);
         public static string AppShortcutPath => Path.Join(WindowsStartupFolder, "AMWin-RP.lnk");
         public static string? ExePath => Process.GetCurrentProcess().MainModule?.FileName;
 
-        public static readonly HttpClient HttpClient = new HttpClient();
+        public static readonly HttpClient HttpClient = new();
     }
 }

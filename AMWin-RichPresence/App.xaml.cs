@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Security.Policy;
+using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
+using Microsoft.VisualBasic;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -42,6 +46,11 @@ namespace AMWin_RichPresence {
                 logger.Log("Application started");
             } catch {
                 logger = null;
+            }
+
+            // check for updates
+            if (AMWin_RichPresence.Properties.Settings.Default.CheckForUpdatesOnStartup) {
+                CheckForUpdates();
             }
 
             // start Discord RPC
@@ -117,6 +126,33 @@ namespace AMWin_RichPresence {
 
         internal void UpdateScraperPreferences(bool composerAsArtist) {
             amScraper.composerAsArtist = composerAsArtist;
+        }
+
+        internal async void CheckForUpdates() {
+            static int StringVerToInt(string v) {
+                var verStr = v[1..].Split("b")[0].Replace(".", "").PadRight(4, '0');
+                return int.Parse(verStr);
+            }
+            Constants.HttpClient.DefaultRequestHeaders.Add("User-Agent", "AMWin-RP");
+            var result = await Constants.HttpClient.GetStringAsync(Constants.GithubReleasesApiUrl);
+            var json = JsonDocument.Parse(result);
+
+            var verLocal = Constants.ProgramVersionBase;
+            var verRemote = json.RootElement.GetProperty("name").GetString()!;
+
+            var numverLocal = StringVerToInt(verLocal);
+            var numverRemote = StringVerToInt(verRemote);
+
+            // TODO add support for multiple beta versions (i.e. b1 and b2)
+            if (numverRemote > numverLocal || (numverRemote == numverLocal && verLocal.Contains('b') && !verRemote.Contains('b'))) {
+                var res = MessageBox.Show("A new update for AMWin-RP is available.\nWould you like to view the releases?", "New update available", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                if (res == MessageBoxResult.Yes) {
+                    Process.Start(new ProcessStartInfo {
+                        FileName = Constants.GithubReleasesUrl,
+                        UseShellExecute = true
+                    });
+                }
+            }
         }
     }
 }

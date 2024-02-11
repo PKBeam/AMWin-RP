@@ -26,7 +26,9 @@ namespace AMWin_RichPresence {
             } else {
                 RemoveStartupShortcut();
             }
-
+            SaveSettings();
+        }
+        private void CheckBox_CheckForUpdatesOnStartup_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
 
