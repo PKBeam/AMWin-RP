@@ -7,10 +7,11 @@ using System.Text.RegularExpressions;
 using FlaUI.UIA3;
 using FlaUI.Core.Conditions;
 using FlaUI.Core.AutomationElements;
+using System.Security.Policy;
 
 namespace AMWin_RichPresence {
 
-    internal class AppleMusicInfo {
+    internal class AppleMusicInfo: IEquatable<AppleMusicInfo> {
         // the following fields are only valid if HasSong is true.
         // DateTimes are in UTC.
         public string SongName;
@@ -45,6 +46,27 @@ namespace AMWin_RichPresence {
         }
         public void Print() {
             Trace.WriteLine(ToString());
+        }
+
+        public bool Equals(AppleMusicInfo? other) {
+            return other is not null && other!.SongName == SongName || other!.SongArtist == SongArtist || other!.SongSubTitle == SongSubTitle;
+        }
+        public override bool Equals(object? obj) => Equals(obj as AppleMusicInfo);
+        public static bool operator == (AppleMusicInfo? a1, AppleMusicInfo? a2) {
+            if (a1 is null && a2 is null) {
+                return true;
+            } else if (a1 is null || a2 is null) {
+                return false;
+            } else {
+                return a1.Equals(a2);
+            }
+        }
+        public static bool operator != (AppleMusicInfo? a1, AppleMusicInfo? a2) {
+            return !(a1 == a2);
+        }
+
+        public override int GetHashCode() {
+            return SongName.GetHashCode() ^ SongArtist.GetHashCode() ^ SongSubTitle.GetHashCode();
         }
     }
 
@@ -149,8 +171,9 @@ namespace AMWin_RichPresence {
                 }
 
                 // if this is a new song, clear out the current song
-                if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongArtist != songArtist || currentSong?.SongSubTitle != songAlbumArtist) {
-                    currentSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
+                var newSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
+                if (currentSong != newSong) {
+                    currentSong = newSong;
                 }
 
                 // init web scraper
