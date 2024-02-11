@@ -136,18 +136,17 @@ namespace AMWin_RichPresence {
 
                 string songArtist = "";
                 string songAlbum = "";
+                string? songPerformer = null;
 
-                // some classical songs add "By " before the composer's name
+                // parse song string into album and artist
                 try {
                     var songInfo = ParseSongAlbumArtist(songAlbumArtist, composerAsArtist);
                     songArtist = songInfo.Item1;
                     songAlbum = songInfo.Item2;
+                    songPerformer = songInfo.Item3;
                 } catch (Exception ex) {
                     logger?.Log($"Could not parse '{songAlbumArtist}' into artist and album: {ex}");
                 }
-
-                // when searching for song info, use the performer as the artist instead of composer
-                string songSearchArtist = songArtist;
 
                 // if this is a new song, clear out the current song
                 if (currentSong == null || currentSong?.SongName != songName || currentSong?.SongArtist != songArtist || currentSong?.SongSubTitle != songAlbumArtist) {
@@ -155,7 +154,8 @@ namespace AMWin_RichPresence {
                 }
 
                 // init web scraper
-                var webScraper = new AppleMusicWebScraper(songName, songAlbum, songSearchArtist, logger, lastFmApiKey);
+                // when searching for song info, use the performer as the artist instead of composer
+                var webScraper = new AppleMusicWebScraper(songName, songAlbum, songPerformer, logger, lastFmApiKey);
 
                 // find artist list... unless it's a classical song
                 if (currentSong.ArtistList == null) {
@@ -258,15 +258,16 @@ namespace AMWin_RichPresence {
             return min * 60 + sec;
         }
 
-        private static Tuple<string, string> ParseSongAlbumArtist(string songAlbumArtist, bool composerAsArtist) {
+        private static Tuple<string, string, string?> ParseSongAlbumArtist(string songAlbumArtist, bool composerAsArtist) {
             string songArtist;
             string songAlbum;
+            string? songPerformer = null;
 
             // some classical songs add "By " before the composer's name
             var songComposerPerformer = ComposerPerformerRegex.Matches(songAlbumArtist);
             if (songComposerPerformer.Count > 0) {
                 var songComposer = songAlbumArtist.Split(" \u2014 ")[0].Remove(0, 3);
-                var songPerformer = songAlbumArtist.Split(" \u2014 ")[1];
+                songPerformer = songAlbumArtist.Split(" \u2014 ")[1];
                 songArtist = composerAsArtist ? songComposer : songPerformer;
                 songAlbum = songAlbumArtist.Split(" \u2014 ")[2];
             } else {
@@ -281,7 +282,7 @@ namespace AMWin_RichPresence {
                     songAlbum = songSplit[0];
                 }
             }
-            return new(songArtist, songAlbum);
+            return new(songArtist, songAlbum, songPerformer);
         }
 
         // some localisations of Apple Music have slight differences in element names
