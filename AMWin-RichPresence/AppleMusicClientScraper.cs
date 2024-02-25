@@ -114,12 +114,19 @@ namespace AMWin_RichPresence {
             }
             var app = FlaUI.Core.Application.Attach(amProcesses[0].Id);
             using (var automation = new UIA3Automation()) {
-                var window = app.GetMainWindow(automation);
-                var amWinTransportBar = FindFirstDescendantWithAutomationId(window, "TransportBar");
+                var windows = app.GetAllTopLevelWindows(automation);
+
+                // find the main apple music window
+                AutomationElement? amWinTransportBar = null;
+                foreach (var window in windows) {
+                    amWinTransportBar = FindFirstDescendantWithAutomationId(window, "TransportBar") ?? amWinTransportBar;
+                }
+                
                 if (amWinTransportBar == null) {
                     logger?.Log("Apple Music song panel (TransportBar) is not initialised or missing");
                     return null;
                 }
+                
                 var amWinLCD = amWinTransportBar.FindFirstChild("LCD");
 
                 // song panel not initialised
