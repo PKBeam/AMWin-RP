@@ -51,7 +51,7 @@ internal class AppleMusicDiscordClient {
 
         var songName = TrimString(amInfo.SongName);
         var songSubtitle = amInfo.SongSubTitle.Length > maxStringLength ? amInfo.SongSubTitle.Replace(amInfo.SongArtist, GetTrimmedArtistList(amInfo)) : amInfo.SongSubTitle;
-        var songArtist = GetTrimmedArtistList(amInfo);
+        var songArtist = amInfo.SongArtist.Length > maxStringLength ? GetTrimmedArtistList(amInfo) : amInfo.SongArtist;
         var songAlbum = TrimString(amInfo.SongAlbum);
 
         // pick the subtitle format to show
