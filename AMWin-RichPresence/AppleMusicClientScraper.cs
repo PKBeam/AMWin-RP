@@ -180,6 +180,10 @@ namespace AMWin_RichPresence {
                 // if this is a new song, clear out the current song
                 var newSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
                 if (currentSong != newSong) {
+                    // keep the same album art if it's another song in the same album
+                    if (newSong.SongAlbum == currentSong?.SongAlbum && newSong.SongArtist == currentSong?.SongArtist) {
+                        newSong.CoverArtUrl = currentSong.CoverArtUrl;
+                    }
                     currentSong = newSong;
                 }
 
