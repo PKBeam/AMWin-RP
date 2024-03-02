@@ -49,7 +49,7 @@ namespace AMWin_RichPresence {
         }
 
         public bool Equals(AppleMusicInfo? other) {
-            return other is not null && other!.SongName == SongName || other!.SongArtist == SongArtist || other!.SongSubTitle == SongSubTitle;
+            return other is not null && other!.SongName == SongName && other!.SongArtist == SongArtist && other!.SongSubTitle == SongSubTitle;
         }
         public override bool Equals(object? obj) => Equals(obj as AppleMusicInfo);
         public static bool operator == (AppleMusicInfo? a1, AppleMusicInfo? a2) {
