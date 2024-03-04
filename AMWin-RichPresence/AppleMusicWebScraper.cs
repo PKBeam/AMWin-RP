@@ -87,14 +87,14 @@ namespace AMWin_RichPresence {
 
             // search on the Apple Music website for the song
             var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
-            var url = $"https://music.apple.com/us/search?term={searchTerm}";
+            var url = $"https://music.apple.com/jp/search?term={searchTerm}";
             HtmlDocument doc = await GetURL(url, "SearchSongs");
 
             try {
                 // scrape search results for "Songs" section
                 var list = doc.DocumentNode
                     .Descendants("div")
-                    .First(x => x.Attributes.Contains("aria-label") && x.Attributes["aria-label"].Value == "Songs")
+                    .First(x => x.Attributes.Contains("aria-label") && x.Attributes["aria-label"].Value == "曲")
                     .Descendants("ul")
                     .First(x => x.Attributes["data-testid"].Value == "shelf-item-list")
                     .ChildNodes
@@ -143,7 +143,7 @@ namespace AMWin_RichPresence {
         private async Task<HtmlNode?> _SearchTopResults() {
             // search on the Apple Music website for the song
             var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
-            var url = $"https://music.apple.com/us/search?term={searchTerm}";
+            var url = $"https://music.apple.com/jp/search?term={searchTerm}";
             HtmlDocument doc = await GetURL(url, "SearchTopResults");
 
             try {

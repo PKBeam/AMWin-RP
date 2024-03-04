@@ -252,7 +252,7 @@ namespace AMWin_RichPresence {
                 // check if the song is paused or not
                 var playPauseButton = amWinTransportBar.FindFirstChild("TransportControl_PlayPauseStop");
 
-                currentSong.IsPaused = playPauseButton.Name == "Play";
+                currentSong.IsPaused = playPauseButton.Name == "再生";
 
 
                 // ================================================
