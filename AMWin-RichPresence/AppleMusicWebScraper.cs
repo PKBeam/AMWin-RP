@@ -161,6 +161,8 @@ namespace AMWin_RichPresence {
                     var searchResultTitle = result
                         .Descendants("li")
                         .First(x => x.Attributes["data-testid"].Value == "top-search-result-title")
+                        .Descendants("span")
+                        .First()
                         .InnerHtml;
 
                     var searchResultSubtitle = result
