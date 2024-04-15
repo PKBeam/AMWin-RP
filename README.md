@@ -16,11 +16,14 @@ Releases can be found [here](https://github.com/PKBeam/AMWin-RP/releases).
 
 **Note**: AMWin-RP will run on Windows 10 1809 or later, but the Apple Music app requires at least Windows 10 22H2. 
 
-### Which version do I use?
-The `NoRuntime` release is smaller, but requires you to have the [.NET 8.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) installed.  
-The program should prompt you for this on startup if the runtime isn't already installed.
+### Which release do I use?
+There are two release files: the standard one and one marked as `NoRuntime`.
 
-The unlabelled release (without `NoRuntime`) works universally, but is larger in size. This is because it bundles the components of .NET that are needed for the app to run.
+If in doubt, use the unlabelled release (i.e. the one without `NoRuntime`).  
+This version works universally, but is larger in size because it bundles the components of .NET that are needed for the app to run.
+
+The `NoRuntime` release is much smaller, but requires you to have the [.NET 8.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) installed.  
+If you don't have this runtime installed, the program will prompt you to do it when it opens.
 
 ## Usage
 You need the [Microsoft store version](https://apps.microsoft.com/detail/9PFHDD62MXS1) of Apple Music to use AMWin-RP.  
@@ -55,10 +58,9 @@ You can scrobble to ListenBrainz by adding your user token in the settings.
 
 <hr/>
 
+**⚠️ Technical details ahead ⚠️**
+
 ## How does it work?
-
-**(Technical details ahead)**
-
 The biggest challenge here is being able to extract song information out of the Apple Music app.
 
 This is achieved using Microsoft's [UI Automation API](https://learn.microsoft.com/en-us/windows/win32/winauto/windows-automation-api-overview) via the FlaUI library, which lets us access UI elements of any window on the user's desktop.
