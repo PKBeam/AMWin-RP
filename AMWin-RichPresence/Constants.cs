@@ -27,6 +27,7 @@ namespace AMWin_RichPresence {
 #endif                        
         public static int    MaxLogFiles                    = 10;
         public static int    RefreshPeriod                  = 5; // seconds
+        public static int    NumFailedSearchesBeforeAbandon = 3;
         public static string AppDataFolderName              = "AMWin-RichPresence";
         public static string DiscordClientID                = "1066220978406953012";
         public static string DiscordAppleMusicImageKey      = "applemusic1024x";

@@ -80,6 +80,7 @@ namespace AMWin_RichPresence {
         AppleMusicInfo? currentSong;
         public bool composerAsArtist; // for classical music, treat composer (not performer) as artist
         Logger? logger;
+        int failedWebRequests = 0;
 
         public AppleMusicClientScraper(string? lastFmApiKey, int refreshPeriodInSec, bool composerAsArtist, RefreshHandler refreshHandler, Logger? logger = null) {
             this.refreshHandler = refreshHandler;
@@ -107,6 +108,9 @@ namespace AMWin_RichPresence {
         }
 
         public AppleMusicInfo? GetAppleMusicInfo() {
+            var webSearchFailed = false;
+            var shouldTrySearch = failedWebRequests < Constants.NumFailedSearchesBeforeAbandon;
+
             var amProcesses = Process.GetProcessesByName("AppleMusic");
             if (amProcesses.Length == 0) {
                 logger?.Log("Could not find an AppleMusic.exe process");
@@ -188,6 +192,7 @@ namespace AMWin_RichPresence {
                         newSong.CoverArtUrl = currentSong.CoverArtUrl;
                     }
                     currentSong = newSong;
+                    failedWebRequests = 0;
                 }
 
                 // init web scraper
@@ -195,8 +200,11 @@ namespace AMWin_RichPresence {
                 var webScraper = new AppleMusicWebScraper(songName, songAlbum, songPerformer ?? songArtist, Properties.Settings.Default.AppleMusicRegion, logger, lastFmApiKey);
 
                 // find artist list... unless it's a classical song
-                if (currentSong.ArtistList == null) {
+                if (shouldTrySearch && currentSong.ArtistList == null) {
                     webScraper.GetArtistList().ContinueWith(t => {
+                        if (t.Result.Count == 0) {
+                            webSearchFailed = true;
+                        }
                         currentSong.ArtistList = t.Result;
                         if (currentSong.ArtistList.Count == 0) {
                             currentSong.ArtistList = null;
@@ -225,8 +233,11 @@ namespace AMWin_RichPresence {
                 if (currentTimeElement == null || remainingDurationElement == null) {
 
                     // try to get song duration if we don't have it
-                    if (currentSong.SongDuration == null) {
+                    if (shouldTrySearch && currentSong.SongDuration == null) {
                         webScraper.GetSongDuration().ContinueWith(t => {
+                            if (t.Result == null) {
+                                webSearchFailed = true;
+                            }
                             string? dur = t.Result;
                             currentSong.SongDuration = dur == null ? null : ParseTimeString(dur);
                         });
@@ -262,8 +273,11 @@ namespace AMWin_RichPresence {
                 //  Get song cover art
                 // ------------------------------------------------
 
-                if (currentSong.CoverArtUrl == null) {
+                if (shouldTrySearch && currentSong.CoverArtUrl == null) {
                     webScraper.GetAlbumArtUrl().ContinueWith(t => {
+                        if (t.Result == null) {
+                            webSearchFailed = true;
+                        }
                         currentSong.CoverArtUrl = t.Result;
                     });
                 }
@@ -272,11 +286,18 @@ namespace AMWin_RichPresence {
                 // Get music url
                 // ------------------------------------------------
                 
-                if (currentSong.SongUrl == null) {
+                if (shouldTrySearch && currentSong.SongUrl == null) {
                     webScraper.GetSongUrl().ContinueWith(t => {
+                        if (t.Result == null) {
+                            webSearchFailed = true;
+                        }
                         currentSong.SongUrl = t.Result;
                     });
                 }
+            }
+
+            if (webSearchFailed) {
+                failedWebRequests += 1;
             }
             return currentSong;
         }
