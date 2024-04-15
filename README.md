@@ -14,30 +14,31 @@ Last.FM scrobbling is also supported!
 
 Releases can be found [here](https://github.com/PKBeam/AMWin-RP/releases).
 
-Note that the Apple Music app requires Windows 10 22H2 or later. 
+**Note**: AMWin-RP will run on Windows 10 1809 or later, but the Apple Music app requires at least Windows 10 22H2. 
 
-If you have (or are able to install) the [.NET 8.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0), you can download the `NoRuntime` release.  
-(Note: v1.2.6.1 and earlier use the [.NET 7.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/7.0).)  
+### Which version do I use?
+The `NoRuntime` release is smaller, but requires you to have the [.NET 8.0 runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) installed.  
+The program should prompt you for this on startup if the runtime isn't already installed.
 
-Otherwise, download the other release (the one that isn't labelled as `NoRuntime`).  
-This release is larger in size as it bundles the components of .NET that are needed for the app to run.
+The unlabelled release (without `NoRuntime`) works universally, but is larger in size. This is because it bundles the components of .NET that are needed for the app to run.
+
+## Usage
+You need the [Microsoft store version](https://apps.microsoft.com/detail/9PFHDD62MXS1) of Apple Music to use AMWin-RP.  
+There is no support for iTunes, Apple Music via WSA or any other third-party players.
+
+- AMWin-RP runs in the background, minimised to the system tray.  
+- Double clicking on the tray icon brings up the settings window.
+  - From here you can adjust individual settings such as run on startup, scrobbling and song detection.  
+- The app can be closed by right-clicking on the tray icon and selecting "Exit".  
+- By default, the Apple Music app must be open and currently playing music (i.e. not paused) in order for the rich presence to show.  
 
 ## Reporting Bugs
 Before creating a new issue, please make sure your problem does not fall under an existing issue.  
-If you are reporting a problem, please attach all relevant `.log` files (found in `C:\Users\your_username\AppData\Local\AMWin-RichPresence`).
+If you are reporting a problem, please attach any relevant `.log` files (found in `C:\Users\your_username_here\AppData\Local\AMWin-RichPresence`).
 
-Before posting, double-check the following:
-- The problem isn't already covered by an existing open issue.
+Before posting, please double-check the following:
+- The problem isn't already covered by an existing open or closed issue.
 - You have RP display enabled in Discord (Settings > Activity Settings > Activity Privacy > Actvity Status).
-
-## General Usage
-Only the [Microsoft store version](https://apps.microsoft.com/detail/9PFHDD62MXS1) of Apple Music is supported.  
-There's no support for iTunes, Apple Music via WSA, or any third-party players.
-
-The app runs in the background, minimised to the system tray. It can be closed by right-clicking on the tray icon and selecting "Exit".  
-By default, the Apple Music app must be open and currently playing music (i.e. not paused) in order for the rich presence to show.  
-
-Double clicking on the tray icon brings up the settings window. From here you can adjust individual settings such as run on startup, scrobbling and song detection.  
 
 ## Scrobbling
 ### Last.FM
@@ -53,7 +54,6 @@ This Scrobbler implementation does not support offline Scrobbles, which means an
 You can scrobble to ListenBrainz by adding your user token in the settings.
 
 <hr/>
-
 
 ## How does it work?
 
@@ -75,5 +75,3 @@ The other problem is getting the song's cover art.
 
 We can't use UI Automation to get the image being displayed in the window (as far as I know). Instead we send an HTTP request to the Last.FM or Apple Music website, where we try to search for the song and grab the cover image URL from there.  
 It's not ideal but gives us what we're looking for most of the time.
-
-
