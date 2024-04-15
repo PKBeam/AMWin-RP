@@ -112,14 +112,17 @@ namespace AMWin_RichPresence {
                 logger?.Log("Could not find an AppleMusic.exe process");
                 return null;
             }
-            var app = FlaUI.Core.Application.Attach(amProcesses[0].Id);
             using (var automation = new UIA3Automation()) {
-                var windows = app.GetAllTopLevelWindows(automation);
+                var windows = automation.GetDesktop().FindAllChildren(c => c.ByProcessId(amProcesses[0].Id));
 
                 // find the main apple music window
                 AutomationElement? amWinTransportBar = null;
                 foreach (var window in windows) {
-                    amWinTransportBar = FindFirstDescendantWithAutomationId(window, "TransportBar") ?? amWinTransportBar;
+                    // quick check to exclude the mini player
+                    // we check != Mini Player instead of == Apple Music in case this is a localisation with different window names (is this possible?)
+                    if (window.Name != "Mini Player") { 
+                        amWinTransportBar = FindFirstDescendantWithAutomationId(window, "TransportBar") ?? amWinTransportBar;
+                    }
                 }
                 
                 if (amWinTransportBar == null) {
@@ -337,6 +340,10 @@ namespace AMWin_RichPresence {
                     return node;
                 }
                 nodes.AddRange(node.FindAllChildren());
+                // fallback to prevent this taking too long
+                if (nodes.Count > 25) {
+                    return null;
+                }
             }
             return null;
         }
