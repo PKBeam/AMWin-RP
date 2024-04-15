@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -46,6 +48,17 @@ namespace AMWin_RichPresence {
                 logger.Log("Application started");
             } catch {
                 logger = null;
+            }
+
+            // try to auto detect region
+            if (AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion == "") {
+                var region = RegionInfo.CurrentRegion.Name;
+                if (Constants.ValidAppleMusicRegions.Contains(region.ToLower())) {
+                    AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion = region;
+                } else {
+                    AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion = Constants.DefaultAppleMusicRegion;
+                }
+                AMWin_RichPresence.Properties.Settings.Default.Save();
             }
 
             // check for updates

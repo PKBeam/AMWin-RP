@@ -217,7 +217,7 @@ namespace AMWin_RichPresence.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("US")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string AppleMusicRegion {
             get {
                 return ((string)(this["AppleMusicRegion"]));
