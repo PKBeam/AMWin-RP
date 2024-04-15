@@ -42,10 +42,12 @@ namespace AMWin_RichPresence {
         protected double lastSongProgress;
         protected Logger? logger;
         protected string serviceName;
+        protected string region;
 
-        public AppleMusicScrobbler(string serviceName, Logger? logger = null) {
+        public AppleMusicScrobbler(string serviceName, string region, Logger? logger = null) {
             this.serviceName = serviceName;
             this.logger = logger;
+            this.region = region;
         }
 
         protected bool IsTimeToScrobble(AppleMusicInfo info) {
@@ -86,7 +88,7 @@ namespace AMWin_RichPresence {
 
             try {
                 var thisSongID = info.SongArtist + info.SongName + info.SongAlbum;
-                var webScraper = new AppleMusicWebScraper(info.SongName, info.SongAlbum, info.SongArtist);
+                var webScraper = new AppleMusicWebScraper(info.SongName, info.SongAlbum, info.SongArtist, region);
                 var artist = Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await webScraper.GetArtistList()).FirstOrDefault(info.SongArtist) : info.SongArtist;
                 var album = Properties.Settings.Default.LastfmCleanAlbumName ? AlbumCleaner.CleanAlbumName(info.SongAlbum) : info.SongAlbum;
 
@@ -126,7 +128,7 @@ namespace AMWin_RichPresence {
         private IScrobbler? lastFmScrobbler;
         private ITrackApi? trackApi;
 
-        public AppleMusicLastFmScrobbler(Logger? logger = null) : base("Last.FM", logger) { }
+        public AppleMusicLastFmScrobbler(string region, Logger? logger = null) : base("Last.FM", region, logger) { }
 
         public async override Task<bool> init(LastFmCredentials credentials) {
             if (string.IsNullOrEmpty(credentials.apiKey)
@@ -180,7 +182,7 @@ namespace AMWin_RichPresence {
     internal class AppleMusicListenBrainzScrobbler : AppleMusicScrobbler<ListenBrainzCredentials> {
         private ListenBrainz? listenBrainzClient;
 
-        public AppleMusicListenBrainzScrobbler(Logger? logger = null) : base("ListenBrainz", logger) { }
+        public AppleMusicListenBrainzScrobbler(string region, Logger? logger = null) : base("ListenBrainz", region, logger) { }
 
         public async override Task<bool> init(ListenBrainzCredentials credentials) {
             listenBrainzClient = new();

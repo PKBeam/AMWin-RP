@@ -59,11 +59,12 @@ namespace AMWin_RichPresence {
             discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, logger: logger);
 
             // start Last.FM scrobbler
-            lastFmScrobblerClient = new AppleMusicLastFmScrobbler(logger: logger);
+            var amRegion = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion;
+            lastFmScrobblerClient = new AppleMusicLastFmScrobbler(region: amRegion, logger: logger);
             _ = lastFmScrobblerClient.init(lastFmCredentials);
 
             // start ListenBrainz scrobbler
-            listenBrainzScrobblerClient = new AppleMusicListenBrainzScrobbler(logger: logger);
+            listenBrainzScrobblerClient = new AppleMusicListenBrainzScrobbler(region: amRegion, logger: logger);
             _ = listenBrainzScrobblerClient.init(listenBrainzCredentials);
 
             // start Apple Music scraper

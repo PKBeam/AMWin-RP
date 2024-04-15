@@ -192,7 +192,7 @@ namespace AMWin_RichPresence {
 
                 // init web scraper
                 // when searching for song info, use the performer as the artist instead of composer
-                var webScraper = new AppleMusicWebScraper(songName, songAlbum, songPerformer ?? songArtist, logger, lastFmApiKey);
+                var webScraper = new AppleMusicWebScraper(songName, songAlbum, songPerformer ?? songArtist, Properties.Settings.Default.AppleMusicRegion, logger, lastFmApiKey);
 
                 // find artist list... unless it's a classical song
                 if (currentSong.ArtistList == null) {

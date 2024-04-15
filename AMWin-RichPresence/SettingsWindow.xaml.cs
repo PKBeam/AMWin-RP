@@ -2,21 +2,26 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
-using System.Reflection;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Media;
 
 namespace AMWin_RichPresence {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
     /// </summary>
     public partial class SettingsWindow : Window {
+        private bool amRegionValid { 
+            get { return Constants.ValidAppleMusicRegions.Contains(AppleMusicRegion.Text.ToLower()); }
+        }
         public SettingsWindow() {
             InitializeComponent();
             TextBlock_VersionString.Text = Constants.ProgramVersion;
+            AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion;
             LastfmPassword.Password = GetLastFMPassword();
         }
 
@@ -170,6 +175,31 @@ namespace AMWin_RichPresence {
         public static String ToPlainString(System.Security.SecureString secureStr) {
             String plainStr = new System.Net.NetworkCredential(string.Empty, secureStr).Password;
             return plainStr;
+        }
+
+        private void AppleMusicRegion_TextChanged(object sender, TextChangedEventArgs e) {
+            if (amRegionValid) {
+                AppleMusicRegion.Background = Brushes.White;
+            } else {
+                AppleMusicRegion.Background = Brushes.Pink;
+                if (AppleMusicRegion.Text.Length > 2) {
+                    AppleMusicRegion.Text = AppleMusicRegion.Text.Substring(0, 2);
+                }
+            }
+            AppleMusicRegion.Text = AppleMusicRegion.Text.ToUpper();
+            AppleMusicRegion.CaretIndex = Math.Max(0, AppleMusicRegion.Text.Length);
+
+        }
+
+        private void AppleMusicRegion_LostFocus(object sender, RoutedEventArgs e) {
+            if (amRegionValid) {
+                AppleMusicRegion.Background = Brushes.White;
+                Properties.Settings.Default.AppleMusicRegion = AppleMusicRegion.Text.ToLower();
+            } else {
+                AppleMusicRegion.Background = Brushes.Pink;
+                AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion;
+            }
+            SaveSettings();
         }
     }
 }

@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
         mc:Ignorable="d"
         Icon="/Resources/AMWinRP.ico"
-        Title="AMWin-RichPresence" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Width="470" Height="690">
+        Title="AMWin-RichPresence" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Width="470" Height="720">
     <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
         <DockPanel>
             <Border DockPanel.Dock="Top" Height="64" Padding="10" Background="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" BorderThickness="0 0 0 1.5">
@@ -36,6 +36,7 @@
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0">Run when Windows starts</TextBlock>
@@ -47,22 +48,25 @@
                         <TextBlock Grid.Row="2" Grid.Column="0">Treat composer as artist</TextBlock>
                         <CheckBox Grid.Row="2" Grid.Column="1" x:Name="CheckBox_ClassicalComposerAsArtist" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ClassicalComposerAsArtist, Mode=TwoWay}" Click="CheckBox_ClassicalComposerAsArtist_Click"/>
 
-                        <TextBlock Grid.Row="3" FontWeight="Bold" Padding="0 3 0 0" VerticalAlignment="Top">Discord settings</TextBlock>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Padding="0 3 0 0">Apple Music region</TextBlock>
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="AppleMusicRegion" HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Cascadia Code" Width="21" VerticalAlignment="Center" TextChanged="AppleMusicRegion_TextChanged" LostFocus="AppleMusicRegion_LostFocus"/>
 
-                        <TextBlock Grid.Row="4" Grid.Column="0"  Padding="10 0 0 0">Enable Discord RP</TextBlock>
-                        <CheckBox Grid.Row="4" Grid.Column="1" x:Name="CheckBox_EnableDiscordRP" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableDiscordRP, Mode=TwoWay}" Click="CheckBox_EnableDiscordRP_Click"/>
+                        <TextBlock Grid.Row="4" FontWeight="Bold" Padding="0 3 0 0" VerticalAlignment="Top">Discord settings</TextBlock>
 
-                        <TextBlock Grid.Row="5" Grid.Column="0"  Padding="10 0 0 0">Enable cover images</TextBlock>
-                        <CheckBox Grid.Row="5" Grid.Column="1" x:Name="CheckBox_EnableRPCoverImages" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableRPCoverImages, Mode=TwoWay}" Click="CheckBox_EnableRPCoverImages_Click"/>
+                        <TextBlock Grid.Row="5" Grid.Column="0"  Padding="10 0 0 0">Enable Discord RP</TextBlock>
+                        <CheckBox Grid.Row="5" Grid.Column="1" x:Name="CheckBox_EnableDiscordRP" Margin="0,2,0,0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableDiscordRP, Mode=TwoWay}" Click="CheckBox_EnableDiscordRP_Click"/>
 
-                        <TextBlock Grid.Row="6" Grid.Column="0"  Padding="10 0 0 0">RP when music paused</TextBlock>
-                        <CheckBox Grid.Row="6" Grid.Column="1" x:Name="CheckBox_ShowRPWhenMusicPaused" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowRPWhenMusicPaused, Mode=TwoWay}" Click="CheckBox_ShowRPWhenMusicPaused_Click"/>
+                        <TextBlock Grid.Row="6" Grid.Column="0"  Padding="10 0 0 0">Enable cover images</TextBlock>
+                        <CheckBox Grid.Row="6" Grid.Column="1" x:Name="CheckBox_EnableRPCoverImages" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableRPCoverImages, Mode=TwoWay}" Click="CheckBox_EnableRPCoverImages_Click"/>
 
-                        <TextBlock Grid.Row="7" Grid.Column="0"  Padding="10 0 0 0">Apple Music icon in status</TextBlock>
-                        <CheckBox Grid.Row="7" Grid.Column="1" x:Name="CheckBox_ShowAppleMusicIcon" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowAppleMusicIcon, Mode=TwoWay}" Click="CheckBox_ShowAppleMusicIcon_Click"></CheckBox>
+                        <TextBlock Grid.Row="7" Grid.Column="0"  Padding="10 0 0 0">RP when music paused</TextBlock>
+                        <CheckBox Grid.Row="7" Grid.Column="1" x:Name="CheckBox_ShowRPWhenMusicPaused" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowRPWhenMusicPaused, Mode=TwoWay}" Click="CheckBox_ShowRPWhenMusicPaused_Click"/>
 
-                        <TextBlock Grid.Row="8" Grid.Column="0" Margin="0 0 0 2"  Padding="10 0 0 0" VerticalAlignment="Center">Rich Presence subtitle</TextBlock>
-                        <ComboBox Grid.Row="8" Grid.Column="1" x:Name="ComboBox_RPSubtitleChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPSubtitleChoice, Mode=TwoWay}" Height="22" SelectionChanged="ComboBox_RPSubtitleChoice_SelectionChanged" Margin="0,1,145,2">
+                        <TextBlock Grid.Row="8" Grid.Column="0"  Padding="10 0 0 0">Apple Music icon in status</TextBlock>
+                        <CheckBox Grid.Row="8" Grid.Column="1" x:Name="CheckBox_ShowAppleMusicIcon" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowAppleMusicIcon, Mode=TwoWay}" Click="CheckBox_ShowAppleMusicIcon_Click"></CheckBox>
+
+                        <TextBlock Grid.Row="9" Grid.Column="0" Margin="0 0 0 2"  Padding="10 0 0 0" VerticalAlignment="Center">Rich Presence subtitle</TextBlock>
+                        <ComboBox Grid.Row="9" Grid.Column="1" x:Name="ComboBox_RPSubtitleChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPSubtitleChoice, Mode=TwoWay}" Height="22" SelectionChanged="ComboBox_RPSubtitleChoice_SelectionChanged" Margin="0,1,145,2">
                             <!-- The order of these items matters! (check the enum in AppleMusicDiscordClient.cs) -->
                             <ComboBoxItem>Artist and album</ComboBoxItem>
                             <ComboBoxItem>Artist only</ComboBoxItem>

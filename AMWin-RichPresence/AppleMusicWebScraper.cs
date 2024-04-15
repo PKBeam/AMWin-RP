@@ -21,6 +21,7 @@ namespace AMWin_RichPresence {
         string songName;
         string songAlbum;
         string songArtist;
+        string region;
 
         HtmlNode? cachedSongSearchResults;
         private async Task<HtmlNode?> SearchSongs() {
@@ -54,12 +55,13 @@ namespace AMWin_RichPresence {
             return cachedSongSearchTopResults;
         }
 
-        public AppleMusicWebScraper(string songName, string songAlbum, string songArtist, Logger? logger = null, string? lastFmApiKey = null) {
+        public AppleMusicWebScraper(string songName, string songAlbum, string songArtist, string region, Logger? logger = null, string? lastFmApiKey = null) {
             this.logger = logger;
             this.lastFmApiKey = lastFmApiKey;
             this.songName = songName;
             this.songAlbum = songAlbum;
             this.songArtist = songArtist;
+            this.region = region;
         }
         private async Task<HtmlDocument> GetURL(string url, string? callingFunction = null) {
             // Apple Music web search doesn't like ampersands... even if they're HTML-escaped?
@@ -87,7 +89,7 @@ namespace AMWin_RichPresence {
 
             // search on the Apple Music website for the song
             var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
-            var url = $"https://music.apple.com/us/search?term={searchTerm}";
+            var url = $"https://music.apple.com/{region}/search?term={searchTerm}";
             HtmlDocument doc = await GetURL(url, "SearchSongs");
 
             try {
@@ -143,7 +145,7 @@ namespace AMWin_RichPresence {
         private async Task<HtmlNode?> _SearchTopResults() {
             // search on the Apple Music website for the song
             var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
-            var url = $"https://music.apple.com/us/search?term={searchTerm}";
+            var url = $"https://music.apple.com/{region}/search?term={searchTerm}";
             HtmlDocument doc = await GetURL(url, "SearchTopResults");
 
             try {
