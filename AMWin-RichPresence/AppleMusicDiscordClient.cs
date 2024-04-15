@@ -54,6 +54,11 @@ internal class AppleMusicDiscordClient {
         var songArtist = amInfo.SongArtist.Length > maxStringLength ? GetTrimmedArtistList(amInfo) : amInfo.SongArtist;
         var songAlbum = TrimString(amInfo.SongAlbum);
 
+        // hack to show 1-character song names
+        while (songName.Length < 2) {
+            songName += "\u0000";
+        }
+
         // pick the subtitle format to show
         var subtitle = "";
         switch (subtitleOptions) {
