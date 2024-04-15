@@ -52,8 +52,8 @@ namespace AMWin_RichPresence {
 
             // try to auto detect region
             if (AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion == "") {
-                var region = RegionInfo.CurrentRegion.Name;
-                if (Constants.ValidAppleMusicRegions.Contains(region.ToLower())) {
+                var region = RegionInfo.CurrentRegion.Name.ToLower();
+                if (Constants.ValidAppleMusicRegions.Contains(region)) {
                     AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion = region;
                 } else {
                     AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion = Constants.DefaultAppleMusicRegion;
