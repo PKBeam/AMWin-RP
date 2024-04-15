@@ -61,7 +61,7 @@ namespace AMWin_RichPresence {
             this.songName = songName;
             this.songAlbum = songAlbum;
             this.songArtist = songArtist;
-            this.region = region;
+            this.region = region.ToLower();
         }
         private async Task<HtmlDocument> GetURL(string url, string? callingFunction = null) {
             // Apple Music web search doesn't like ampersands... even if they're HTML-escaped?
