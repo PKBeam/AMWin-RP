@@ -6,15 +6,15 @@ Last.FM scrobbling is also supported!
 
 [日本語 (Japanese README)](https://github.com/PKBeam/AMWin-RP/blob/master/README-JA.md)
 
-![image](https://github.com/PKBeam/AMWin-RP/assets/18737124/1451aef5-cb50-44e0-b60e-6be80874b090)
+![image](https://github.com/PKBeam/AMWin-RP/assets/18737124/dcc7dfa6-5504-4556-b62a-ab67cb0b0951)
 
-![image](https://user-images.githubusercontent.com/18737124/213862194-e02ec9e7-07ab-481f-9dc5-451b9159c903.png)
+![image](https://github.com/PKBeam/AMWin-RP/assets/18737124/34e87ee6-b30a-4d1c-9fe2-70af0d7bd7f8)
 
 ## Installation
 
 Releases can be found [here](https://github.com/PKBeam/AMWin-RP/releases).
 
-**Note**: AMWin-RP will run on Windows 10 1809 or later, but the Apple Music app requires at least Windows 10 22H2. 
+**Note**: AMWin-RP will run on Windows 10 21H1 or later, but the Apple Music app requires at least Windows 10 22H2. 
 
 ### Which release do I use?
 There are two release files: the standard one and one marked as `NoRuntime`.
