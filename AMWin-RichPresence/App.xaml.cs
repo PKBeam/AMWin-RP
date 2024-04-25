@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Security.Policy;
@@ -63,7 +64,12 @@ namespace AMWin_RichPresence {
 
             // check for updates
             if (AMWin_RichPresence.Properties.Settings.Default.CheckForUpdatesOnStartup) {
-                CheckForUpdates();
+                try {
+                    CheckForUpdates();
+                    logger?.Log("No AMWin-RP updates available.");
+                } catch (Exception e) {
+                    logger?.Log($"Could not check for AMWin-RP updates: {e.Message}");
+                }
             }
 
             // start Discord RPC
