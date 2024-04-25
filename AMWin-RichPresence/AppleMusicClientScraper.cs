@@ -266,7 +266,7 @@ namespace AMWin_RichPresence {
                     if (currentSong.SongDuration != null) {
 
                         // grab the seek slider to check song playback progress
-                        var songProgressSlider = amSongPanel.FindFirstChild("LCDScrubber")?.Patterns.RangeValue.Pattern;
+                        var songProgressSlider = amSongPanel.FindFirstChild("LCD").FindFirstChild("LCDScrubber")?.Patterns.RangeValue.Pattern;
                         var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Value / songProgressSlider.Maximum;
 
                         currentTime = (int)(songProgressPercent * currentSong.SongDuration);
