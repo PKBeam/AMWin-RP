@@ -88,12 +88,13 @@ namespace AMWin_RichPresence {
             this.refreshHandler = refreshHandler;
             this.logger = logger;
             this.lastFmApiKey = lastFmApiKey;
+            this.composerAsArtist = composerAsArtist;
+            this.appleMusicRegion = appleMusicRegion;
+
             timer = new Timer(refreshPeriodInSec * 1000);
             timer.Elapsed += Refresh;
             Refresh(this, null);
             timer.Start();
-            this.composerAsArtist = composerAsArtist;
-            this.appleMusicRegion = appleMusicRegion;
         }
 
         ~AppleMusicClientScraper() {
