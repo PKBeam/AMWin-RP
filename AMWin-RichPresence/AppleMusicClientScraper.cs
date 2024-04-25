@@ -138,7 +138,7 @@ namespace AMWin_RichPresence {
                             break;
                         }
                     } else {
-                        amSongPanel = FindFirstDescendantWithAutomationId(window, "TransportBar")?.FindFirstChild("LCD");
+                        amSongPanel = FindFirstDescendantWithAutomationId(window, "TransportBar") ?? amSongPanel;
                     }
                 }
 
@@ -151,7 +151,7 @@ namespace AMWin_RichPresence {
                 //  Get song fields
                 // ------------------------------------------------
 
-                var songFields = amSongPanel.FindAllChildren(new ConditionFactory(new UIA3PropertyLibrary()).ByAutomationId("myScrollViewer"));
+                var songFields = (isMiniPlayer ? amSongPanel : amSongPanel.FindFirstChild("LCD")).FindAllChildren(new ConditionFactory(new UIA3PropertyLibrary()).ByAutomationId("myScrollViewer"));
 
                 // ================================================
                 //  Check if there is a song playing
