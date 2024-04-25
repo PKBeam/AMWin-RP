@@ -13,8 +13,7 @@ using System.Drawing;
 namespace AMWin_RichPresence {
     internal class AppleMusicWebScraper
     {
-        private static readonly Regex SongTitleRegex = new Regex(@"(?<=Listen to ).*(?= by)", RegexOptions.Compiled);
-        private static readonly Regex DurationRegex = new Regex(@"(?<=Duration: )\S*$", RegexOptions.Compiled);
+        private static readonly Regex DurationRegex = new Regex(@"[0-9]*:[0-9]{2}", RegexOptions.Compiled);
         private static readonly Regex ImageUrlRegex = new Regex(@"http\S*?(?= \d{2,3}w)", RegexOptions.Compiled);
         Logger? logger;
         string? lastFmApiKey;
@@ -96,7 +95,10 @@ namespace AMWin_RichPresence {
                 // scrape search results for "Songs" section
                 var list = doc.DocumentNode
                     .Descendants("div")
-                    .First(x => x.Attributes.Contains("aria-label") && x.Attributes["aria-label"].Value == "Songs")
+                    .First(x => x.HasClass("desktop-search-page"))
+                    .ChildNodes
+                    .Where(x => x.Name == "div")
+                    .Last()
                     .Descendants("ul")
                     .First(x => x.Attributes["data-testid"].Value == "shelf-item-list")
                     .ChildNodes
@@ -372,11 +374,10 @@ namespace AMWin_RichPresence {
                     .First(x => x.Attributes.Contains("name") && x.Attributes["name"].Value == "description");
 
                 var str = desc.Attributes["content"].Value;
-                var songTitle = SongTitleRegex.Matches(str).First().Value;
                 var duration = DurationRegex.Matches(str).First().Value;
 
                 // check that the result actually is the song
-                if (HttpUtility.HtmlDecode(songTitle) == songName) {
+                if (HttpUtility.HtmlDecode(str).Contains(songName)) {
                     return duration;
                 }
                 return null;
