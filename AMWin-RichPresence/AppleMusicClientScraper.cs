@@ -151,7 +151,8 @@ namespace AMWin_RichPresence {
                 //  Get song fields
                 // ------------------------------------------------
 
-                var songFields = (isMiniPlayer ? amSongPanel : amSongPanel.FindFirstChild("LCD")).FindAllChildren(new ConditionFactory(new UIA3PropertyLibrary()).ByAutomationId("myScrollViewer"));
+                var songFieldsPanel = isMiniPlayer ? amSongPanel : amSongPanel.FindFirstChild("LCD");
+                var songFields = songFieldsPanel?.FindAllChildren(new ConditionFactory(new UIA3PropertyLibrary()).ByAutomationId("myScrollViewer")) ?? [];
 
                 // ================================================
                 //  Check if there is a song playing

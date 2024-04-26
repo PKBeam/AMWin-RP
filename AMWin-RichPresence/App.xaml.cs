@@ -61,6 +61,7 @@ namespace AMWin_RichPresence {
                 }
                 AMWin_RichPresence.Properties.Settings.Default.Save();
             }
+            logger?.Log($"Using region {AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion}");
 
             // check for updates
             if (AMWin_RichPresence.Properties.Settings.Default.CheckForUpdatesOnStartup) {
