@@ -96,11 +96,8 @@ namespace AMWin_RichPresence {
                 var list = doc.DocumentNode
                     .Descendants("div")
                     .First(x => x.HasClass("desktop-search-page"))
-                    .ChildNodes
-                    .Where(x => x.Name == "div")
-                    .Last()
                     .Descendants("ul")
-                    .First(x => x.Attributes["data-testid"].Value == "shelf-item-list")
+                    .First(x => x.HasClass("shelf-grid__list--grid-type-TrackLockupsShelf"))
                     .ChildNodes
                     .Where(x => x.Name == "li");
 
