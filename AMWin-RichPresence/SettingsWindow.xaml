@@ -49,7 +49,7 @@
                         <CheckBox Grid.Row="2" Grid.Column="1" x:Name="CheckBox_ClassicalComposerAsArtist" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ClassicalComposerAsArtist, Mode=TwoWay}" Click="CheckBox_ClassicalComposerAsArtist_Click"/>
 
                         <TextBlock Grid.Row="3" Grid.Column="0" Padding="0 3 0 0">Apple Music region</TextBlock>
-                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="AppleMusicRegion" HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Cascadia Code" Width="21" VerticalAlignment="Center" TextChanged="AppleMusicRegion_TextChanged" LostFocus="AppleMusicRegion_LostFocus"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="AppleMusicRegion" HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Cascadia Code" Width="21" VerticalAlignment="Center" TextChanged="AppleMusicRegion_TextChanged" LostFocus="AppleMusicRegion_LostFocus" KeyDown="AppleMusicRegion_KeyDown"/>
 
                         <TextBlock Grid.Row="4" FontWeight="Bold" Padding="0 3 0 0" VerticalAlignment="Top">Discord settings</TextBlock>
 

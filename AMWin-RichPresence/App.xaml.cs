@@ -145,6 +145,12 @@ namespace AMWin_RichPresence {
             return await listenBrainzScrobblerClient.UpdateCredsAsync(listenBrainzCredentials);
         }
 
+        internal void UpdateRegion() {
+            var region = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion;
+            logger?.Log($"Changed region to {region}");
+            amScraper.ChangeRegion(region);
+        }
+
         internal void UpdateScraperPreferences(bool composerAsArtist) {
             amScraper.composerAsArtist = composerAsArtist;
         }

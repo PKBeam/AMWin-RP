@@ -46,6 +46,30 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
+        private void AppleMusicRegion_TextChanged(object sender, TextChangedEventArgs e) {
+            if (amRegionValid) {
+                AppleMusicRegion.Background = Brushes.White;
+            } else {
+                AppleMusicRegion.Background = Brushes.Pink;
+                if (AppleMusicRegion.Text.Length > 2) {
+                    AppleMusicRegion.Text = AppleMusicRegion.Text.Substring(0, 2);
+                }
+            }
+            AppleMusicRegion.Text = AppleMusicRegion.Text.ToUpper();
+            AppleMusicRegion.CaretIndex = Math.Max(0, AppleMusicRegion.Text.Length);
+
+        }
+
+        private void AppleMusicRegion_LostFocus(object sender, RoutedEventArgs e) {
+            UpdateAppleMusicRegion();
+        }
+
+        private void AppleMusicRegion_KeyDown(object sender, System.Windows.Input.KeyEventArgs e) {
+            if (e.Key == System.Windows.Input.Key.Enter) {
+                UpdateAppleMusicRegion();
+            }
+        }
+
         private void CheckBox_EnableDiscordRP_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
@@ -61,7 +85,6 @@ namespace AMWin_RichPresence {
         private void ComboBox_RPSubtitleChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var newOption = AppleMusicDiscordClient.SubtitleOptionFromIndex(ComboBox_RPSubtitleChoice.SelectedIndex);
             ((App)Application.Current).UpdateRPSubtitleDisplay(newOption);
-
             SaveSettings();
         }
 
@@ -105,6 +128,18 @@ namespace AMWin_RichPresence {
 
         private static void SaveSettings() {
             Properties.Settings.Default.Save();
+        }
+
+        private void UpdateAppleMusicRegion() {
+            if (amRegionValid) {
+                AppleMusicRegion.Background = Brushes.White;
+                Properties.Settings.Default.AppleMusicRegion = AppleMusicRegion.Text.ToLower();
+            } else {
+                AppleMusicRegion.Background = Brushes.Pink;
+                AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion;
+            }
+            SaveSettings();
+            ((App)Application.Current).UpdateRegion();
         }
 
         private async void SaveLastFMCreds_Click(object sender, RoutedEventArgs e) {
@@ -175,31 +210,6 @@ namespace AMWin_RichPresence {
         public static String ToPlainString(System.Security.SecureString secureStr) {
             String plainStr = new System.Net.NetworkCredential(string.Empty, secureStr).Password;
             return plainStr;
-        }
-
-        private void AppleMusicRegion_TextChanged(object sender, TextChangedEventArgs e) {
-            if (amRegionValid) {
-                AppleMusicRegion.Background = Brushes.White;
-            } else {
-                AppleMusicRegion.Background = Brushes.Pink;
-                if (AppleMusicRegion.Text.Length > 2) {
-                    AppleMusicRegion.Text = AppleMusicRegion.Text.Substring(0, 2);
-                }
-            }
-            AppleMusicRegion.Text = AppleMusicRegion.Text.ToUpper();
-            AppleMusicRegion.CaretIndex = Math.Max(0, AppleMusicRegion.Text.Length);
-
-        }
-
-        private void AppleMusicRegion_LostFocus(object sender, RoutedEventArgs e) {
-            if (amRegionValid) {
-                AppleMusicRegion.Background = Brushes.White;
-                Properties.Settings.Default.AppleMusicRegion = AppleMusicRegion.Text.ToLower();
-            } else {
-                AppleMusicRegion.Background = Brushes.Pink;
-                AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion;
-            }
-            SaveSettings();
         }
     }
 }

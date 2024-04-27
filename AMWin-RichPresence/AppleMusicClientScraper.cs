@@ -101,6 +101,11 @@ namespace AMWin_RichPresence {
             timer.Elapsed -= Refresh;
         }
 
+        public void ChangeRegion(string region) {
+            this.appleMusicRegion = region;
+            Refresh(this, null);
+        }
+
         public void Refresh(object? source, ElapsedEventArgs? e) {
             AppleMusicInfo? appleMusicInfo = null;
             try {
