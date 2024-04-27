@@ -8,7 +8,8 @@ assignees: ''
 ---
 
 **Version Info**
-State the Apple Music version and the AMWin-RP version.
+State the Apple Music version and the AMWin-RP version. 
+Include the Apple Music region configured in AMWin-RP (e.g. `US`)
 
 **Describe the bug**
 A clear and concise description of what the bug is.
