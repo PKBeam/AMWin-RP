@@ -232,7 +232,7 @@ namespace AMWin_RichPresence {
                     currentSong.IsPaused = playPauseButton.Name == "Play";
 
                 } else { // ... otherwise fallback to tracking song progress
-                    var songProgressSlider = (isMiniPlayer ? amSongPanel.FindFirstChild("Scrubber") : amSongPanel.FindFirstChild("LCDScrubber"))?.Patterns.RangeValue.Pattern;
+                    var songProgressSlider = (isMiniPlayer ? amSongPanel.FindFirstChild("Scrubber") : amSongPanel.FindFirstChild("LCD").FindFirstChild("LCDScrubber"))?.Patterns.RangeValue.Pattern;
                     var songProgress = songProgressSlider == null ? 0 : songProgressSlider.Value / songProgressSlider.Maximum;
 
                     currentSong.IsPaused = previousSongProgress != null && songProgress == previousSongProgress;
