@@ -157,7 +157,7 @@ namespace AMWin_RichPresence {
                 // scrape search results for "Top Results" section
                 var nodes = doc.DocumentNode
                     .Descendants("ul")
-                    .FirstOrDefault(x => x.Attributes["class"].Value.Contains("grid--top-results"), null);
+                    .FirstOrDefault(x => x?.Attributes["class"].Value.Contains("grid--top-results") ?? false, null);
 
                 if (nodes == null) {
                     return null;
