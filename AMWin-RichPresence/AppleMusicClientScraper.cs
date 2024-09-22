@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using FlaUI.UIA3;
 using FlaUI.Core.Conditions;
 using FlaUI.Core.AutomationElements;
-using System.Security.Policy;
+using System.Threading.Tasks;
 
 namespace AMWin_RichPresence {
 
@@ -71,6 +71,17 @@ namespace AMWin_RichPresence {
     }
 
     internal class AppleMusicClientScraper {
+        struct WebReqFailCounters {
+            public int MaxFails = Constants.NumFailedSearchesBeforeAbandon;
+
+            public int SongDuration = 0;
+            public int AlbumArt = 0;
+            public int ArtistList = 0;
+            public int SongUrl = 0;
+
+            public WebReqFailCounters() { }
+        };
+
         private static readonly Regex ComposerPerformerRegex = new Regex(@"By\s.*?\s\u2014", RegexOptions.Compiled);
 
         public delegate void RefreshHandler(AppleMusicInfo? newInfo);
@@ -80,9 +91,9 @@ namespace AMWin_RichPresence {
         AppleMusicInfo? currentSong;
         public bool composerAsArtist; // for classical music, treat composer (not performer) as artist
         Logger? logger;
-        int failedWebRequests = 0;
         double? previousSongProgress;
         string appleMusicRegion;
+        WebReqFailCounters webReqFails = new();
 
         public AppleMusicClientScraper(string? lastFmApiKey, int refreshPeriodInSec, bool composerAsArtist, string appleMusicRegion, RefreshHandler refreshHandler, Logger? logger = null) {
             this.refreshHandler = refreshHandler;
@@ -106,21 +117,18 @@ namespace AMWin_RichPresence {
             Refresh(this, null);
         }
 
-        public void Refresh(object? source, ElapsedEventArgs? e) {
+        public async void Refresh(object? source, ElapsedEventArgs? e) {
             AppleMusicInfo? appleMusicInfo = null;
             try {
-                appleMusicInfo = GetAppleMusicInfo();
+                appleMusicInfo = await GetAppleMusicInfo();
             } catch (Exception ex) {
                 logger?.Log($"Something went wrong while scraping: {ex}");
             }
             refreshHandler(appleMusicInfo);
         }
 
-        public AppleMusicInfo? GetAppleMusicInfo() {
+        public async Task<AppleMusicInfo?> GetAppleMusicInfo() {
             var isMiniPlayer = true;
-            var webSearchFailed = false;
-            var shouldTrySearch = failedWebRequests < Constants.NumFailedSearchesBeforeAbandon;
-
             var amProcesses = Process.GetProcessesByName("AppleMusic");
             if (amProcesses.Length == 0) {
                 logger?.Log("Could not find an AppleMusic.exe process");
@@ -216,7 +224,7 @@ namespace AMWin_RichPresence {
                         newSong.CoverArtUrl = currentSong.CoverArtUrl;
                     }
                     currentSong = newSong;
-                    failedWebRequests = 0;
+                    webReqFails = new();
                     previousSongProgress = null;
                 }
 
@@ -261,14 +269,17 @@ namespace AMWin_RichPresence {
                 } else { // fallback to calculation using song slider
 
                     // web query for song duration if we don't have it
-                    if (shouldTrySearch && currentSong.SongDuration == null) {
-                        webScraper.GetSongDuration().ContinueWith(t => {
-                            if (t.Result == null) {
-                                webSearchFailed = true;
+                    if (currentSong.SongDuration == null && webReqFails.SongDuration < webReqFails.MaxFails) {
+                        var result = await webScraper.GetSongDuration();
+                        if (result == null) {
+                            webReqFails.SongDuration++;
+                            if (webReqFails.SongDuration == webReqFails.MaxFails) {
+                                logger?.Log("Reached max fails for GetSongDuration.");
                             }
-                            string? dur = t.Result;
-                            currentSong.SongDuration = ParseTimeString(dur);
-                        });
+                        } else {
+                            webReqFails.SongDuration = 0;
+                        }
+                        currentSong.SongDuration = ParseTimeString(result);
                     }
 
                     // if success, set timestamps using seek slider
@@ -296,49 +307,57 @@ namespace AMWin_RichPresence {
                 //  Get song cover art  
                 // ------------------------------------------------
 
-                if (shouldTrySearch && currentSong.CoverArtUrl == null) {
-                    webScraper.GetAlbumArtUrl().ContinueWith(t => {
-                        if (t.Result == null) {
-                            webSearchFailed = true;
+                if (currentSong.CoverArtUrl == null && webReqFails.AlbumArt < webReqFails.MaxFails) {
+                    var result = await webScraper.GetAlbumArtUrl();
+                    if (result == null) {
+                        webReqFails.AlbumArt++;
+                        if (webReqFails.AlbumArt == webReqFails.MaxFails) {
+                            logger?.Log("Reached max fails for GetAlbumArt.");
                         }
-                        currentSong.CoverArtUrl = t.Result;
-                    });
+                    } else {
+                        webReqFails.AlbumArt = 0;
+                    }
+                    currentSong.CoverArtUrl = result;
                 }
 
                 // ================================================
                 //  Get song artists, as a list
                 // ------------------------------------------------
 
-                if (shouldTrySearch && currentSong.ArtistList == null) {
-                    webScraper.GetArtistList().ContinueWith(t => {
-                        if (t.Result.Count == 0) {
-                            webSearchFailed = true;
+                if (currentSong.ArtistList == null && webReqFails.ArtistList < webReqFails.MaxFails) {
+                    var result = await webScraper.GetArtistList();
+                    if (result.Count == 0) {
+                        webReqFails.ArtistList++;
+                        if (webReqFails.ArtistList == webReqFails.MaxFails) {
+                            logger?.Log("Reached max fails for GetArtistList.");
                         }
-                        currentSong.ArtistList = t.Result;
-                        if (currentSong.ArtistList.Count == 0) {
-                            currentSong.ArtistList = null;
-                        }
-                    });
+                    } else {
+                        webReqFails.ArtistList = 0;
+                    }
+                    currentSong.ArtistList = result;
+                    if (currentSong.ArtistList.Count == 0) {
+                        currentSong.ArtistList = null;
+                    }
+                    
                 }
 
                 // ================================================
                 // Get music url
                 // ------------------------------------------------
 
-                if (shouldTrySearch && currentSong.SongUrl == null) {
-                    webScraper.GetSongUrl().ContinueWith(t => {
-                        if (t.Result == null) {
-                            webSearchFailed = true;
+                if (currentSong.SongUrl == null && webReqFails.SongUrl < webReqFails.MaxFails) {
+                    var result = await webScraper.GetSongUrl();
+                    if (result == null) {
+                        webReqFails.SongUrl++;
+                        if (webReqFails.SongUrl == webReqFails.MaxFails) {
+                            logger?.Log("Reached max fails for GetSongUrl.");
                         }
-                        currentSong.SongUrl = t.Result;
-                    });
+                    } else {
+                        webReqFails.SongUrl = 0;
+                    }
+                    currentSong.SongUrl = result;
                 }
             }
-
-            if (webSearchFailed) {
-                failedWebRequests += 1;
-            }
-
             return currentSong;
         }
 

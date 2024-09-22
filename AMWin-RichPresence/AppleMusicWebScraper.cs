@@ -69,17 +69,17 @@ namespace AMWin_RichPresence {
             var stopwatch = Stopwatch.StartNew();
             var res = await Constants.HttpClient.GetStringAsync(cleanUrl);
             stopwatch.Stop();
-            logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {cleanUrl} took {stopwatch.ElapsedMilliseconds}ms");
+            logger?.Log($"[{callingFunction ?? "GetURL"}] Request took {stopwatch.ElapsedMilliseconds}ms");
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(res);
             return doc;
         }
         private async Task<JsonDocument> GetURLJson(string url, string? callingFunction = null) {
-            logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {url}");
+            logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {url}...");
             var stopwatch = Stopwatch.StartNew();
             var res = await Constants.HttpClient.GetStringAsync(url);
             stopwatch.Stop();
-            logger?.Log($"[{callingFunction ?? "GetURL"}] HTTP GET for {url} took {stopwatch.ElapsedMilliseconds}ms");
+            logger?.Log($"[{callingFunction ?? "GetURL"}] Request took {stopwatch.ElapsedMilliseconds}ms");
             return JsonDocument.Parse(res);
         }
 
@@ -93,10 +93,16 @@ namespace AMWin_RichPresence {
 
             try {
                 // scrape search results for "Songs" section
-                var list = doc.DocumentNode
+                var nodes = doc.DocumentNode
                     .Descendants("div")
                     .First(x => x.HasClass("desktop-search-page"))
-                    .Descendants("ul")
+                    .Descendants("ul");
+                    
+                if (nodes.Count() == 0) {
+                    return null;
+                }
+                
+                var list = nodes
                     .First(x => x.HasClass("shelf-grid__list--grid-type-TrackLockupsShelf"))
                     .ChildNodes
                     .Where(x => x.Name == "li");
@@ -149,9 +155,14 @@ namespace AMWin_RichPresence {
 
             try {
                 // scrape search results for "Top Results" section
-                var list = doc.DocumentNode
+                var nodes = doc.DocumentNode
                     .Descendants("ul")
-                    .First(x => x.Attributes["class"].Value.Contains("grid--top-results"))
+                    .FirstOrDefault(x => x.Attributes["class"].Value.Contains("grid--top-results"), null);
+
+                if (nodes == null) {
+                    return null;
+                }
+                var list = nodes   
                     .Descendants("li")
                     .Where(x => x.Attributes.Contains("data-testid") && x.Attributes["data-testid"].Value == "grid-item")
                     .ToList();

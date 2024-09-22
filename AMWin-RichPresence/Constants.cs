@@ -25,9 +25,9 @@ namespace AMWin_RichPresence {
 #else
         public static string  ProgramVersion = ProgramVersionBase;
 #endif                        
-        public static int    MaxLogFiles                    = 10;
+        public static int    MaxLogFiles                    = 10; // files
         public static int    RefreshPeriod                  = 5; // seconds
-        public static int    NumFailedSearchesBeforeAbandon = 3;
+        public static int    NumFailedSearchesBeforeAbandon = 5; // attempts
         public static string AppDataFolderName              = "AMWin-RichPresence";
         public static string DiscordClientID                = "1066220978406953012";
         public static string DiscordAppleMusicImageKey      = "applemusic1024x";
@@ -47,5 +47,27 @@ namespace AMWin_RichPresence {
         public static readonly HttpClient HttpClient = new();
 
         public static string[] ValidAppleMusicRegions = [
-            "ae","ag","ai","am","ao","ar","at","au",            "az","ba","bb","be","bg","bh","bj","bm",            "bo","br","bs","bt","bw","by","bz","ca",            "cd","cg","ch","ci","cl","cm","cn","co",            "cr","cv","cy","cz","de","dk","dm","do",            "dz","ec","ee","eg","es","fi","fj","fm",            "fr","ga","gb","gd","ge","gh","gm","gr",            "gt","gw","gy","hk","hn","hr","hu","id",            "ie","il","in","iq","is","it","jm","jo",            "jp","ke","kg","kh","kn","kr","kw","ky",            "kz","la","lb","lc","lk","lr","lt","lu",            "lv","ly","ma","md","me","mg","mk","ml",            "mm","mn","mo","mr","ms","mt","mu","mv",            "mw","mx","my","mz","na","ne","ng","ni",            "nl","no","np","nz","om","pa","pe","pg",            "ph","pl","pt","py","qa","ro","rs","ru",            "rw","sa","sb","sc","se","sg","si","sk",            "sl","sn","sr","sv","sz","tc","td","th",            "tj","tm","tn","to","tr","tt","tw","tz",            "ua","ug","us","uy","uz","vc","ve","vg",            "vn","vu","xk","ye","za","zm","zw"        ];    }
+            "ae","ag","ai","am","ao","ar","at","au",
+            "az","ba","bb","be","bg","bh","bj","bm",
+            "bo","br","bs","bt","bw","by","bz","ca",
+            "cd","cg","ch","ci","cl","cm","cn","co",
+            "cr","cv","cy","cz","de","dk","dm","do",
+            "dz","ec","ee","eg","es","fi","fj","fm",
+            "fr","ga","gb","gd","ge","gh","gm","gr",
+            "gt","gw","gy","hk","hn","hr","hu","id",
+            "ie","il","in","iq","is","it","jm","jo",
+            "jp","ke","kg","kh","kn","kr","kw","ky",
+            "kz","la","lb","lc","lk","lr","lt","lu",
+            "lv","ly","ma","md","me","mg","mk","ml",
+            "mm","mn","mo","mr","ms","mt","mu","mv",
+            "mw","mx","my","mz","na","ne","ng","ni",
+            "nl","no","np","nz","om","pa","pe","pg",
+            "ph","pl","pt","py","qa","ro","rs","ru",
+            "rw","sa","sb","sc","se","sg","si","sk",
+            "sl","sn","sr","sv","sz","tc","td","th",
+            "tj","tm","tn","to","tr","tt","tw","tz",
+            "ua","ug","us","uy","uz","vc","ve","vg",
+            "vn","vu","xk","ye","za","zm","zw"
+        ];
+    }
 }
