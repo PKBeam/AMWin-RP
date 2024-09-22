@@ -258,8 +258,8 @@ namespace AMWin_RichPresence {
                 int? currentTime = null;
                 int? remainingDuration = null;
                 
-                var currentTimeElement = amSongPanel.FindFirstChild("CurrentTime");
-                var remainingDurationElement = amSongPanel.FindFirstChild("Duration");
+                var currentTimeElement = songFieldsPanel?.FindFirstChild("CurrentTime");
+                var remainingDurationElement = songFieldsPanel?.FindFirstChild("Duration");
 
                 // use the Apple Music timestamps, if visible
                 if (currentTimeElement != null && remainingDurationElement != null) {
