@@ -20,10 +20,10 @@ namespace AMWin_RichPresence {
                 }
             }
         } 
-#if DEBUG
-        public static string  ProgramVersion = $"{ProgramVersionBase}-dev";
-#else
+#if RELEASE
         public static string  ProgramVersion = ProgramVersionBase;
+#else
+        public static string  ProgramVersion = $"{ProgramVersionBase}-dev";
 #endif                        
         public static int    MaxLogFiles                    = 10; // files
         public static int    RefreshPeriod                  = 5; // seconds
