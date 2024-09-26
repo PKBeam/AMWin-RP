@@ -135,11 +135,18 @@ namespace AMWin_RichPresence {
                 return null;
             }
             using (var automation = new UIA3Automation()) {
-                var windows = automation.GetDesktop().FindAllChildren(c => c.ByProcessId(amProcesses[0].Id));
-                if (windows.Length == 0) {
+                var windows = new List<AutomationElement>();
+                automation.GetDesktop()
+                    .FindAllChildren(c => c.ByProcessId(amProcesses[0].Id))
+                    .ToList()
+                    .ForEach(c => windows.Add(c));
+
+                // if no windows on the normal desktop, search for virtual desktops and add them
+                if (windows.Count == 0) {
                     var vdesktopWin = FlaUI.Core.Application.Attach(amProcesses[0].Id).GetMainWindow(automation);
-                    windows.Append(vdesktopWin);
+                    windows.Add(vdesktopWin);
                 }
+
                 // find an apple music window that we can extract information from
                 AutomationElement? amSongPanel = null;
                 foreach (var window in windows) {
