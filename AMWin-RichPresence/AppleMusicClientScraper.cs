@@ -154,14 +154,14 @@ namespace AMWin_RichPresence {
                     isMiniPlayer = window.Name == "Mini Player";
 
                     if (isMiniPlayer) {
-                        amSongPanel = window.FindFirstChild(cf => cf.ByClassName("Microsoft.UI.Content.DesktopChildSiteBridge"));
+                        amSongPanel = window.FindFirstDescendant(cf => cf.ByClassName("InputSiteWindowClass"));
 
                         // preference the mini player because it always has timestamps visible
                         if (amSongPanel != null) {
                             break;
                         }
                     } else {
-                        amSongPanel = FindFirstDescendantWithAutomationId(window, "TransportBar") ?? amSongPanel;
+                        amSongPanel = window.FindFirstDescendant(cf => cf.ByAutomationId("TransportBar")) ?? amSongPanel;
                     }
                 }
 
@@ -175,7 +175,7 @@ namespace AMWin_RichPresence {
                 // ------------------------------------------------
 
                 var songFieldsPanel = isMiniPlayer ? amSongPanel : amSongPanel.FindFirstChild("LCD");
-                var songFields = songFieldsPanel?.FindAllChildren(new ConditionFactory(new UIA3PropertyLibrary()).ByAutomationId("myScrollViewer")) ?? [];
+                var songFields = songFieldsPanel?.FindAllChildren(cf => cf.ByAutomationId("myScrollViewer")) ?? [];
 
                 // ================================================
                 //  Check if there is a song playing
@@ -419,24 +419,6 @@ namespace AMWin_RichPresence {
         }
         private static bool StringLetterComparison(string s1, string s2) {
             return StringToLetters(s1) == StringToLetters(s2);
-        }
-
-        // breadth-first search for element with given automation ID.
-        // BFS is preferred as the elements we want to find are generally not too deep in the element tree
-        private static AutomationElement? FindFirstDescendantWithAutomationId(AutomationElement baseElement, string id) {
-            List<AutomationElement> nodes = new() { baseElement };
-            for (var i = 0; i < nodes.Count; i++) {
-                var node = nodes[i];
-                if (node.Properties.AutomationId.IsSupported && node.AutomationId == id) {
-                    return node;
-                }
-                nodes.AddRange(node.FindAllChildren());
-                // fallback to prevent this taking too long
-                if (nodes.Count > 25) {
-                    return null;
-                }
-            }
-            return null;
         }
     }
 }

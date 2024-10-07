@@ -8,7 +8,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\AMWinRP.ico</ApplicationIcon>
     <AssemblyVersion>1.0</AssemblyVersion>
-    <FileVersion>1.4.8</FileVersion>
+    <FileVersion>1.4.9</FileVersion>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <SupportedOSPlatformVersion>10.0.20348.0</SupportedOSPlatformVersion>
   </PropertyGroup>
