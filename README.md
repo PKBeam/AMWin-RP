@@ -41,7 +41,7 @@ If you are reporting a problem, please attach any relevant `.log` files (found i
 
 Before posting, please double-check the following:
 - The problem isn't already covered by an existing open or closed issue.
-- You have RP display enabled in Discord (Settings > Activity Settings > Activity Privacy > Actvity Status).
+- You have RP display enabled in Discord (Settings > Activity Settings > Activity Privacy > Activity Status).
 
 ## Scrobbling
 ### Last.FM
