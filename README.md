@@ -37,7 +37,7 @@ There is no support for iTunes, Apple Music via WSA or any other third-party pla
 
 ## Reporting Bugs
 Before creating a new issue, please make sure your problem does not fall under an existing issue.  
-If you are reporting a problem, please attach any relevant `.log` files (found in `C:\Users\your_username_here\AppData\Local\AMWin-RichPresence`).
+If you are reporting a problem, please attach any relevant `.log` files (found in `%localappdata%\AMWin-RichPresence`).
 
 Before posting, please double-check the following:
 - The problem isn't already covered by an existing open or closed issue.
