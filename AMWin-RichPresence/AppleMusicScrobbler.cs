@@ -43,6 +43,7 @@ namespace AMWin_RichPresence {
         protected Logger? logger;
         protected string serviceName;
         protected string region;
+        protected bool scrobbleInProgress;
 
         public AppleMusicScrobbler(string serviceName, string region, Logger? logger = null) {
             this.serviceName = serviceName;
@@ -95,6 +96,7 @@ namespace AMWin_RichPresence {
                 if (thisSongID != lastSongID) {
                     lastSongID = thisSongID;
                     elapsedSeconds = 0;
+                    scrobbleInProgress = false;
                     hasScrobbled = false;
                     logger?.Log($"[{serviceName} scrobbler] New Song: {lastSongID}");
 
@@ -109,8 +111,9 @@ namespace AMWin_RichPresence {
                         logger?.Log($"[{serviceName} scrobbler] Repeating Song: {lastSongID}");
                     }
 
-                    if (IsTimeToScrobble(info) && !hasScrobbled) {
+                    if (IsTimeToScrobble(info) && !hasScrobbled && !scrobbleInProgress) {
                         logger?.Log($"[{serviceName} scrobbler] Scrobbling: {lastSongID}");
+                        scrobbleInProgress = true;
                         await ScrobbleSong(artist, album, info.SongName);
                         hasScrobbled = true;
                     }
@@ -120,6 +123,8 @@ namespace AMWin_RichPresence {
             } catch (Exception ex) {
                 logger?.Log($"[{serviceName} scrobbler] An error occurred while scrobbling: {ex}");
             }
+
+            scrobbleInProgress = false;
         }
     }
 
