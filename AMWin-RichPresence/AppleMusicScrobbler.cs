@@ -113,9 +113,14 @@ namespace AMWin_RichPresence {
 
                     if (IsTimeToScrobble(info) && !hasScrobbled && !scrobbleInProgress) {
                         logger?.Log($"[{serviceName} scrobbler] Scrobbling: {lastSongID}");
-                        scrobbleInProgress = true;
-                        await ScrobbleSong(artist, album, info.SongName);
-                        hasScrobbled = true;
+
+                        try {
+                            scrobbleInProgress = true;
+                            await ScrobbleSong(artist, album, info.SongName);
+                            hasScrobbled = true;
+                        } finally {
+                            scrobbleInProgress = false;
+                        }
                     }
 
                     lastSongProgress = info.CurrentTime ?? 0.0;
@@ -123,8 +128,6 @@ namespace AMWin_RichPresence {
             } catch (Exception ex) {
                 logger?.Log($"[{serviceName} scrobbler] An error occurred while scrobbling: {ex}");
             }
-
-            scrobbleInProgress = false;
         }
     }
 
