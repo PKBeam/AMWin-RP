@@ -48,9 +48,9 @@ namespace AMWin_RichPresence {
 
         private void AppleMusicRegion_TextChanged(object sender, TextChangedEventArgs e) {
             if (amRegionValid) {
-                AppleMusicRegion.Background = Brushes.White;
+                Application.Current.Resources.Remove("TextControlFocusedBorderBrush");
             } else {
-                AppleMusicRegion.Background = Brushes.Pink;
+                Application.Current.Resources["TextControlFocusedBorderBrush"] = new SolidColorBrush(Colors.Red);
                 if (AppleMusicRegion.Text.Length > 2) {
                     AppleMusicRegion.Text = AppleMusicRegion.Text.Substring(0, 2);
                 }
@@ -132,10 +132,10 @@ namespace AMWin_RichPresence {
 
         private void UpdateAppleMusicRegion() {
             if (amRegionValid) {
-                AppleMusicRegion.Background = Brushes.White;
+                AppleMusicRegion.Resources.Remove("TextControlFocusedBorderBrush");
                 Properties.Settings.Default.AppleMusicRegion = AppleMusicRegion.Text.ToLower();
             } else {
-                AppleMusicRegion.Background = Brushes.Pink;
+                AppleMusicRegion.Resources["TextControlFocusedBorderBrush"] = Brushes.Red;
                 AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion;
             }
             SaveSettings();
