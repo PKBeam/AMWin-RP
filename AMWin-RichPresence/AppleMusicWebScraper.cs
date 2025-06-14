@@ -137,7 +137,7 @@ namespace AMWin_RichPresence {
 
                     // check that the result actually is the song
                     // (Apple Music web search's "Song" section replaces ampersands with commas in the artist list)
-                    if (searchResultTitle == songName && searchResultSubtitle == songArtist.Replace(" & ", ", ")) {
+                    if (searchResultTitle == songName && searchResultSubtitle.ToUpper() == songArtist.Replace(" & ", ", ").ToUpper()) {
                         return result;
                     }
                 }
