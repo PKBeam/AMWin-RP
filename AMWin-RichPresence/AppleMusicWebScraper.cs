@@ -336,7 +336,12 @@ namespace AMWin_RichPresence {
                 if (lastFmApiKey != null && lastFmDur == null) {
                     logger?.Log($"[GetSongDuration] LastFM lookup failed, falling back to Apple Music Web");
                 }
-                return lastFmDur ?? await GetSongDurationAppleMusic();
+
+                if (Properties.Settings.Default.ScrobblePreferAppleMusicWebDuration) {
+                    return await GetSongDurationAppleMusic() ?? lastFmDur;
+                } else {
+                    return lastFmDur ?? await GetSongDurationAppleMusic();
+                }
             } catch (Exception ex) {
                 logger?.Log($"[GetSongDuration] An exception occurred: {ex}");
                 return null;

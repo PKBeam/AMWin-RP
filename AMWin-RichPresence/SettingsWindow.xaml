@@ -63,9 +63,11 @@
 
                         <CheckBox x:Name="CheckBox_LastfmScrobblePrimary" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmScrobblePrimaryArtist, Mode=TwoWay}" Click="CheckBox_LastfmScrobblePrimary_Click" Content="Scrobble primary artist"/>
 
+                        <CheckBox x:Name="CheckBox_ScrobblePreferAppleMusicWebDuration" Margin="0 2 0 0" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ScrobblePreferAppleMusicWebDuration, Mode=TwoWay}" Content="Prefer song duration from Apple Music Web" Checked="CheckBox_ScrobblePreferAppleMusicWebDuration_Checked"/>
+
                         <StackPanel Orientation="Horizontal">
                             <TextBlock  VerticalAlignment="Center">Max time before scrobble (sec)</TextBlock>
-                            <TextBox x:Name="ScrobbleMaxTime" Margin="10 4 7 2" MinWidth="50" HorizontalAlignment="Left" Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.ScrobbleMaxWait}" TextWrapping="Wrap" TextChanged="ScrobbleMaxTime_TextChanged"/>
+                            <TextBox x:Name="ScrobbleMaxTime" Margin="10 4 7 2" MinWidth="50" HorizontalAlignment="Left" Text="{Binding Source={x:Static properties:Settings.Default}, Path=ScrobbleMaxWait}" TextWrapping="Wrap" TextChanged="ScrobbleMaxTime_TextChanged"/>
                         </StackPanel>
                         
                         <TextBlock Margin="0 5 0 5"  FontWeight="Bold">Last.FM</TextBlock>

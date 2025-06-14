@@ -238,5 +238,17 @@ namespace AMWin_RichPresence.Properties {
                 this["ScrobbleMaxWait"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ScrobblePreferAppleMusicWebDuration {
+            get {
+                return ((bool)(this["ScrobblePreferAppleMusicWebDuration"]));
+            }
+            set {
+                this["ScrobblePreferAppleMusicWebDuration"] = value;
+            }
+        }
     }
 }
