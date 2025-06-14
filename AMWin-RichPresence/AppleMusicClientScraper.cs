@@ -118,21 +118,20 @@ namespace AMWin_RichPresence {
         }
 
         public async void Refresh(object? source, ElapsedEventArgs? e) {
-            AppleMusicInfo? appleMusicInfo = null;
             try {
-                appleMusicInfo = await GetAppleMusicInfo();
+                await GetAppleMusicInfo();
             } catch (Exception ex) {
                 logger?.Log($"Something went wrong while scraping: {ex}");
             }
-            refreshHandler(appleMusicInfo);
+            refreshHandler(currentSong);
         }
 
-        public async Task<AppleMusicInfo?> GetAppleMusicInfo() {
+        public async Task GetAppleMusicInfo() {
             var isMiniPlayer = true;
             var amProcesses = Process.GetProcessesByName("AppleMusic");
             if (amProcesses.Length == 0) {
                 logger?.Log("Could not find an AppleMusic.exe process");
-                return null;
+                return;
             }
             using (var automation = new UIA3Automation()) {
                 var windows = new List<AutomationElement>();
@@ -167,7 +166,7 @@ namespace AMWin_RichPresence {
 
                 if (amSongPanel == null) {
                     logger?.Log("Apple Music song panel is not initialised or missing");
-                    return null;
+                    return;
                 }
 
                 // ================================================
@@ -183,7 +182,7 @@ namespace AMWin_RichPresence {
 
                 // an active mini player must have a song 
                 if (!isMiniPlayer && songFields.Length != 2) {
-                    return null;
+                    return;
                 }
 
                 // ================================================
@@ -244,18 +243,16 @@ namespace AMWin_RichPresence {
 
                 // check if the song is paused or not
                 var playPauseButton = amSongPanel.FindFirstChild("TransportControl_PlayPauseStop");
+                var songProgressSlider = (isMiniPlayer ? amSongPanel.FindFirstChild("Scrubber") : amSongPanel.FindFirstChild("LCD").FindFirstChild("LCDScrubber"))?.Patterns.RangeValue.Pattern;
+                var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Value / songProgressSlider.Maximum;
 
                 // grab playback status directly from Apple Music for English languages
                 if (playPauseButton.Name == "Play" || playPauseButton.Name == "Pause") {
                     currentSong.IsPaused = playPauseButton.Name == "Play";
 
                 } else { // ... otherwise fallback to tracking song progress
-                    var songProgressSlider = (isMiniPlayer ? amSongPanel.FindFirstChild("Scrubber") : amSongPanel.FindFirstChild("LCD").FindFirstChild("LCDScrubber"))?.Patterns.RangeValue.Pattern;
-                    var songProgress = songProgressSlider == null ? 0 : songProgressSlider.Value / songProgressSlider.Maximum;
-
-                    currentSong.IsPaused = previousSongProgress != null && songProgress == previousSongProgress;
-
-                    previousSongProgress = songProgress;
+                    currentSong.IsPaused = previousSongProgress != null && songProgressPercent == previousSongProgress;
+                    previousSongProgress = songProgressPercent;
                 }
 
                 // ================================================
@@ -273,99 +270,100 @@ namespace AMWin_RichPresence {
                     currentTime = ParseTimeString(currentTimeElement!.Name);
                     remainingDuration = ParseTimeString(remainingDurationElement!.Name);
 
-                } else { // fallback to calculation using song slider
-
-                    // web query for song duration if we don't have it
-                    if (currentSong.SongDuration == null && webReqFails.SongDuration < webReqFails.MaxFails) {
-                        var result = await webScraper.GetSongDuration();
-                        if (result == null) {
-                            webReqFails.SongDuration++;
-                            if (webReqFails.SongDuration == webReqFails.MaxFails) {
-                                logger?.Log("Reached max fails for GetSongDuration.");
-                            }
-                        } else {
-                            webReqFails.SongDuration = 0;
-                        }
-                        currentSong.SongDuration = ParseTimeString(result);
-                    }
-
-                    // if success, set timestamps using seek slider
-                    if (currentSong.SongDuration != null) {
-
-                        // grab the seek slider to check song playback progress
-                        var songProgressSlider = amSongPanel.FindFirstChild("LCD").FindFirstChild("LCDScrubber")?.Patterns.RangeValue.Pattern;
-                        var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Value / songProgressSlider.Maximum;
-
-                        currentTime = (int)(songProgressPercent * currentSong.SongDuration);
-                        remainingDuration = (int)((1 - songProgressPercent) * currentSong.SongDuration);
-                    }
-
-                }
-
-                currentSong.CurrentTime = currentTime;
-
-                // convert timestamps to Unix format for Discord
-                if (currentTime != null && remainingDuration != null) {
                     currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, (int)currentTime);
                     currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, (int)remainingDuration);
+
                 }
 
-                // ================================================
-                //  Get song cover art  
-                // ------------------------------------------------
-
-                if (currentSong.CoverArtUrl == null && webReqFails.AlbumArt < webReqFails.MaxFails) {
-                    var result = await webScraper.GetAlbumArtUrl();
-                    if (result == null) {
-                        webReqFails.AlbumArt++;
-                        if (webReqFails.AlbumArt == webReqFails.MaxFails) {
-                            logger?.Log("Reached max fails for GetAlbumArt.");
-                        }
-                    } else {
-                        webReqFails.AlbumArt = 0;
-                    }
-                    currentSong.CoverArtUrl = result;
-                }
-
-                // ================================================
-                //  Get song artists, as a list
-                // ------------------------------------------------
-
-                if (currentSong.ArtistList == null && webReqFails.ArtistList < webReqFails.MaxFails) {
-                    var result = await webScraper.GetArtistList();
-                    if (result.Count == 0) {
-                        webReqFails.ArtistList++;
-                        if (webReqFails.ArtistList == webReqFails.MaxFails) {
-                            logger?.Log("Reached max fails for GetArtistList.");
-                        }
-                    } else {
-                        webReqFails.ArtistList = 0;
-                    }
-                    currentSong.ArtistList = result;
-                    if (currentSong.ArtistList.Count == 0) {
-                        currentSong.ArtistList = null;
-                    }
-                    
-                }
-
-                // ================================================
-                // Get music url
-                // ------------------------------------------------
-
-                if (currentSong.SongUrl == null && webReqFails.SongUrl < webReqFails.MaxFails) {
-                    var result = await webScraper.GetSongUrl();
-                    if (result == null) {
-                        webReqFails.SongUrl++;
-                        if (webReqFails.SongUrl == webReqFails.MaxFails) {
-                            logger?.Log("Reached max fails for GetSongUrl.");
-                        }
-                    } else {
-                        webReqFails.SongUrl = 0;
-                    }
-                    currentSong.SongUrl = result;
-                }
+                // potentially slow HTTP request
+                // fire and forget; it will update this.currentSong once done
+                DoWebScrapes(webScraper, songProgressPercent);
             }
-            return currentSong;
+            return;
+        }
+
+        private async void DoWebScrapes(AppleMusicWebScraper webScraper, double songProgressPercent) {
+            if (currentSong == null) {
+                return;
+            }
+
+            // web query for song duration if we don't have it
+            if (currentSong.SongDuration == null && webReqFails.SongDuration < webReqFails.MaxFails) {
+                var result = await webScraper.GetSongDuration();
+                if (result == null) {
+                    webReqFails.SongDuration++;
+                    if (webReqFails.SongDuration == webReqFails.MaxFails) {
+                        logger?.Log("Reached max fails for GetSongDuration.");
+                    }
+                } else {
+                    webReqFails.SongDuration = 0;
+                }
+                currentSong.SongDuration = ParseTimeString(result);
+            }
+
+            if (currentSong.SongDuration != null) {
+                int currentTime = (int)(songProgressPercent * currentSong.SongDuration);
+                int remainingDuration = (int)((1 - songProgressPercent) * currentSong.SongDuration);
+
+                currentSong.CurrentTime = currentTime;
+                currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, (int)currentTime);
+                currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, (int)remainingDuration);
+            }
+
+            // ================================================
+            //  Get song cover art  
+            // ------------------------------------------------
+
+            if (currentSong.CoverArtUrl == null && webReqFails.AlbumArt<webReqFails.MaxFails) {
+                var result = await webScraper.GetAlbumArtUrl();
+                if (result == null) {
+                    webReqFails.AlbumArt++;
+                    if (webReqFails.AlbumArt == webReqFails.MaxFails) {
+                        logger?.Log("Reached max fails for GetAlbumArt.");
+                    }
+                } else {
+                    webReqFails.AlbumArt = 0;
+                }
+                currentSong.CoverArtUrl = result;
+            }
+
+            // ================================================
+            //  Get song artists, as a list
+            // ------------------------------------------------
+
+            if (currentSong.ArtistList == null && webReqFails.ArtistList < webReqFails.MaxFails) {
+                var result = await webScraper.GetArtistList();
+                if (result.Count == 0) {
+                    webReqFails.ArtistList++;
+                    if (webReqFails.ArtistList == webReqFails.MaxFails) {
+                        logger?.Log("Reached max fails for GetArtistList.");
+                    }
+                } else {
+                    webReqFails.ArtistList = 0;
+                }
+                currentSong.ArtistList = result;
+                if (currentSong.ArtistList.Count == 0) {
+                    currentSong.ArtistList = null;
+                }
+
+            }
+
+            // ================================================
+            // Get music url
+            // ------------------------------------------------
+
+            if (currentSong.SongUrl == null && webReqFails.SongUrl < webReqFails.MaxFails) {
+                var result = await webScraper.GetSongUrl();
+                if (result == null) {
+                    webReqFails.SongUrl++;
+                    if (webReqFails.SongUrl == webReqFails.MaxFails) {
+                        logger?.Log("Reached max fails for GetSongUrl.");
+                    }
+                } else {
+                    webReqFails.SongUrl = 0;
+                }
+                currentSong.SongUrl = result;
+            }
         }
 
         // e.g. parse "-1:30" to 90 seconds
@@ -411,14 +409,6 @@ namespace AMWin_RichPresence {
                 }
             }
             return new(songArtist, songAlbum, songPerformer);
-        }
-
-        // some localisations of Apple Music have slight differences in element names
-        private static string StringToLetters(string s) {
-            return new string(s.Where(char.IsLetter).ToArray());
-        }
-        private static bool StringLetterComparison(string s1, string s2) {
-            return StringToLetters(s1) == StringToLetters(s2);
         }
     }
 }
