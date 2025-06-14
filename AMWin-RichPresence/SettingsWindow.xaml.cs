@@ -141,6 +141,13 @@ namespace AMWin_RichPresence {
             SaveSettings();
             ((App)Application.Current).UpdateRegion();
         }
+        private void ScrobbleMaxTime_TextChanged(object sender, TextChangedEventArgs e) {
+            try {
+                int.Parse(ScrobbleMaxTime.Text);
+            } catch {
+                ScrobbleMaxTime.Text = $"{Properties.Settings.Default.ScrobbleMaxWait}";
+            }
+        }
 
         private async void SaveLastFMCreds_Click(object sender, RoutedEventArgs e) {
             // Store the actual password to the Credential Manager.  Not as good as true Last.FM tokenized authentication,

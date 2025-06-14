@@ -54,7 +54,7 @@ namespace AMWin_RichPresence {
         protected bool IsTimeToScrobble(AppleMusicInfo info) {
             if (info.SongDuration.HasValue && info.SongDuration.Value >= 30) { // we should only scrobble tracks with more than 30 seconds
                 double halfSongDuration = info.SongDuration.Value / 2;
-                return elapsedSeconds >= halfSongDuration || elapsedSeconds >= 240; // half the song has passed or more than 4 minutes
+                return elapsedSeconds >= halfSongDuration || elapsedSeconds >= Properties.Settings.Default.ScrobbleMaxWait; // half the song has passed or more than 4 minutes
             }
             return elapsedSeconds > Constants.LastFMTimeBeforeScrobbling;
         }
