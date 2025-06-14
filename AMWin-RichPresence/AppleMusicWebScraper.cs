@@ -89,6 +89,9 @@ namespace AMWin_RichPresence {
             // search on the Apple Music website for the song
             var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
             var url = $"https://music.apple.com/{region}/search?term={searchTerm}";
+            if (url.Length > 255) {
+                url = url.Substring(0, 255);
+            }
             HtmlDocument doc = await GetURL(url, "SearchSongs");
 
             try {
@@ -137,8 +140,12 @@ namespace AMWin_RichPresence {
 
                     // check that the result actually is the song
                     // (Apple Music web search's "Song" section replaces ampersands with commas in the artist list)
-                    if (searchResultTitle == songName && searchResultSubtitle.ToUpper() == songArtist.Replace(" & ", ", ").ToUpper()) {
-                        return result;
+                    if (searchResultTitle == songName) {
+                        var webResult = searchResultSubtitle.ToUpper();
+                        var localResult = songArtist.Replace(" & ", ", ").ToUpper();
+                        if (webResult == localResult || localResult.Contains(webResult) || webResult.Contains(localResult)) { 
+                            return result;
+                        }
                     }
                 }
                 return null;
