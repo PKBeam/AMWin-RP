@@ -117,16 +117,16 @@ namespace AMWin_RichPresence {
             Refresh(this, null);
         }
 
-        public async void Refresh(object? source, ElapsedEventArgs? e) {
+        public void Refresh(object? source, ElapsedEventArgs? e) {
             try {
-                await GetAppleMusicInfo();
+                GetAppleMusicInfo();
             } catch (Exception ex) {
                 logger?.Log($"Something went wrong while scraping: {ex}");
             }
             refreshHandler(currentSong);
         }
 
-        public async Task GetAppleMusicInfo() {
+        public void GetAppleMusicInfo() {
             var isMiniPlayer = true;
             var amProcesses = Process.GetProcessesByName("AppleMusic");
             if (amProcesses.Length == 0) {
@@ -143,7 +143,9 @@ namespace AMWin_RichPresence {
                 // if no windows on the normal desktop, search for virtual desktops and add them
                 if (windows.Count == 0) {
                     var vdesktopWin = FlaUI.Core.Application.Attach(amProcesses[0].Id).GetMainWindow(automation);
-                    windows.Add(vdesktopWin);
+                    if (vdesktopWin != null) {
+                        windows.Add(vdesktopWin);
+                    }
                 }
 
                 // find an apple music window that we can extract information from
@@ -160,6 +162,7 @@ namespace AMWin_RichPresence {
                             break;
                         }
                     } else {
+                        var t = window.FindAllDescendants();
                         amSongPanel = window.FindFirstDescendant(cf => cf.ByAutomationId("TransportBar")) ?? amSongPanel;
                     }
                 }
@@ -243,11 +246,11 @@ namespace AMWin_RichPresence {
 
                 // check if the song is paused or not
                 var playPauseButton = amSongPanel.FindFirstChild("TransportControl_PlayPauseStop");
-                var songProgressSlider = (isMiniPlayer ? amSongPanel.FindFirstChild("Scrubber") : amSongPanel.FindFirstChild("LCD").FindFirstChild("LCDScrubber"))?.Patterns.RangeValue.Pattern;
+                var songProgressSlider = (isMiniPlayer ? amSongPanel.FindFirstChild("Scrubber") : amSongPanel.FindFirstChild("LCD")?.FindFirstChild("LCDScrubber"))?.Patterns.RangeValue.Pattern;
                 var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Value / songProgressSlider.Maximum;
 
                 // grab playback status directly from Apple Music for English languages
-                if (playPauseButton.Name == "Play" || playPauseButton.Name == "Pause") {
+                if (playPauseButton?.Name == "Play" || playPauseButton?.Name == "Pause") {
                     currentSong.IsPaused = playPauseButton.Name == "Play";
 
                 } else { // ... otherwise fallback to tracking song progress
@@ -270,9 +273,8 @@ namespace AMWin_RichPresence {
                     currentTime = ParseTimeString(currentTimeElement!.Name);
                     remainingDuration = ParseTimeString(remainingDurationElement!.Name);
 
-                    currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, (int)currentTime);
-                    currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, (int)remainingDuration);
-
+                    currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime ?? 0);
+                    currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration ?? 0);
                 }
 
                 // potentially slow HTTP request

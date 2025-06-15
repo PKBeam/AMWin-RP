@@ -7,7 +7,7 @@
         xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
         mc:Ignorable="d"
         Icon="/Resources/AMWinRP.ico"
-        Title="AMWin-RichPresence" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" MinWidth="370" Width="370" Height="1000">
+        Title="AMWin-RichPresence" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" MinWidth="370" Width="370" Height="600">
     <Grid TextElement.FontSize="14">
         <DockPanel>
             <Border DockPanel.Dock="Top" Height="70" Padding="10">

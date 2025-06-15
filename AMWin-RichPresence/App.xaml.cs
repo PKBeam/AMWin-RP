@@ -83,17 +83,16 @@ namespace AMWin_RichPresence {
             lastFmScrobblerClient = new AppleMusicLastFmScrobbler(region: amRegion, logger: logger);
             _ = lastFmScrobblerClient.init(lastFmCredentials);
 
+            var lastFMApiKey = AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey;
+            if (lastFMApiKey == null || lastFMApiKey == "") {
+                logger?.Log("No Last.FM API key found");
+            }
+
             // start ListenBrainz scrobbler
             listenBrainzScrobblerClient = new AppleMusicListenBrainzScrobbler(region: amRegion, logger: logger);
             _ = listenBrainzScrobblerClient.init(listenBrainzCredentials);
 
             // start Apple Music scraper
-            var lastFMApiKey = AMWin_RichPresence.Properties.Settings.Default.LastfmAPIKey;
-
-            if (lastFMApiKey == null || lastFMApiKey == "") {
-                logger?.Log("No Last.FM API key found");
-            }
-
             amScraper = new(lastFMApiKey, Constants.RefreshPeriod, classicalComposerAsArtist, AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion, (newInfo) => {
 
                 // don't update scraper if Apple Music is paused or not open
