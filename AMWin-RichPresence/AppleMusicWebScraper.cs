@@ -87,11 +87,12 @@ namespace AMWin_RichPresence {
         private async Task<HtmlNode?> _SearchSongs() {
 
             // search on the Apple Music website for the song
-            var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
-            var url = $"https://music.apple.com/{region}/search?term={searchTerm}";
-            if (url.Length > 255) {
-                url = url.Substring(0, 255);
+            var rawSearch = $"{songName} {songAlbum} {songArtist}";
+            while (rawSearch.Length > 100) {
+                rawSearch = rawSearch.Substring(0, rawSearch.LastIndexOf(" "));
             }
+            var searchTerm = Uri.EscapeDataString(rawSearch);
+            var url = $"https://music.apple.com/{region}/search?term={searchTerm}";
             HtmlDocument doc = await GetURL(url, "SearchSongs");
 
             try {

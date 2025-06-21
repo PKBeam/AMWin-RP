@@ -117,20 +117,21 @@ namespace AMWin_RichPresence {
             Refresh(this, null);
         }
 
-        public void Refresh(object? source, ElapsedEventArgs? e) {
+        public async void Refresh(object? source, ElapsedEventArgs? e) {
             try {
-                GetAppleMusicInfo();
+                await GetAppleMusicInfo();
             } catch (Exception ex) {
                 logger?.Log($"Something went wrong while scraping: {ex}");
             }
             refreshHandler(currentSong);
         }
 
-        public void GetAppleMusicInfo() {
+        public async Task GetAppleMusicInfo() {
             var isMiniPlayer = true;
             var amProcesses = Process.GetProcessesByName("AppleMusic");
             if (amProcesses.Length == 0) {
                 logger?.Log("Could not find an AppleMusic.exe process");
+                currentSong = null;
                 return;
             }
             using (var automation = new UIA3Automation()) {
@@ -138,7 +139,7 @@ namespace AMWin_RichPresence {
                 automation.GetDesktop()
                     .FindAllChildren(c => c.ByProcessId(amProcesses[0].Id))
                     .ToList()
-                    .ForEach(c => windows.Add(c));
+                    .ForEach(windows.Add);
 
                 // if no windows on the normal desktop, search for virtual desktops and add them
                 if (windows.Count == 0) {
@@ -169,6 +170,7 @@ namespace AMWin_RichPresence {
 
                 if (amSongPanel == null) {
                     logger?.Log("Apple Music song panel is not initialised or missing");
+                    currentSong = null;
                     return;
                 }
 
@@ -185,6 +187,7 @@ namespace AMWin_RichPresence {
 
                 // an active mini player must have a song 
                 if (!isMiniPlayer && songFields.Length != 2) {
+                    currentSong = null;
                     return;
                 }
 
@@ -279,12 +282,12 @@ namespace AMWin_RichPresence {
 
                 // potentially slow HTTP request
                 // fire and forget; it will update this.currentSong once done
-                DoWebScrapes(webScraper, songProgressPercent);
+
+                await Task.WhenAny(DoWebScrapes(webScraper, songProgressPercent), Task.Delay(2000));
             }
-            return;
         }
 
-        private async void DoWebScrapes(AppleMusicWebScraper webScraper, double songProgressPercent) {
+        private async Task DoWebScrapes(AppleMusicWebScraper webScraper, double songProgressPercent) {
             if (currentSong == null) {
                 return;
             }
