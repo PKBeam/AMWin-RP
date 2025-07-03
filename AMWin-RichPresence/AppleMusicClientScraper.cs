@@ -1,13 +1,12 @@
-﻿using System;
-using System.Diagnostics;
-using System.Timers;
+﻿using FlaUI.Core.AutomationElements;
+using FlaUI.UIA3;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
-using FlaUI.UIA3;
-using FlaUI.Core.Conditions;
-using FlaUI.Core.AutomationElements;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace AMWin_RichPresence {
 
@@ -129,163 +128,163 @@ namespace AMWin_RichPresence {
         public async Task GetAppleMusicInfo() {
             var isMiniPlayer = true;
             var amProcesses = Process.GetProcessesByName("AppleMusic");
-            if (amProcesses.Length == 0) {
+            if (!amProcesses.Any()) {
                 logger?.Log("Could not find an AppleMusic.exe process");
                 currentSong = null;
                 return;
             }
-            using (var automation = new UIA3Automation()) {
-                var windows = new List<AutomationElement>();
-                automation.GetDesktop()
-                    .FindAllChildren(c => c.ByProcessId(amProcesses[0].Id))
-                    .ToList()
-                    .ForEach(windows.Add);
 
+            // find apple music windows
+            var windows = new List<AutomationElement>();
+            using (var automation = new UIA3Automation()) {
+                var processId = amProcesses[0].Id;
+                windows = [.. automation.GetDesktop().FindAllChildren(c => c.ByProcessId(processId))];
+                
                 // if no windows on the normal desktop, search for virtual desktops and add them
                 if (windows.Count == 0) {
-                    var vdesktopWin = FlaUI.Core.Application.Attach(amProcesses[0].Id).GetMainWindow(automation);
+                    logger?.Log("No windows found on desktop, trying alternative search");
+                    var vdesktopWin = FlaUI.Core.Application.Attach(processId).GetMainWindow(automation, TimeSpan.FromSeconds(3));
                     if (vdesktopWin != null) {
                         windows.Add(vdesktopWin);
                     }
                 }
-
-                // find an apple music window that we can extract information from
-                AutomationElement? amSongPanel = null;
-                foreach (var window in windows) {
-                    // TODO: can localisation change the window name of the Mini Player?
-                    isMiniPlayer = window.Name == "Mini Player";
-
-                    if (isMiniPlayer) {
-                        amSongPanel = window.FindFirstDescendant(cf => cf.ByClassName("InputSiteWindowClass"));
-
-                        // preference the mini player because it always has timestamps visible
-                        if (amSongPanel != null) {
-                            break;
-                        }
-                    } else {
-                        var t = window.FindAllDescendants();
-                        amSongPanel = window.FindFirstDescendant(cf => cf.ByAutomationId("TransportBar")) ?? amSongPanel;
-                    }
-                }
-
-                if (amSongPanel == null) {
-                    logger?.Log("Apple Music song panel is not initialised or missing");
-                    currentSong = null;
-                    return;
-                }
-
-                // ================================================
-                //  Get song fields
-                // ------------------------------------------------
-
-                var songFieldsPanel = isMiniPlayer ? amSongPanel : amSongPanel.FindFirstChild("LCD");
-                var songFields = songFieldsPanel?.FindAllChildren(cf => cf.ByAutomationId("myScrollViewer")) ?? [];
-
-                // ================================================
-                //  Check if there is a song playing
-                // ------------------------------------------------
-
-                // an active mini player must have a song 
-                if (!isMiniPlayer && songFields.Length != 2) {
-                    currentSong = null;
-                    return;
-                }
-
-                // ================================================
-                //  Get song, artist and album names
-                // ------------------------------------------------
-
-                var songNameElement = songFields[0];
-                var songAlbumArtistElement = songFields[1];
-
-
-                // the upper rectangle is the song name; the bottom rectangle is the author/album
-                // lower .Bottom = higher up on the screen (?)
-                if (songNameElement.BoundingRectangle.Bottom > songAlbumArtistElement.BoundingRectangle.Bottom) {
-                    songNameElement = songFields[1];
-                    songAlbumArtistElement = songFields[0];
-                }
-
-                var songName = songNameElement.Name;
-                var songAlbumArtist = songAlbumArtistElement.Name;
-
-                string songArtist = "";
-                string songAlbum = "";
-                string? songPerformer = null;
-
-                // parse song string into album and artist
-                try {
-                    var songInfo = ParseSongAlbumArtist(songAlbumArtist, composerAsArtist);
-                    songArtist = songInfo.Item1;
-                    songAlbum = songInfo.Item2;
-                    songPerformer = songInfo.Item3;
-                } catch (Exception ex) {
-                    logger?.Log($"Could not parse '{songAlbumArtist}' into artist and album: {ex}");
-                }
-
-                // ================================================
-                //  Initialise basic song data and web scraper
-                // ------------------------------------------------
-
-                var newSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
-
-                // only clear out the current song if song is new
-                if (currentSong != newSong) {
-                    // keep the same album art if it's another song in the same album
-                    if (newSong.SongAlbum == currentSong?.SongAlbum && newSong.SongArtist == currentSong?.SongArtist) {
-                        newSong.CoverArtUrl = currentSong.CoverArtUrl;
-                    }
-                    currentSong = newSong;
-                    webReqFails = new();
-                    previousSongProgress = null;
-                }
-
-                // when searching for song info, use the performer as the artist instead of composer
-                var webScraper = new AppleMusicWebScraper(songName, songAlbum, songPerformer ?? songArtist, appleMusicRegion, logger, lastFmApiKey);
-
-                // ================================================
-                //  Get song playback status
-                // ------------------------------------------------
-
-                // check if the song is paused or not
-                var playPauseButton = amSongPanel.FindFirstChild("TransportControl_PlayPauseStop");
-                var songProgressSlider = (isMiniPlayer ? amSongPanel.FindFirstChild("Scrubber") : amSongPanel.FindFirstChild("LCD")?.FindFirstChild("LCDScrubber"))?.Patterns.RangeValue.Pattern;
-                var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Value / songProgressSlider.Maximum;
-
-                // grab playback status directly from Apple Music for English languages
-                if (playPauseButton?.Name == "Play" || playPauseButton?.Name == "Pause") {
-                    currentSong.IsPaused = playPauseButton.Name == "Play";
-
-                } else { // ... otherwise fallback to tracking song progress
-                    currentSong.IsPaused = previousSongProgress != null && songProgressPercent == previousSongProgress;
-                    previousSongProgress = songProgressPercent;
-                }
-
-                // ================================================
-                //  Get song timestamps
-                // ------------------------------------------------
-
-                int? currentTime = null;
-                int? remainingDuration = null;
-                
-                var currentTimeElement = songFieldsPanel?.FindFirstChild("CurrentTime");
-                var remainingDurationElement = songFieldsPanel?.FindFirstChild("Duration");
-
-                // use the Apple Music timestamps, if visible
-                if (currentTimeElement != null && remainingDurationElement != null) {
-                    currentTime = ParseTimeString(currentTimeElement!.Name);
-                    remainingDuration = ParseTimeString(remainingDurationElement!.Name);
-
-                    currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime ?? 0);
-                    currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration ?? 0);
-                }
-
-                // potentially slow HTTP request
-                // fire and forget; it will update this.currentSong once done
-
-                await Task.WhenAny(DoWebScrapes(webScraper, songProgressPercent), Task.Delay(2000));
             }
+
+            // find an apple music window that we can extract information from
+            AutomationElement? amSongPanel = null;
+            foreach (var window in windows) {
+                // TODO: can localisation change the window name of the Mini Player?
+                isMiniPlayer = window.Name == "Mini Player";
+
+                if (isMiniPlayer) {
+                    amSongPanel = window.FindFirstDescendant(cf => cf.ByClassName("InputSiteWindowClass"));
+
+                    // preference the mini player because it always has timestamps visible
+                    if (amSongPanel != null) {
+                        break;
+                    }
+                } else {
+                    amSongPanel = window.FindFirstDescendant(cf => cf.ByAutomationId("TransportBar")) ?? amSongPanel;
+                }
+            }
+
+            if (amSongPanel == null) {
+                logger?.Log("Apple Music song panel is not initialised or missing");
+                currentSong = null;
+                return;
+            }
+
+            // ================================================
+            //  Get song fields
+            // ------------------------------------------------
+
+            var songFieldsPanel = isMiniPlayer ? amSongPanel : amSongPanel.FindFirstChild("LCD");
+            var songFields = songFieldsPanel?.FindAllChildren(cf => cf.ByAutomationId("myScrollViewer")) ?? [];
+
+            // ================================================
+            //  Check if there is a song playing
+            // ------------------------------------------------
+
+            // an active mini player must have a song 
+            if (!isMiniPlayer && songFields.Length != 2) {
+                currentSong = null;
+                return;
+            }
+
+            // ================================================
+            //  Get song, artist and album names
+            // ------------------------------------------------
+
+            var songNameElement = songFields[0];
+            var songAlbumArtistElement = songFields[1];
+
+
+            // the upper rectangle is the song name; the bottom rectangle is the author/album
+            // lower .Bottom = higher up on the screen (?)
+            if (songNameElement.BoundingRectangle.Bottom > songAlbumArtistElement.BoundingRectangle.Bottom) {
+                songNameElement = songFields[1];
+                songAlbumArtistElement = songFields[0];
+            }
+
+            var songName = songNameElement.Name;
+            var songAlbumArtist = songAlbumArtistElement.Name;
+
+            string songArtist = "";
+            string songAlbum = "";
+            string? songPerformer = null;
+
+            // parse song string into album and artist
+            try {
+                var songInfo = ParseSongAlbumArtist(songAlbumArtist, composerAsArtist);
+                songArtist = songInfo.Item1;
+                songAlbum = songInfo.Item2;
+                songPerformer = songInfo.Item3;
+            } catch (Exception ex) {
+                logger?.Log($"Could not parse '{songAlbumArtist}' into artist and album: {ex}");
+            }
+
+            // ================================================
+            //  Initialise basic song data and web scraper
+            // ------------------------------------------------
+
+            var newSong = new AppleMusicInfo(songName, songAlbumArtist, songAlbum, songArtist);
+
+            // only clear out the current song if song is new
+            if (currentSong != newSong) {
+                // keep the same album art if it's another song in the same album
+                if (newSong.SongAlbum == currentSong?.SongAlbum && newSong.SongArtist == currentSong?.SongArtist) {
+                    newSong.CoverArtUrl = currentSong.CoverArtUrl;
+                }
+                currentSong = newSong;
+                webReqFails = new();
+                previousSongProgress = null;
+            }
+
+            // when searching for song info, use the performer as the artist instead of composer
+            var webScraper = new AppleMusicWebScraper(songName, songAlbum, songPerformer ?? songArtist, appleMusicRegion, logger, lastFmApiKey);
+
+            // ================================================
+            //  Get song playback status
+            // ------------------------------------------------
+
+            // check if the song is paused or not
+            var playPauseButton = amSongPanel.FindFirstChild("TransportControl_PlayPauseStop");
+            var songProgressSlider = (isMiniPlayer ? amSongPanel.FindFirstChild("Scrubber") : amSongPanel.FindFirstChild("LCD")?.FindFirstChild("LCDScrubber"))?.Patterns.RangeValue.Pattern;
+            var songProgressPercent = songProgressSlider == null ? 0 : songProgressSlider.Value / songProgressSlider.Maximum;
+
+            // grab playback status directly from Apple Music for English languages
+            if (playPauseButton?.Name == "Play" || playPauseButton?.Name == "Pause") {
+                currentSong.IsPaused = playPauseButton.Name == "Play";
+
+            } else { // ... otherwise fallback to tracking song progress
+                currentSong.IsPaused = previousSongProgress != null && songProgressPercent == previousSongProgress;
+                previousSongProgress = songProgressPercent;
+            }
+
+            // ================================================
+            //  Get song timestamps
+            // ------------------------------------------------
+
+            int? currentTime = null;
+            int? remainingDuration = null;
+                
+            var currentTimeElement = songFieldsPanel?.FindFirstChild("CurrentTime");
+            var remainingDurationElement = songFieldsPanel?.FindFirstChild("Duration");
+
+            // use the Apple Music timestamps, if visible
+            if (currentTimeElement != null && remainingDurationElement != null) {
+                currentTime = ParseTimeString(currentTimeElement!.Name);
+                remainingDuration = ParseTimeString(remainingDurationElement!.Name);
+
+                currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime ?? 0);
+                currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration ?? 0);
+            }
+
+            // potentially slow HTTP request
+            // wait up to 2s for the req to finish
+            await Task.WhenAny(DoWebScrapes(webScraper, songProgressPercent), Task.Delay(2000));
         }
+
 
         private async Task DoWebScrapes(AppleMusicWebScraper webScraper, double songProgressPercent) {
             if (currentSong == null) {
