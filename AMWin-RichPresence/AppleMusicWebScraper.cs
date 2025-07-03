@@ -62,6 +62,14 @@ namespace AMWin_RichPresence {
             this.songArtist = songArtist;
             this.region = region.ToLower();
         }
+        private string GetURLFromSongInfo() {
+            var rawSearch = $"{songName} {songAlbum} {songArtist}";
+            while (rawSearch.Length > 100) {
+                rawSearch = rawSearch.Substring(0, rawSearch.LastIndexOf(" "));
+            }
+            var searchTerm = Uri.EscapeDataString(rawSearch);
+            return $"https://music.apple.com/{region}/search?term={searchTerm}";
+        }
         private async Task<HtmlDocument> GetURL(string url, string? callingFunction = null) {
             // Apple Music web search doesn't like ampersands... even if they're HTML-escaped?
             var cleanUrl = HttpUtility.HtmlEncode(url.Replace("&", " "));
@@ -85,15 +93,7 @@ namespace AMWin_RichPresence {
 
         // Apple Music web search functions
         private async Task<HtmlNode?> _SearchSongs() {
-
-            // search on the Apple Music website for the song
-            var rawSearch = $"{songName} {songAlbum} {songArtist}";
-            while (rawSearch.Length > 100) {
-                rawSearch = rawSearch.Substring(0, rawSearch.LastIndexOf(" "));
-            }
-            var searchTerm = Uri.EscapeDataString(rawSearch);
-            var url = $"https://music.apple.com/{region}/search?term={searchTerm}";
-            HtmlDocument doc = await GetURL(url, "SearchSongs");
+            HtmlDocument doc = await GetURL(GetURLFromSongInfo(), "SearchSongs");
 
             try {
                 // scrape search results for "Songs" section
@@ -156,10 +156,7 @@ namespace AMWin_RichPresence {
             }
         }
         private async Task<HtmlNode?> _SearchTopResults() {
-            // search on the Apple Music website for the song
-            var searchTerm = Uri.EscapeDataString($"{songName} {songAlbum} {songArtist}");
-            var url = $"https://music.apple.com/{region}/search?term={searchTerm}";
-            HtmlDocument doc = await GetURL(url, "SearchTopResults");
+            HtmlDocument doc = await GetURL(GetURLFromSongInfo(), "SearchTopResults");
 
             try {
                 // scrape search results for "Top Results" section
@@ -196,6 +193,10 @@ namespace AMWin_RichPresence {
 
                     // check that the result actually is the song
                     if (searchResultTitle.ToLower() == songName.ToLower() && searchResultSubtitle.ToLower() == $"Song · {songArtist}".ToLower()) {
+                        return result;
+                    }
+                    // use album cover if can't find song
+                    if (searchResultTitle.ToLower() == songAlbum.ToLower() && searchResultSubtitle.ToLower() == $"Album · {songArtist}".ToLower()) {
                         return result;
                     }
                 }
@@ -307,13 +308,11 @@ namespace AMWin_RichPresence {
                     return GetLargestImageUrl(result);
                 }
 
-                // now search results for "Top Results" section
+                // now search results for "Top Results" section, including Albums section
                 result = await SearchTopResults();
                 if (result != null) {
                     return GetLargestImageUrl(result);
                 }
-
-                // TODO: search in "Albums" section?
                 return null;
             } catch (Exception ex) {
                 logger?.Log($"[GetAlbumArtUrlAppleMusic] An exception occurred: {ex}");
