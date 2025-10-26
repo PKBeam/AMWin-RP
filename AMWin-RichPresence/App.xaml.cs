@@ -136,6 +136,10 @@ namespace AMWin_RichPresence {
             discordClient.subtitleOptions = newVal;
         }
 
+        internal void UpdateRPPreviewDisplay(AppleMusicDiscordClient.RPPreviewDisplayOptions newVal) {
+            discordClient.previewOptions = newVal;
+        }
+
         internal async Task<bool> UpdateLastfmCreds() {
             return await lastFmScrobblerClient.UpdateCredsAsync(lastFmCredentials);
         }

@@ -51,9 +51,19 @@
                             <TextBlock VerticalAlignment="Center">Rich Presence subtitle</TextBlock>
                             <ComboBox Margin="8 0 0 0" x:Name="ComboBox_RPSubtitleChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPSubtitleChoice, Mode=TwoWay}" SelectionChanged="ComboBox_RPSubtitleChoice_SelectionChanged">
                                 <!-- The order of these items matters! (check the enum in AppleMusicDiscordClient.cs) -->
-                                <ComboBoxItem>Artist and album</ComboBoxItem>
                                 <ComboBoxItem>Artist only</ComboBoxItem>
+                                <ComboBoxItem>Artist and album</ComboBoxItem>
                                 <ComboBoxItem>Album only</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center">Rich Presence display</TextBlock>
+                            <ComboBox Margin="8 10 0 0" x:Name="ComboBox_RPDisplayChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPDisplayChoice, Mode=TwoWay}" SelectionChanged="ComboBox_RPDisplayChoice_SelectionChanged">
+                                <!-- The order of these items matters! (check the enum in AppleMusicDiscordClient.cs) -->
+                                <ComboBoxItem>RP subtitle</ComboBoxItem>
+                                <ComboBoxItem>"Apple Music"</ComboBoxItem>
+                                <ComboBoxItem>Song name</ComboBoxItem>
                             </ComboBox>
                         </StackPanel>
 

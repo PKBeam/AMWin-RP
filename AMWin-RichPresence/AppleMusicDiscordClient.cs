@@ -7,24 +7,40 @@ using DiscordRPC;
 
 internal class AppleMusicDiscordClient {
     public enum RPSubtitleDisplayOptions {
-        ArtistAlbum = 0, ArtistOnly = 1, AlbumOnly = 2
+        ArtistOnly = 0, ArtistAlbum = 1, AlbumOnly = 2
     }
 
     public static RPSubtitleDisplayOptions SubtitleOptionFromIndex(int i) {
         return (RPSubtitleDisplayOptions)i;
     }
 
+    public enum RPPreviewDisplayOptions {
+        Subtitle = 0, AppleMusic = 1, SongName = 2
+    }
+
+    public static RPPreviewDisplayOptions PreviewOptionFromIndex(int i) {
+        return (RPPreviewDisplayOptions)i;
+    }
+
     public RPSubtitleDisplayOptions subtitleOptions;
+    public RPPreviewDisplayOptions previewOptions;
     DiscordRpcClient? client;
     string discordClientID;
     bool enabled = false;
     Logger? logger;
     int maxStringLength = 127;
 
-    public AppleMusicDiscordClient(string discordClientID, bool enabled = true, RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistAlbum, Logger? logger = null) {
+    public AppleMusicDiscordClient(
+        string discordClientID, 
+        bool enabled = true,
+        RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistAlbum,
+        RPPreviewDisplayOptions previewOptions = RPPreviewDisplayOptions.Subtitle, 
+        Logger? logger = null
+    ) {
         this.discordClientID = discordClientID;
         this.enabled = enabled;
         this.subtitleOptions = subtitleOptions;
+        this.previewOptions = previewOptions;
         this.logger = logger;
 
         if (enabled) {
@@ -72,6 +88,20 @@ internal class AppleMusicDiscordClient {
                 subtitle = songAlbum;
                 break;
         }
+
+        var statusDisplay = StatusDisplayType.Details;
+        switch (previewOptions) {
+            case RPPreviewDisplayOptions.Subtitle:
+                statusDisplay = StatusDisplayType.State;
+                break;
+            case RPPreviewDisplayOptions.AppleMusic:
+                statusDisplay = StatusDisplayType.Name;
+                break;
+            case RPPreviewDisplayOptions.SongName:
+                statusDisplay = StatusDisplayType.Details;
+                break;
+        }
+
         if (ASCIIEncoding.Unicode.GetByteCount(subtitle) > 128) {
             // TODO fix this to account for multibyte unicode characters
             subtitle = subtitle.Substring(0, 60) + "...";
@@ -85,6 +115,7 @@ internal class AppleMusicDiscordClient {
                     LargeImageText = songAlbum
                 },
                 Type = ActivityType.Listening,
+                StatusDisplay = statusDisplay,
             };
             
             if (amInfo.SongUrl != null) {

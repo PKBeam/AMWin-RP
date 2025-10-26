@@ -87,6 +87,12 @@ namespace AMWin_RichPresence {
             ((App)Application.Current).UpdateRPSubtitleDisplay(newOption);
             SaveSettings();
         }
+        
+        private void ComboBox_RPDisplayChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var newOption = AppleMusicDiscordClient.PreviewOptionFromIndex(ComboBox_RPDisplayChoice.SelectedIndex);
+            ((App)Application.Current).UpdateRPPreviewDisplay(newOption);
+            SaveSettings();
+        }
 
         private void CheckBox_LastfmEnable_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
