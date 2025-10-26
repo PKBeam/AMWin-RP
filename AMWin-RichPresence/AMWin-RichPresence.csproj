@@ -8,7 +8,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\AMWinRP.ico</ApplicationIcon>
     <AssemblyVersion>1.0</AssemblyVersion>
-    <FileVersion>1.5.1</FileVersion>
+    <FileVersion>1.5.2</FileVersion>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <SupportedOSPlatformVersion>10.0.20348.0</SupportedOSPlatformVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -25,7 +25,7 @@
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
     <PackageReference Include="Inflatable.Lastfm" Version="1.2.0" />
-    <PackageReference Include="MetaBrainz.ListenBrainz" Version="5.0.0" />
+    <PackageReference Include="MetaBrainz.ListenBrainz" Version="4.0.0" />
     <PackageReference Include="SecureCredentialManagement" Version="1.0.2" />
     <PackageReference Include="System.Drawing.Common" Version="9.0.10" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
