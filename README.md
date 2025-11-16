@@ -22,7 +22,7 @@ There are two release files: the standard one and one marked as `NoRuntime`.
 If in doubt, use the unlabelled release (i.e. the one without `NoRuntime`).  
 This version works universally, but is larger in size because it bundles the components of .NET that are needed for the app to run.
 
-The `NoRuntime` release is much smaller, but requires you to have the [.NET 9.0 desktop runtime](https://dotnet.microsoft.com/en-us/download/dotnet/9.0) installed.  
+The `NoRuntime` release is much smaller, but requires you to have the [.NET 10.0 desktop runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) installed.  
 If you don't have this runtime installed, the app will prompt you to do it when it opens.
 
 ## Usage
