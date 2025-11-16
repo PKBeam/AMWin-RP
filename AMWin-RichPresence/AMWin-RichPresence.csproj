@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows10.0.20348.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.20348.0</TargetFramework>
     <RootNamespace>AMWin_RichPresence</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
@@ -26,10 +26,7 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
     <PackageReference Include="Inflatable.Lastfm" Version="1.2.0" />
     <PackageReference Include="MetaBrainz.ListenBrainz" Version="4.0.0" />
-    <PackageReference Include="SecureCredentialManagement" Version="1.0.2" />
-    <PackageReference Include="System.Drawing.Common" Version="9.0.10" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageReference Include="Meziantou.Framework.Win32.CredentialManager" Version="1.7.11" />
   </ItemGroup>
 
   <ItemGroup>

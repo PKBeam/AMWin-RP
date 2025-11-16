@@ -1,5 +1,4 @@
-﻿using CredentialManagement;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using Meziantou.Framework.Win32;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -166,14 +166,11 @@ namespace AMWin_RichPresence {
             //       but better than storing plain-text password in config file
             //       https://stackoverflow.com/questions/32548714/how-to-store-and-retrieve-credentials-on-windows-using-c-sharp
             try {
-                using (var cred = new SecureCredential()) {
-
-                    cred.SecurePassword = ConvertToSecureString(LastfmPassword.Password);
-                    cred.Target = Constants.LastFMCredentialTargetName;
-                    cred.Type = CredentialType.Generic;
-                    cred.PersistanceType = PersistanceType.LocalComputer;
-                    cred.Save();
-                }
+                CredentialManager.WriteCredential(
+                    applicationName: Constants.LastFMCredentialTargetName,
+                    userName: "",
+                    secret: LastfmPassword.Password,
+                    persistence: CredentialPersistence.LocalMachine);
             } catch (Exception ex) {
                 Trace.WriteLine(ex.Message);
                 Trace.WriteLine(ex.StackTrace);
@@ -203,32 +200,10 @@ namespace AMWin_RichPresence {
             // Close();
         }
 
-        private SecureString ConvertToSecureString(string password) {
-            var securePassword = new SecureString();
-
-            foreach (char c in password) securePassword.AppendChar(c);
-            securePassword.MakeReadOnly();
-            return securePassword;
-        }
-
         public static string GetLastFMPassword() {
             // Read the stored password from Windows Credential Manager and use it to log into Last.FM
-            try {
-                using (var cred = new SecureCredential()) {
-                    cred.Target = Constants.LastFMCredentialTargetName;
-                    cred.Load();
-                    return ToPlainString(cred.SecurePassword);
-                }
-            } catch (Exception ex) {
-                Trace.WriteLine(ex.Message);
-                Trace.WriteLine(ex.StackTrace);
-                return String.Empty;
-            }
-        }
-
-        public static String ToPlainString(System.Security.SecureString secureStr) {
-            String plainStr = new System.Net.NetworkCredential(string.Empty, secureStr).Password;
-            return plainStr;
+            var cred = CredentialManager.ReadCredential(applicationName: Constants.LastFMCredentialTargetName);
+            return cred?.Password ?? String.Empty;
         }
     }
 }
