@@ -11,11 +11,14 @@ namespace AMWin_RichPresence {
         private SettingsWindow? settingsWindow;
 
         private void ShowWindow() {
-            if (settingsWindow == null) {
+            try {
+                settingsWindow!.Show();
+                settingsWindow!.Focus();
+            } catch (Exception e) when (e is NullReferenceException || e is InvalidOperationException) {
                 settingsWindow = new SettingsWindow();
+                settingsWindow.Show();
+                settingsWindow.Focus();
             }
-            settingsWindow!.Show(); 
-            settingsWindow!.Focus();
         }
 
         internal void TaskbarIcon_DoubleClick(object sender, RoutedEventArgs e) {
