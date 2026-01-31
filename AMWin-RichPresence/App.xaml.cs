@@ -47,6 +47,7 @@ namespace AMWin_RichPresence {
             try {
                 logger = new Logger();
                 logger.Log("Application started");
+                logger.Log($"{Environment.OSVersion}");
             } catch {
                 logger = null;
             }
