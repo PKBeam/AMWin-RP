@@ -168,6 +168,10 @@ namespace AMWin_RichPresence {
                 }
             }
 
+            if (isMiniPlayer) {
+                logger?.Log("Using Mini Player");
+            }
+
             if (amSongPanel == null) {
                 logger?.Log("Apple Music song panel is not initialised or missing");
                 currentSong = null;
@@ -208,6 +212,14 @@ namespace AMWin_RichPresence {
 
             var songName = songNameElement.Name;
             var songAlbumArtist = songAlbumArtistElement.Name;
+
+            // the mini player doubles the album/artist string (when hovered over) to mimic an infinite scroll effect
+            if (isMiniPlayer) {
+                var deduped = DuduplicateSongAlbumArtistString(songAlbumArtist);
+                if (deduped != null) { 
+                    songAlbumArtist = deduped;
+                }
+            }
 
             string songArtist = "";
             string songAlbum = "";
@@ -413,6 +425,15 @@ namespace AMWin_RichPresence {
                 }
             }
             return new(songArtist, songAlbum, songPerformer);
+        }
+
+        private static string? DuduplicateSongAlbumArtistString(string s) {
+            string firstHalf = s.Substring(0, (s.Length + 1) / 2 - 1);
+            string secondHalf = s.Substring((s.Length + 1) / 2);
+            if (firstHalf == secondHalf) {
+                return firstHalf;
+            }
+            return null;
         }
     }
 }
