@@ -76,8 +76,9 @@ namespace AMWin_RichPresence {
 
             // start Discord RPC
             var subtitleOptions = (AppleMusicDiscordClient.RPSubtitleDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPSubtitleChoice;
+            var previewOptions = (AppleMusicDiscordClient.RPPreviewDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPDisplayChoice;
             var classicalComposerAsArtist = AMWin_RichPresence.Properties.Settings.Default.ClassicalComposerAsArtist;
-            discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, logger: logger);
+            discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, previewOptions: previewOptions, logger: logger);
 
             // start Last.FM scrobbler
             var amRegion = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion;
