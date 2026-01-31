@@ -173,52 +173,24 @@ namespace AMWin_RichPresence {
             if (lyrics == null || lyrics.Count == 0) return string.Empty;
 
             LyricLine? current = null;
-            LyricLine? nextNonEmpty = null;
-            int currentIndex = -1;
+            LyricLine? lastNonEmpty = null;
 
-            for (int i = 0; i < lyrics.Count; i++) {
-                if (lyrics[i].Time <= currentTime) {
-                    current = lyrics[i];
-                    currentIndex = i;
+            foreach (var line in lyrics) {
+                if (line.Time <= currentTime) {
+                    current = line;
+                    if (!string.IsNullOrWhiteSpace(line.Text)) {
+                        lastNonEmpty = line;
+                    }
                 } else {
                     break;
                 }
             }
 
-            if (current == null) return string.Empty;
-
-            // Find the next meaningful line
-            if (currentIndex != -1) {
-                for (int i = currentIndex + 1; i < lyrics.Count; i++) {
-                    if (!string.IsNullOrWhiteSpace(lyrics[i].Text)) {
-                        nextNonEmpty = lyrics[i];
-                        break;
-                    }
-                }
+            if (AMWin_RichPresence.Properties.Settings.Default.ExtendLyricsLine && current != null && string.IsNullOrWhiteSpace(current.Text)) {
+                return lastNonEmpty?.Text ?? string.Empty;
             }
 
-            var timeSinceLineStarted = currentTime - current.Time;
-            bool isExtendOn = AMWin_RichPresence.Properties.Settings.Default.ExtendLyricsLine;
-
-            // If we are on an empty line (instrumental/gap)
-            if (string.IsNullOrWhiteSpace(current.Text)) {
-                if (isExtendOn && nextNonEmpty != null) {
-                    return nextNonEmpty.Text; // Skip to next lyric early
-                }
-                return string.Empty;
-            }
-
-            // If the current line has been showing for too long (e.g. > 8 seconds)
-            // AND there's a significant gap until the next line
-            if (timeSinceLineStarted.TotalSeconds > 8 && nextNonEmpty != null) {
-                if (isExtendOn) {
-                    return nextNonEmpty.Text; // Jump to next lyric early
-                } else {
-                    return string.Empty; // Just clear it, singer is likely done with this line
-                }
-            }
-
-            return current.Text;
+            return current?.Text ?? string.Empty;
         }
     }
 }
