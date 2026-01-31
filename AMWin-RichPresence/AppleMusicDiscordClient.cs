@@ -60,7 +60,7 @@ internal class AppleMusicDiscordClient {
         }
     }
 
-    public void SetPresence(AppleMusicInfo amInfo, bool showSmallImage, bool showBigImage) {
+    public void SetPresence(AppleMusicInfo amInfo, bool showSmallImage, bool showBigImage, string? currentLyric = null, bool lyricsEnabled = false, bool instrumentalDots = false, bool hasLyrics = false) {
         if (!enabled) {
             return;
         }
@@ -69,6 +69,25 @@ internal class AppleMusicDiscordClient {
         var songSubtitle = amInfo.SongSubTitle.Length > maxStringLength ? amInfo.SongSubTitle.Replace(amInfo.SongArtist, GetTrimmedArtistList(amInfo)) : amInfo.SongSubTitle;
         var songArtist = amInfo.SongArtist.Length > maxStringLength ? GetTrimmedArtistList(amInfo) : amInfo.SongArtist;
         var songAlbum = TrimString(amInfo.SongAlbum);
+
+        // IF LYRICS ENABLED
+        if (lyricsEnabled && hasLyrics) {
+            if (!string.IsNullOrWhiteSpace(currentLyric)) {
+                // We have a lyric -> Show it
+                songAlbum = currentLyric;
+            } else {
+                // We have NO lyric or empty lyric -> Show placeholder if setting active
+                songAlbum = instrumentalDots ? "•••" : ""; 
+            }
+            
+            // Truncate to max length for safety
+            if (songAlbum.Length > 127) {
+                songAlbum = songAlbum.Substring(0, 125) + "...";
+            }
+        } else {
+            // IF LYRICS DISABLED or SONG HAS NO LYRICS
+            songAlbum = ""; 
+        }
 
         // hack to show 1-character song names
         while (songName.Length < 2) {
@@ -79,7 +98,11 @@ internal class AppleMusicDiscordClient {
         var subtitle = "";
         switch (subtitleOptions) {
             case RPSubtitleDisplayOptions.ArtistAlbum:
-                subtitle = songSubtitle;
+                if (string.IsNullOrEmpty(songAlbum)) {
+                    subtitle = songArtist;
+                } else {
+                    subtitle = $"{songArtist} - {songAlbum}";
+                }
                 break;
             case RPSubtitleDisplayOptions.ArtistOnly:
                 subtitle = songArtist;
@@ -104,7 +127,7 @@ internal class AppleMusicDiscordClient {
 
         if (ASCIIEncoding.Unicode.GetByteCount(subtitle) > 128) {
             // TODO fix this to account for multibyte unicode characters
-            subtitle = subtitle.Substring(0, 60) + "...";
+            subtitle = subtitle.Substring(0, 123) + "...";
         }
         try {
             var rp = new RichPresence() {
@@ -112,15 +135,21 @@ internal class AppleMusicDiscordClient {
                 State = subtitle,
                 Assets = new Assets() {
                     LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey,
-                    LargeImageText = songAlbum
+                    LargeImageText = string.IsNullOrWhiteSpace(songAlbum) ? null : songAlbum
                 },
                 Type = ActivityType.Listening,
                 StatusDisplay = statusDisplay,
             };
             
             if (amInfo.SongUrl != null) {
+                string buttonLabel = "♫ Listen on Apple Music";
+                int langIndex = AMWin_RichPresence.Properties.Settings.Default.ButtonLanguage;
+                if (langIndex == 1) { // Turkish
+                    buttonLabel = "♫ Apple Music'de Dinle";
+                }
+
                 rp.Buttons = [new() {
-                    Label = "Listen on Apple Music", 
+                    Label = buttonLabel, 
                     Url = amInfo.SongUrl
                 }];
             }
@@ -140,7 +169,7 @@ internal class AppleMusicDiscordClient {
                 logger?.Log($"Tried to set Discord RP, but no client");
             } else {
                 client.SetPresence(rp);
-                logger?.Log($"Set Discord RP to:\n{amInfo}");
+                // logger?.Log($"Set Discord RP to:\n{amInfo}");
             }
 
         } catch (Exception ex) {

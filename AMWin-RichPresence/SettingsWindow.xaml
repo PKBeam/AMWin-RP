@@ -67,6 +67,20 @@
                             </ComboBox>
                         </StackPanel>
 
+                        <TextBlock FontSize="16" FontWeight="Bold" Padding="0 8 0 0" Margin="0 5 0 5" VerticalAlignment="Top">Lyrics</TextBlock>
+                        <CheckBox x:Name="CheckBox_ShowLyrics" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowLyrics, Mode=TwoWay}" Click="CheckBox_ShowLyrics_Click" Content="Show lyrics in Discord status"/>
+                        <CheckBox x:Name="CheckBox_EnstrumentalDots" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnstrumentalDots, Mode=TwoWay}" Click="CheckBox_EnstrumentalDots_Click" Content="Instrumental dots (•••)"/>
+                        <CheckBox x:Name="CheckBox_ExtendLyrics" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ExtendLyrics, Mode=TwoWay}" Click="CheckBox_ExtendLyrics_Click" Content="Keep last lyric visible (no empty lines)"/>
+                        <Button x:Name="Button_ResetLyricsCache" Content="Reset Lyrics Cache" Margin="0 5 0 0" Click="Button_ResetLyricsCache_Click" HorizontalAlignment="Left" Padding="10 2"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                            <TextBlock VerticalAlignment="Center">Button language</TextBlock>
+                            <ComboBox Margin="8 0 0 0" x:Name="ComboBox_ButtonLanguage" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=ButtonLanguage, Mode=TwoWay}" SelectionChanged="ComboBox_ButtonLanguage_SelectionChanged">
+                                <ComboBoxItem>English</ComboBoxItem>
+                                <ComboBoxItem>Turkish</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+
                         <TextBlock FontWeight="Bold" Padding="0 16 0 0" Margin="0 5 0 5" FontSize="16">Scrobbling settings</TextBlock>
 
                         <CheckBox x:Name="CheckBox_LastfmCleanAlbumName" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmCleanAlbumName, Mode=TwoWay}" Click="CheckBox_LastfmCleanAlbumName_Click" Content="Clean album name"/>

@@ -29,6 +29,10 @@ namespace AMWin_RichPresence {
             ShowWindow();
         }
 
+        internal void MenuItemLyrics_Click(object sender, RoutedEventArgs e) {
+            ((App)Application.Current).ToggleLyricsWindow();
+        }
+
         internal void MenuItemExit_Click(object sender, RoutedEventArgs e) {
             Application.Current.Shutdown();
         }

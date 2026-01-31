@@ -110,6 +110,42 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
+        private void CheckBox_ShowLyrics_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
+        private void CheckBox_EnstrumentalDots_Click(object sender, RoutedEventArgs e) {
+            if (CheckBox_EnstrumentalDots.IsChecked == true) {
+                Properties.Settings.Default.ExtendLyrics = false;
+                CheckBox_ExtendLyrics.IsChecked = false;
+            }
+            SaveSettings();
+        }
+
+        private void CheckBox_ExtendLyrics_Click(object sender, RoutedEventArgs e) {
+            if (CheckBox_ExtendLyrics.IsChecked == true) {
+                Properties.Settings.Default.EnstrumentalDots = false;
+                CheckBox_EnstrumentalDots.IsChecked = false;
+            }
+            SaveSettings();
+        }
+
+        private void Button_ResetLyricsCache_Click(object sender, RoutedEventArgs e) {
+            string cacheDir = System.IO.Path.Combine(Constants.AppDataFolder, "LyricsCache");
+            if (Directory.Exists(cacheDir)) {
+                try {
+                    Directory.Delete(cacheDir, true);
+                    MessageBox.Show("Lyrics cache has been reset.", "Cache Reset", MessageBoxButton.OK, MessageBoxImage.Information);
+                } catch (Exception ex) {
+                    MessageBox.Show($"Could not reset cache: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void ComboBox_ButtonLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            SaveSettings();
+        }
+
         private void CheckBox_ScrobblePreferAppleMusicWebDuration_Checked(object sender, RoutedEventArgs e) {
             SaveSettings();
         }

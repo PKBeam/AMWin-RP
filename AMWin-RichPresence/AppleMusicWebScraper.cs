@@ -370,14 +370,16 @@ namespace AMWin_RichPresence {
             try {
                 var result = await SearchSongs();
                 if (result != null) {
-                    var searchResultUrl = result
+                    var li = result
                         .Descendants("li")
-                        .First(x => x.Attributes["class"].Value.Contains("track-lockup__title"))
-                        .Descendants("a")
-                        .First()
-                        .Attributes["href"]
-                        .Value;
+                        .FirstOrDefault(x => x.Attributes.Contains("class") && x.Attributes["class"].Value.Contains("track-lockup__title"));
+                    
+                    if (li == null) return null;
 
+                    var a = li.Descendants("a").FirstOrDefault();
+                    if (a == null || !a.Attributes.Contains("href")) return null;
+
+                    var searchResultUrl = a.Attributes["href"].Value;
                     return await GetSongDurationFromAlbumPage(searchResultUrl);
                 }
                 return null;
@@ -391,10 +393,24 @@ namespace AMWin_RichPresence {
             try {
                 var desc = doc.DocumentNode
                     .Descendants("meta")
-                    .First(x => x.Attributes.Contains("property") && x.Attributes["property"].Value == "og:description");
+                    .FirstOrDefault(x => x.Attributes.Contains("name") && x.Attributes["name"].Value == "description")
+                    ?? doc.DocumentNode
+                    .Descendants("meta")
+                    .FirstOrDefault(x => x.Attributes.Contains("property") && x.Attributes["property"].Value == "og:description");
+
+                if (desc == null || !desc.Attributes.Contains("content")) {
+                    return null;
+                }
 
                 var str = desc.Attributes["content"].Value;
-                var duration = DurationRegex.Matches(str).First().Value;
+                var matches = DurationRegex.Matches(str);
+                if (matches.Count == 0) {
+                    return null;
+                }
+                
+                // If there are multiple matches (e.g. song name is "10:35"), 
+                // the actual duration is almost always the LAST one in the description meta tag.
+                var duration = matches.Last().Value;
 
                 // check that the result actually is the song
                 if (HttpUtility.HtmlDecode(str).Contains(songName)) {

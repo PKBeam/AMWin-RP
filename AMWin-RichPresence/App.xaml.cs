@@ -41,6 +41,11 @@ namespace AMWin_RichPresence {
             }
         }
 
+        private LyricsClient lyricsClient;
+        private LyricsWindow? lyricsWindow;
+        private List<LrcLine> currentLyrics = new List<LrcLine>();
+        private string? lastSongId = null;
+
         public App() {
 
             // make logger
@@ -80,6 +85,9 @@ namespace AMWin_RichPresence {
             var classicalComposerAsArtist = AMWin_RichPresence.Properties.Settings.Default.ClassicalComposerAsArtist;
             discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, previewOptions: previewOptions, logger: logger);
 
+            // start lyrics client
+            lyricsClient = new LyricsClient(logger);
+
             // start Last.FM scrobbler
             var amRegion = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion;
             lastFmScrobblerClient = new AppleMusicLastFmScrobbler(region: amRegion, logger: logger);
@@ -95,15 +103,44 @@ namespace AMWin_RichPresence {
             _ = listenBrainzScrobblerClient.init(listenBrainzCredentials);
 
             // start Apple Music scraper
-            amScraper = new(lastFMApiKey, Constants.RefreshPeriod, classicalComposerAsArtist, AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion, (newInfo) => {
+            amScraper = new(lastFMApiKey, Constants.RefreshPeriod, classicalComposerAsArtist, AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion, async (newInfo) => {
 
                 // don't update scraper if Apple Music is paused or not open
                 if (newInfo != null && (AMWin_RichPresence.Properties.Settings.Default.ShowRPWhenMusicPaused || !newInfo.IsPaused)) {
 
+                    // LYRICS FETCHING
+                    string songId = $"{newInfo.SongName}-{newInfo.SongArtist}";
+                    if (songId != lastSongId) {
+                        lastSongId = songId;
+                        currentLyrics = await lyricsClient.GetLyrics(newInfo.SongName, newInfo.SongArtist, newInfo.SongAlbum, newInfo.SongDuration);
+                        
+                        if (lyricsWindow != null) {
+                            if (currentLyrics.Count > 0) {
+                                lyricsWindow.SetLyrics(currentLyrics);
+                            } else {
+                                lyricsWindow.SetStatus("No lyrics found for this song.");
+                            }
+                        }
+                    }
+
+                    // Update Lyrics Window if open
+                    if (lyricsWindow != null && newInfo.CurrentTime != null) {
+                        lyricsWindow.UpdateLyrics(newInfo.CurrentTime.Value);
+                    }
+
                     // Discord RP update
                     if (AMWin_RichPresence.Properties.Settings.Default.EnableDiscordRP) {
                         discordClient.Enable();
-                        discordClient.SetPresence(newInfo, AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon, AMWin_RichPresence.Properties.Settings.Default.EnableRPCoverImages);
+                        string? lyric = GetCurrentLyric(newInfo, AMWin_RichPresence.Properties.Settings.Default.ExtendLyrics);
+                        discordClient.SetPresence(
+                            newInfo, 
+                            AMWin_RichPresence.Properties.Settings.Default.ShowAppleMusicIcon, 
+                            AMWin_RichPresence.Properties.Settings.Default.EnableRPCoverImages,
+                            lyric,
+                            AMWin_RichPresence.Properties.Settings.Default.ShowLyrics,
+                            AMWin_RichPresence.Properties.Settings.Default.EnstrumentalDots,
+                            currentLyrics.Count > 0
+                        );
                     } else {
                         discordClient.Disable();
                     }
@@ -119,8 +156,36 @@ namespace AMWin_RichPresence {
                     }
                 } else {
                     discordClient.Disable();
+                    if (lyricsWindow != null) lyricsWindow.SetStatus("Music paused.");
                 }
             }, logger);
+        }
+
+        private string? GetCurrentLyric(AppleMusicInfo newInfo, bool extendLyrics = false) {
+             if (currentLyrics.Count == 0 || newInfo.CurrentTime == null) return null;
+
+             TimeSpan current = TimeSpan.FromSeconds(newInfo.CurrentTime.Value); 
+             
+             if (extendLyrics) {
+                 // Find the last NON-EMPTY line that matches the time criteria
+                 var line = currentLyrics.LastOrDefault(l => l.Time <= current && !string.IsNullOrWhiteSpace(l.Text));
+                 return line?.Text;
+             } else {
+                 // Normal behavior: get the last line (might be empty)
+                 var line = currentLyrics.LastOrDefault(l => l.Time <= current);
+                 return line?.Text;
+             }
+        }
+
+        public void ToggleLyricsWindow() {
+            if (lyricsWindow == null) {
+                lyricsWindow = new LyricsWindow();
+                lyricsWindow.Closed += (s, e) => lyricsWindow = null;
+                lyricsWindow.SetLyrics(currentLyrics);
+                lyricsWindow.Show();
+            } else {
+                lyricsWindow.Close();
+            }
         }
 
         protected override void OnStartup(StartupEventArgs e) {

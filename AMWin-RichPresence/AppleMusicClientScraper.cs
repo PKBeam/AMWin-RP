@@ -290,6 +290,12 @@ namespace AMWin_RichPresence {
 
                 currentSong.PlaybackStart = DateTime.UtcNow - new TimeSpan(0, 0, currentTime ?? 0);
                 currentSong.PlaybackEnd = DateTime.UtcNow + new TimeSpan(0, 0, remainingDuration ?? 0);
+                
+                // If we have both, we can calculate the total duration and set it immediately
+                // This is much faster and more accurate than web scraping for new songs or songs with time-like names.
+                if (currentTime != null && remainingDuration != null) {
+                    currentSong.SongDuration = currentTime.Value + remainingDuration.Value;
+                }
             }
 
             // potentially slow HTTP request

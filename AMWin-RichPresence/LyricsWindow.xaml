@@ -1,0 +1,12 @@
+<Window x:Class="AMWin_RichPresence.LyricsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2000/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2000/xaml"
+        Title="Lyrics" Height="450" Width="400" Background="#111" Topmost="True">
+    <Grid Margin="20">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock x:Name="TextBlock_Prev" Text="" Foreground="#555" FontSize="16" TextAlignment="Center" Margin="0 0 0 10"/>
+            <TextBlock x:Name="TextBlock_Current" Text="Fetching lyrics..." Foreground="#FFF" FontSize="24" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap"/>
+            <TextBlock x:Name="TextBlock_Next" Text="" Foreground="#555" FontSize="16" TextAlignment="Center" Margin="10 10 0 0"/>
+        </StackPanel>
+    </Grid>
+</Window>

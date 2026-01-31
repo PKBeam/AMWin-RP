@@ -262,5 +262,52 @@ namespace AMWin_RichPresence.Properties {
                 this["RPDisplayChoice"] = value;
             }
         }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowLyrics {
+            get {
+                return ((bool)(this["ShowLyrics"]));
+            }
+            set {
+                this["ShowLyrics"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ButtonLanguage {
+            get {
+                return ((int)(this["ButtonLanguage"]));
+            }
+            set {
+                this["ButtonLanguage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnstrumentalDots {
+            get {
+                return ((bool)(this["EnstrumentalDots"]));
+            }
+            set {
+                this["EnstrumentalDots"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ExtendLyrics {
+            get {
+                return ((bool)(this["ExtendLyrics"]));
+            }
+            set {
+                this["ExtendLyrics"] = value;
+            }
+        }
     }
 }
