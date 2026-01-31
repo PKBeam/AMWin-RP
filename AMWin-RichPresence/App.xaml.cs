@@ -75,7 +75,7 @@ namespace AMWin_RichPresence {
             }
 
             // start Discord RPC
-            var subtitleOptions = (AppleMusicDiscordClient.RPSubtitleDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPSubtitleChoice;
+            var subtitleOptions = AppleMusicDiscordClient.RPSubtitleDisplayOptions.ArtistOnly;
             var previewOptions = (AppleMusicDiscordClient.RPPreviewDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPDisplayChoice;
             var classicalComposerAsArtist = AMWin_RichPresence.Properties.Settings.Default.ClassicalComposerAsArtist;
             discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, previewOptions: previewOptions, logger: logger);
@@ -134,9 +134,6 @@ namespace AMWin_RichPresence {
             logger?.Log("Application finished");
         }
 
-        internal void UpdateRPSubtitleDisplay(AppleMusicDiscordClient.RPSubtitleDisplayOptions newVal) {
-            discordClient.subtitleOptions = newVal;
-        }
 
         internal void UpdateRPPreviewDisplay(AppleMusicDiscordClient.RPPreviewDisplayOptions newVal) {
             discordClient.previewOptions = newVal;

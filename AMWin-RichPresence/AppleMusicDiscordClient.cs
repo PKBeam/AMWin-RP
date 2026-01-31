@@ -29,11 +29,12 @@ internal class AppleMusicDiscordClient {
     bool enabled = false;
     Logger? logger;
     int maxStringLength = 127;
+    string songLyrics = string.Empty;
 
     public AppleMusicDiscordClient(
         string discordClientID, 
         bool enabled = true,
-        RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistAlbum,
+        RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistOnly,
         RPPreviewDisplayOptions previewOptions = RPPreviewDisplayOptions.Subtitle, 
         Logger? logger = null
     ) {
@@ -106,21 +107,29 @@ internal class AppleMusicDiscordClient {
             // TODO fix this to account for multibyte unicode characters
             subtitle = subtitle.Substring(0, 60) + "...";
         }
+        // update lyrics
+        songLyrics = string.Empty;
+        if (amInfo.SyncedLyrics != null && AMWin_RichPresence.Properties.Settings.Default.EnableSyncLyrics) {
+            var currentTime = amInfo.CurrentTime != null ? TimeSpan.FromSeconds((int)amInfo.CurrentTime) : (DateTime.UtcNow - (amInfo.PlaybackStart ?? DateTime.UtcNow));
+            songLyrics = LRCLibClient.GetCurrentLyric(amInfo.SyncedLyrics, currentTime);
+        }
+
         try {
             var rp = new RichPresence() {
                 Details = songName,
                 State = subtitle,
                 Assets = new Assets() {
                     LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey,
-                    LargeImageText = songAlbum
+                    LargeImageText = !string.IsNullOrEmpty(songLyrics) ? songLyrics : null
                 },
                 Type = ActivityType.Listening,
                 StatusDisplay = statusDisplay,
             };
             
             if (amInfo.SongUrl != null) {
+                var buttonLabel = AMWin_RichPresence.Properties.Settings.Default.RPCButtonLanguage == 1 ? "Apple Music'de Dinle" : "Listen on Apple Music";
                 rp.Buttons = [new() {
-                    Label = "Listen on Apple Music", 
+                    Label = buttonLabel, 
                     Url = amInfo.SongUrl
                 }];
             }

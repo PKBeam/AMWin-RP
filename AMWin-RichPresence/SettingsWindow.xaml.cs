@@ -82,16 +82,52 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
-        private void ComboBox_RPSubtitleChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            var newOption = AppleMusicDiscordClient.SubtitleOptionFromIndex(ComboBox_RPSubtitleChoice.SelectedIndex);
-            ((App)Application.Current).UpdateRPSubtitleDisplay(newOption);
-            SaveSettings();
-        }
-        
         private void ComboBox_RPDisplayChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var newOption = AppleMusicDiscordClient.PreviewOptionFromIndex(ComboBox_RPDisplayChoice.SelectedIndex);
             ((App)Application.Current).UpdateRPPreviewDisplay(newOption);
             SaveSettings();
+        }
+
+        private void ComboBox_RPCButtonLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            SaveSettings();
+        }
+
+        private void CheckBox_EnableSyncLyrics_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
+        private void CheckBox_ExtendLyricsLine_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
+        private void Button_OpenLyricCache_Click(object sender, RoutedEventArgs e) {
+            var path = Path.Combine(Constants.AppDataFolder, "LyricCache");
+            if (!Directory.Exists(path)) {
+                Directory.CreateDirectory(path);
+            }
+            Process.Start(new ProcessStartInfo {
+                FileName = path,
+                UseShellExecute = true
+            });
+        }
+
+        private void Button_DeleteLyricCache_Click(object sender, RoutedEventArgs e) {
+            var path = Path.Combine(Constants.AppDataFolder, "LyricCache");
+            if (Directory.Exists(path)) {
+                var result = MessageBox.Show("Are you sure you want to delete all saved lyrics?", "Delete Saved Lyrics", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes) {
+                    try {
+                        foreach (var file in Directory.GetFiles(path)) {
+                            File.Delete(file);
+                        }
+                        MessageBox.Show("All saved lyrics have been deleted.", "Lyrics Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
+                    } catch (Exception ex) {
+                        MessageBox.Show($"Could not delete lyrics: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            } else {
+                MessageBox.Show("No saved lyrics found.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void CheckBox_LastfmEnable_Click(object sender, RoutedEventArgs e) {
