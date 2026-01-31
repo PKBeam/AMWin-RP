@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows10.0.20348.0</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.20348.0</TargetFramework>
     <RootNamespace>AMWin_RichPresence</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\AMWinRP.ico</ApplicationIcon>
     <AssemblyVersion>1.0</AssemblyVersion>
-    <FileVersion>1.5.2</FileVersion>
+    <FileVersion>1.5.3</FileVersion>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <SupportedOSPlatformVersion>10.0.20348.0</SupportedOSPlatformVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
