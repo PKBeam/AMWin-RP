@@ -8,12 +8,10 @@ Also includes scrobbling for Last.FM and ListenBrainz.
 &nbsp; &nbsp; 
 <image src=https://github.com/user-attachments/assets/ea63ddf1-d822-4ffd-be9d-24e13701fce9 width=300 />
 
-
-
 ## Installation
-AMWin-RP requires Windows 10 21H1 or later.  
+AMWin-RP requires Windows 11 24H2 or later.
 
-Releases can be found [here](https://github.com/PKBeam/AMWin-RP/releases).  
+Builds for x64 and ARM64 can be found [here](https://github.com/PKBeam/AMWin-RP/releases).  
 Download the package, unzip it and place the contents somewhere safe.  
 
 ### Which release do I use?
