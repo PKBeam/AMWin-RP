@@ -42,7 +42,6 @@ namespace AMWin_RichPresence {
         }
 
         private LyricsClient lyricsClient;
-        private LyricsWindow? lyricsWindow;
         private List<LrcLine> currentLyrics = new List<LrcLine>();
         private string? lastSongId = null;
 
@@ -108,24 +107,10 @@ namespace AMWin_RichPresence {
                 // don't update scraper if Apple Music is paused or not open
                 if (newInfo != null && (AMWin_RichPresence.Properties.Settings.Default.ShowRPWhenMusicPaused || !newInfo.IsPaused)) {
 
-                    // LYRICS FETCHING
                     string songId = $"{newInfo.SongName}-{newInfo.SongArtist}";
                     if (songId != lastSongId) {
                         lastSongId = songId;
                         currentLyrics = await lyricsClient.GetLyrics(newInfo.SongName, newInfo.SongArtist, newInfo.SongAlbum, newInfo.SongDuration);
-                        
-                        if (lyricsWindow != null) {
-                            if (currentLyrics.Count > 0) {
-                                lyricsWindow.SetLyrics(currentLyrics);
-                            } else {
-                                lyricsWindow.SetStatus("No lyrics found for this song.");
-                            }
-                        }
-                    }
-
-                    // Update Lyrics Window if open
-                    if (lyricsWindow != null && newInfo.CurrentTime != null) {
-                        lyricsWindow.UpdateLyrics(newInfo.CurrentTime.Value);
                     }
 
                     // Discord RP update
@@ -156,7 +141,6 @@ namespace AMWin_RichPresence {
                     }
                 } else {
                     discordClient.Disable();
-                    if (lyricsWindow != null) lyricsWindow.SetStatus("Music paused.");
                 }
             }, logger);
         }
@@ -175,17 +159,6 @@ namespace AMWin_RichPresence {
                  var line = currentLyrics.LastOrDefault(l => l.Time <= current);
                  return line?.Text;
              }
-        }
-
-        public void ToggleLyricsWindow() {
-            if (lyricsWindow == null) {
-                lyricsWindow = new LyricsWindow();
-                lyricsWindow.Closed += (s, e) => lyricsWindow = null;
-                lyricsWindow.SetLyrics(currentLyrics);
-                lyricsWindow.Show();
-            } else {
-                lyricsWindow.Close();
-            }
         }
 
         protected override void OnStartup(StartupEventArgs e) {

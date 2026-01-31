@@ -130,18 +130,6 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
-        private void Button_ResetLyricsCache_Click(object sender, RoutedEventArgs e) {
-            string cacheDir = System.IO.Path.Combine(Constants.AppDataFolder, "LyricsCache");
-            if (Directory.Exists(cacheDir)) {
-                try {
-                    Directory.Delete(cacheDir, true);
-                    MessageBox.Show("Lyrics cache has been reset.", "Cache Reset", MessageBoxButton.OK, MessageBoxImage.Information);
-                } catch (Exception ex) {
-                    MessageBox.Show($"Could not reset cache: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
         private void ComboBox_ButtonLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             SaveSettings();
         }

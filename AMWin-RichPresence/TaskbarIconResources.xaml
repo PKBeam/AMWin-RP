@@ -6,8 +6,6 @@
     <ContextMenu x:Shared="false" x:Key="SysTrayMenu">
         <MenuItem Header="AMWin-RP" IsEnabled="False"/>
         <Separator />
-        <MenuItem Header="Lyrics Window" Click="MenuItemLyrics_Click"/>
-        <Separator />
         <MenuItem Header="Settings" Click="MenuItemSettings_Click"/>
         <Separator />
         <MenuItem Header="Exit" Click="MenuItemExit_Click"/>
