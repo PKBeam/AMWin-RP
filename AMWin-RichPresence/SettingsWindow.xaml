@@ -66,7 +66,7 @@
                             </ComboBox>
                         </StackPanel>
 
-                        <TextBlock FontSize="16" FontWeight="Bold" Padding="0 8 0 0" Margin="0 5 0 5" VerticalAlignment="Top">Lyrics setting</TextBlock>
+                        <TextBlock FontSize="16" FontWeight="Bold" Padding="0 8 0 0" Margin="0 5 0 5" VerticalAlignment="Top">Lyrics settings</TextBlock>
 
                         <CheckBox x:Name="CheckBox_EnableSyncLyrics" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableSyncLyrics, Mode=TwoWay}" Click="CheckBox_EnableSyncLyrics_Click" Content="Enable sync lyrics"/>
 
