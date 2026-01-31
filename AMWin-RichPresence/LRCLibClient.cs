@@ -45,6 +45,20 @@ namespace AMWin_RichPresence {
         }
 
         public async Task<LyricResult?> GetSyncedLyrics(string title, string artist, int? durationSeconds = null) {
+            var result = await SearchAndCacheLyrics(title, artist, durationSeconds);
+            if (result != null) return result;
+
+            // Fallback: try with only the primary artist if the full list fails
+            string primaryArtist = GetPrimaryArtist(artist);
+            if (primaryArtist != artist) {
+                logger?.Log($"[LRCLib] Full artist search failed. Retrying with primary artist: {primaryArtist}");
+                return await SearchAndCacheLyrics(title, primaryArtist, durationSeconds);
+            }
+
+            return null;
+        }
+
+        private async Task<LyricResult?> SearchAndCacheLyrics(string title, string artist, int? durationSeconds) {
             var cacheFile = Path.Combine(CacheFolder, GetCacheFileName(title, artist));
             
             // Check local cache first
@@ -74,7 +88,6 @@ namespace AMWin_RichPresence {
                 var results = JsonDocument.Parse(response).RootElement;
 
                 if (results.ValueKind != JsonValueKind.Array || results.GetArrayLength() == 0) {
-                    logger?.Log("[LRCLib] No lyrics found.");
                     return null;
                 }
 
@@ -119,6 +132,20 @@ namespace AMWin_RichPresence {
                 logger?.Log($"[LRCLib] Error fetching lyrics: {ex.Message}");
                 return null;
             }
+        }
+
+        private static string GetPrimaryArtist(string artist) {
+            if (string.IsNullOrWhiteSpace(artist)) return artist;
+            // Split by common separators and return the first part
+            var separators = new[] { " & ", " , ", ",", " feat. ", " ft. ", " / " };
+            string primary = artist;
+            foreach (var sep in separators) {
+                int index = primary.IndexOf(sep, StringComparison.OrdinalIgnoreCase);
+                if (index > 0) {
+                    primary = primary.Substring(0, index);
+                }
+            }
+            return primary.Trim();
         }
 
         private List<LyricLine> ParseLrc(string lrcContent) {
