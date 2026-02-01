@@ -287,16 +287,5 @@ namespace AMWin_RichPresence.Properties {
             }
         }
 
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int RPCButtonLanguage {
-            get {
-                return ((int)(this["RPCButtonLanguage"]));
-            }
-            set {
-                this["RPCButtonLanguage"] = value;
-            }
-        }
     }
 }

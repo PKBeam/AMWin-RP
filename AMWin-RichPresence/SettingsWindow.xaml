@@ -58,13 +58,6 @@
                             </ComboBox>
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center">RPC Button language</TextBlock>
-                            <ComboBox Margin="8 10 0 0" x:Name="ComboBox_RPCButtonLanguage" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPCButtonLanguage, Mode=TwoWay}" SelectionChanged="ComboBox_RPCButtonLanguage_SelectionChanged">
-                                <ComboBoxItem>English</ComboBoxItem>
-                                <ComboBoxItem>Turkish</ComboBoxItem>
-                            </ComboBox>
-                        </StackPanel>
 
                         <TextBlock FontSize="16" FontWeight="Bold" Padding="0 8 0 0" Margin="0 5 0 5" VerticalAlignment="Top">Lyrics settings</TextBlock>
 

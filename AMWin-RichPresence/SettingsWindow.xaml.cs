@@ -88,9 +88,6 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
-        private void ComboBox_RPCButtonLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            SaveSettings();
-        }
 
         private void CheckBox_EnableSyncLyrics_Click(object sender, RoutedEventArgs e) {
             SaveSettings();

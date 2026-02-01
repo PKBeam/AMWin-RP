@@ -65,9 +65,6 @@
     <Setting Name="EnableSyncLyrics" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="RPCButtonLanguage" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="ExtendLyricsLine" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>

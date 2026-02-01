@@ -127,7 +127,7 @@ internal class AppleMusicDiscordClient {
             };
             
             if (amInfo.SongUrl != null) {
-                var buttonLabel = AMWin_RichPresence.Properties.Settings.Default.RPCButtonLanguage == 1 ? "Apple Music'de Dinle" : "Listen on Apple Music";
+                var buttonLabel = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion.Equals("tr", StringComparison.OrdinalIgnoreCase) ? "Apple Music'de Dinle" : "Listen on Apple Music";
                 rp.Buttons = [new() {
                     Label = buttonLabel, 
                     Url = amInfo.SongUrl
