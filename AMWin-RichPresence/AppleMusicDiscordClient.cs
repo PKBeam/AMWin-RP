@@ -119,8 +119,10 @@ internal class AppleMusicDiscordClient {
                 Details = songName,
                 State = subtitle,
                 Assets = new Assets() {
-                    LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey,
-                    LargeImageText = !string.IsNullOrWhiteSpace(songLyrics) ? songLyrics : (AMWin_RichPresence.Properties.Settings.Default.EnableAlbumInfo ? songAlbum : null)
+                    LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey ?? "",
+                    LargeImageText = (!string.IsNullOrWhiteSpace(songLyrics) ? songLyrics : (AMWin_RichPresence.Properties.Settings.Default.EnableAlbumInfo ? songAlbum : "")) ?? "",
+                    SmallImageKey = "",
+                    SmallImageText = ""
                 },
                 Type = ActivityType.Listening,
                 StatusDisplay = statusDisplay,
@@ -135,9 +137,9 @@ internal class AppleMusicDiscordClient {
             }
 
             if (amInfo.IsPaused) {
-                rp.Assets.SmallImageKey = Constants.DiscordAppleMusicPauseImageKey;
+                rp.Assets.SmallImageKey = Constants.DiscordAppleMusicPauseImageKey ?? "";
             } else if (showSmallImage) {
-                rp.Assets.SmallImageKey = (!showBigImage || amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey;
+                rp.Assets.SmallImageKey = ((!showBigImage || amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey) ?? "";
             }
 
             // add timestamps, if they're there
