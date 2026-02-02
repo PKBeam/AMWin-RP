@@ -133,14 +133,14 @@ internal class AppleMusicDiscordClient {
 
             if (amInfo.SongUrl != null) {
                 buttons.Add(new Button() {
-                    Label = Localization.IsTurkish ? Localization.Get("Apple Music'de Dinle") : Localization.Get("Listen on Apple Music"),
+                    Label = Localization.Get("Listen on Apple Music"),
                     Url = amInfo.SongUrl
                 });
             }
 
             if (amInfo.ArtistUrl != null) {
                 buttons.Add(new Button() {
-                    Label = Localization.IsTurkish ? Localization.Get("Sanatçıyı Görüntüle") : Localization.Get("View Artist"),
+                    Label = Localization.Get("View Artist"),
                     Url = amInfo.ArtistUrl
                 });
             }

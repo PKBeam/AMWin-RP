@@ -67,10 +67,8 @@ namespace AMWin_RichPresence {
                 ["The ListenBrainz credentials were successfully authenticated."] = "ListenBrainz kimlik bilgileri başarıyla doğrulandı.",
                 ["ListenBrainz Authentication"] = "ListenBrainz Doğrulaması",
                 ["The ListenBrainz credentials could not be authenticated. Please make sure you have entered the correct user token."] = "ListenBrainz kimlik bilgileri doğrulanamadı. Lütfen kullanıcı tokeninizi doğru girdiğinizden emin olun.",
-                ["Apple Music'de Dinle"] = "Apple Music'de Dinle", // Default for TR
-                ["Listen on Apple Music"] = "Listen on Apple Music",
-                ["Sanatçıyı Görüntüle"] = "Sanatçıyı Görüntüle",
-                ["View Artist"] = "View Artist"
+                ["Listen on Apple Music"] = "Apple Music'de Dinle",
+                ["View Artist"] = "Sanatçıyı Görüntüle"
             }
         };
 
