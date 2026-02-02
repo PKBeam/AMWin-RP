@@ -27,13 +27,13 @@ namespace AMWin_RichPresence {
         }
 
         private void LocalizeUI() {
-            bool isTurkish = Properties.Settings.Default.AppleMusicRegion.Equals("tr", StringComparison.OrdinalIgnoreCase);
+            bool isTurkish = Localization.CurrentRegion == "tr";
             
             this.Title = isTurkish ? "AMWin-RichPresence Ayarlar" : "AMWin-RichPresence Settings";
 
-            CheckBox_RunOnStartup.Content = isTurkish ? "Windows başladığında çalıştır" : "Run when Windows starts";
-            CheckBox_CheckForUpdatesOnStartup.Content = isTurkish ? "Açılışta güncellemeleri kontrol et" : "Check for updates on startup";
-            CheckBox_ClassicalComposerAsArtist.Content = isTurkish ? "Besteciyi sanatçı olarak kabul et" : "Treat composer as artist";
+            CheckBox_RunOnStartup.Content = Localization.Get("Run when Windows starts");
+            CheckBox_CheckForUpdatesOnStartup.Content = Localization.Get("Check for updates on startup");
+            CheckBox_ClassicalComposerAsArtist.Content = Localization.Get("Treat composer as artist");
             
             // Find and translate TextBlocks in the main stack
             var scrollViewer = (ScrollViewer)((Border)((DockPanel)((Grid)this.Content).Children[0]).Children[2]).Child;
@@ -41,52 +41,51 @@ namespace AMWin_RichPresence {
             
             foreach (var child in mainStack.Children) {
                 if (child is TextBlock tb) {
-                    if (tb.Text == "Discord settings" || tb.Text == "Discord ayarları") tb.Text = isTurkish ? "Discord ayarları" : "Discord settings";
-                    else if (tb.Text == "Lyrics settings" || tb.Text == "Şarkı sözü ayarları") tb.Text = isTurkish ? "Şarkı sözü ayarları" : "Lyrics settings";
-                    else if (tb.Text == "Scrobbling settings" || tb.Text == "Scrobbling ayarları") tb.Text = isTurkish ? "Scrobbling ayarları" : "Scrobbling settings";
-                    else if (tb.Text == "Rich Presence display" || tb.Text == "Zengin Durum görünümü") tb.Text = isTurkish ? "Zengin Durum görünümü" : "Rich Presence display";
-                    else if (tb.Text == "Max time before scrobble (sec)" || tb.Text == "Scrobble öncesi max süre (sn)") tb.Text = isTurkish ? "Scrobble öncesi max süre (sn)" : "Max time before scrobble (sec)";
-                    else if (tb.Text == "User token" || tb.Text == "Kullanıcı tokeni") tb.Text = isTurkish ? "Kullanıcı tokeni" : "User token";
-                    else if (tb.Text == "API Key" || tb.Text == "API Anahtarı") tb.Text = isTurkish ? "API Anahtarı" : "API Key";
-                    else if (tb.Text == "API Secret" || tb.Text == "API Gizli Anahtarı") tb.Text = isTurkish ? "API Gizli Anahtarı" : "API Secret";
-                    else if (tb.Text == "Username" || tb.Text == "Kullanıcı adı") tb.Text = isTurkish ? "Kullanıcı adı" : "Username";
-                    else if (tb.Text == "Password" || tb.Text == "Şifre") tb.Text = isTurkish ? "Şifre" : "Password";
+                    // Try to translate the text if it matches a known key
+                    string translated = Localization.Get(tb.Text);
+                    if (translated != tb.Text) tb.Text = translated;
+                    
+                    // Specific fallback check for already translated items to allow switching back to English
+                    if (!isTurkish) {
+                        if (tb.Text == "Discord ayarları") tb.Text = "Discord settings";
+                        else if (tb.Text == "Şarkı sözü ayarları") tb.Text = "Lyrics settings";
+                        else if (tb.Text == "Scrobbling ayarları") tb.Text = "Scrobbling settings";
+                    }
                 }
                 else if (child is StackPanel sp) {
                     foreach (var spChild in sp.Children) {
                         if (spChild is TextBlock spTb) {
-                            if (spTb.Text == "Apple Music region" || spTb.Text == "Apple Music bölgesi") spTb.Text = isTurkish ? "Apple Music bölgesi" : "Apple Music region";
-                            else if (spTb.Text == "Rich Presence display" || spTb.Text == "Zengin Durum görünümü") spTb.Text = isTurkish ? "Zengin Durum görünümü" : "Rich Presence display";
-                            else if (spTb.Text == "Max time before scrobble (sec)" || spTb.Text == "Scrobble öncesi max süre (sn)") spTb.Text = isTurkish ? "Scrobble öncesi max süre (sn)" : "Max time before scrobble (sec)";
+                            string translated = Localization.Get(spTb.Text);
+                            if (translated != spTb.Text) spTb.Text = translated;
                         }
                     }
                 }
             }
 
-            CheckBox_EnableDiscordRP.Content = isTurkish ? "Discord RP'yi etkinleştir" : "Enable Discord RP";
-            CheckBox_EnableRPCoverImages.Content = isTurkish ? "Kapak resimlerini göster" : "Enable cover images";
-            CheckBox_EnableAlbumInfo.Content = isTurkish ? "Albüm bilgisini göster" : "Enable album info";
-            CheckBox_ShowRPWhenMusicPaused.Content = isTurkish ? "Müzik duraklatıldığında RP'yi kapatma" : "RP when music paused";
-            CheckBox_ShowAppleMusicIcon.Content = isTurkish ? "Durumda Apple Music ikonunu göster" : "Apple Music icon in status";
+            CheckBox_EnableDiscordRP.Content = Localization.Get("Enable Discord RP");
+            CheckBox_EnableRPCoverImages.Content = Localization.Get("Enable cover images");
+            CheckBox_EnableAlbumInfo.Content = Localization.Get("Enable album info");
+            CheckBox_ShowRPWhenMusicPaused.Content = Localization.Get("RP when music paused");
+            CheckBox_ShowAppleMusicIcon.Content = Localization.Get("Apple Music icon in status");
 
             int selectedIdx = ComboBox_RPDisplayChoice.SelectedIndex;
             ComboBox_RPDisplayChoice.Items.Clear();
-            ComboBox_RPDisplayChoice.Items.Add(new ComboBoxItem { Content = isTurkish ? "Sanatçı Adı" : "Artist Name" });
-            ComboBox_RPDisplayChoice.Items.Add(new ComboBoxItem { Content = isTurkish ? "Apple Music" : "Apple Music" });
-            ComboBox_RPDisplayChoice.Items.Add(new ComboBoxItem { Content = isTurkish ? "Şarkı Adı" : "Song Name" });
+            ComboBox_RPDisplayChoice.Items.Add(new ComboBoxItem { Content = Localization.Get("Artist Name") });
+            ComboBox_RPDisplayChoice.Items.Add(new ComboBoxItem { Content = Localization.Get("Apple Music") });
+            ComboBox_RPDisplayChoice.Items.Add(new ComboBoxItem { Content = Localization.Get("Song Name") });
             ComboBox_RPDisplayChoice.SelectedIndex = selectedIdx;
 
-            CheckBox_EnableSyncLyrics.Content = isTurkish ? "Senkronize şarkı sözlerini etkinleştir" : "Enable sync lyrics";
-            CheckBox_ExtendLyricsLine.Content = isTurkish ? "Söz satırını sonraki söze kadar uzat" : "Extend lyrics line";
-            Button_OpenLyricCache.Content = isTurkish ? "Kaydedilen sözleri aç" : "Open saved lyrics";
-            Button_DeleteLyricCache.Content = isTurkish ? "Kaydedilen sözleri sil" : "Delete saved lyrics";
+            CheckBox_EnableSyncLyrics.Content = Localization.Get("Enable sync lyrics");
+            CheckBox_ExtendLyricsLine.Content = Localization.Get("Extend lyrics line");
+            Button_OpenLyricCache.Content = Localization.Get("Open saved lyrics");
+            Button_DeleteLyricCache.Content = Localization.Get("Delete saved lyrics");
 
-            CheckBox_LastfmCleanAlbumName.Content = isTurkish ? "Albüm adını temizle" : "Clean album name";
-            CheckBox_LastfmScrobblePrimary.Content = isTurkish ? "Sadece ana sanatçıyı scrobble et" : "Scrobble primary artist";
-            CheckBox_ScrobblePreferAppleMusicWebDuration.Content = isTurkish ? "Şarkı süresini Apple Music Web'den almayı tercih et" : "Prefer song duration from Apple Music Web";
-            CheckBox_LastfmEnable.Content = isTurkish ? "Last.FM'i etkinleştir" : "Enable Last.FM";
-            CheckBox_ListenBrainzEnable.Content = isTurkish ? "ListenBrainz'i etkinleştir" : "Enable ListenBrainz";
-            SaveLastFMCreds.Content = isTurkish ? "Kimlik Bilgilerini Kaydet" : "Save Credentials";
+            CheckBox_LastfmCleanAlbumName.Content = Localization.Get("Clean album name");
+            CheckBox_LastfmScrobblePrimary.Content = Localization.Get("Scrobble primary artist");
+            CheckBox_ScrobblePreferAppleMusicWebDuration.Content = Localization.Get("Prefer song duration from Apple Music Web");
+            CheckBox_LastfmEnable.Content = Localization.Get("Enable Last.FM");
+            CheckBox_ListenBrainzEnable.Content = Localization.Get("Enable ListenBrainz");
+            SaveLastFMCreds.Content = Localization.Get("Save Credentials");
         }
 
         private void CheckBox_RunOnStartup_Click(object sender, RoutedEventArgs e) {
@@ -177,12 +176,11 @@ namespace AMWin_RichPresence {
         }
 
         private void Button_DeleteLyricCache_Click(object sender, RoutedEventArgs e) {
-            bool isTurkish = Properties.Settings.Default.AppleMusicRegion.Equals("tr", StringComparison.OrdinalIgnoreCase);
             var path = Path.Combine(Constants.AppDataFolder, "LyricCache");
             if (Directory.Exists(path)) {
                 var result = MessageBox.Show(
-                    isTurkish ? "Tüm kaydedilen sözleri silmek istediğinize emin misiniz?" : "Are you sure you want to delete all saved lyrics?",
-                    isTurkish ? "Kaydedilen Sözleri Sil" : "Delete Saved Lyrics", 
+                    Localization.Get("Are you sure you want to delete all saved lyrics?"),
+                    Localization.Get("Delete Saved Lyrics"), 
                     MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes) {
                     try {
@@ -190,20 +188,20 @@ namespace AMWin_RichPresence {
                             File.Delete(file);
                         }
                         MessageBox.Show(
-                            isTurkish ? "Tüm kaydedilen sözler silindi." : "All saved lyrics have been deleted.", 
-                            isTurkish ? "Sözler Silindi" : "Lyrics Deleted", 
+                            Localization.Get("All saved lyrics have been deleted."), 
+                            Localization.Get("Lyrics Deleted"), 
                             MessageBoxButton.OK, MessageBoxImage.Information);
                     } catch (Exception ex) {
                         MessageBox.Show(
-                            (isTurkish ? "Sözler silinemedi: " : "Could not delete lyrics: ") + ex.Message, 
-                            isTurkish ? "Hata" : "Error", 
+                            Localization.Get("Could not delete lyrics: ") + ex.Message, 
+                            Localization.Get("Error"), 
                             MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             } else {
                 MessageBox.Show(
-                    isTurkish ? "Kaydedilen söz bulunamadı." : "No saved lyrics found.", 
-                    isTurkish ? "Bilgi" : "Information", 
+                    Localization.Get("No saved lyrics found."), 
+                    Localization.Get("Information"), 
                     MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -296,16 +294,15 @@ namespace AMWin_RichPresence {
             if (Properties.Settings.Default.LastfmEnable) {
                 // Signals the LastFM Scrobbler to re-init with new credentials
                 var result = await ((App)Application.Current).UpdateLastfmCreds();
-                bool isTurkish = Properties.Settings.Default.AppleMusicRegion.Equals("tr", StringComparison.OrdinalIgnoreCase);
                 if (result) {
                     MessageBox.Show(
-                        isTurkish ? "Last.FM kimlik bilgileri başarıyla doğrulandı." : "The Last.FM credentials were successfully authenticated.", 
-                        isTurkish ? "Last.FM Doğrulaması" : "Last.FM Authentication", 
+                        Localization.Get("The Last.FM credentials were successfully authenticated."), 
+                        Localization.Get("Last.FM Authentication"), 
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 } else {
                     MessageBox.Show(
-                        isTurkish ? "Last.FM kimlik bilgileri doğrulanamadı. Lütfen kullanıcı adı ve şifrenizi doğru girdiğinizden ve hesabınızın kilitli olmadığından emin olun." : "The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked.", 
-                        isTurkish ? "Last.FM Doğrulaması" : "Last.FM Authentication", 
+                        Localization.Get("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked."), 
+                        Localization.Get("Last.FM Authentication"), 
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
@@ -313,16 +310,15 @@ namespace AMWin_RichPresence {
             if (Properties.Settings.Default.ListenBrainzEnable) {
                 // Signals the ListenBrainz Scrobbler to re-init with new credentials
                 var result = await ((App)Application.Current).UpdateListenBrainzCreds();
-                bool isTurkish = Properties.Settings.Default.AppleMusicRegion.Equals("tr", StringComparison.OrdinalIgnoreCase);
                 if (result) {
                     MessageBox.Show(
-                        isTurkish ? "ListenBrainz kimlik bilgileri başarıyla doğrulandı." : "The ListenBrainz credentials were successfully authenticated.", 
-                        isTurkish ? "ListenBrainz Doğrulaması" : "ListenBrainz Authentication", 
+                        Localization.Get("The ListenBrainz credentials were successfully authenticated."), 
+                        Localization.Get("ListenBrainz Authentication"), 
                         MessageBoxButton.OK, MessageBoxImage.Information);
                 } else {
                     MessageBox.Show(
-                        isTurkish ? "ListenBrainz kimlik bilgileri doğrulanamadı. Lütfen kullanıcı tokeninizi doğru girdiğinizden emin olun." : "The ListenBrainz credentials could not be authenticated. Please make sure you have entered the correct user token.", 
-                        isTurkish ? "ListenBrainz Doğrulaması" : "ListenBrainz Authentication", 
+                        Localization.Get("The ListenBrainz credentials could not be authenticated. Please make sure you have entered the correct user token."), 
+                        Localization.Get("ListenBrainz Authentication"), 
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
