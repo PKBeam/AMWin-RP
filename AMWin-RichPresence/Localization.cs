@@ -34,7 +34,7 @@ namespace AMWin_RichPresence {
 
                 // Labels
                 ["Apple Music region"] = "Apple Music bölgesi",
-                ["Rich Presence display"] = "Zengin Durum görünümü",
+                ["Rich Presence display"] = "Discord Durum görünümü",
                 ["Max time before scrobble (sec)"] = "Scrobble öncesi max süre (sn)",
                 ["User token"] = "Kullanıcı tokeni",
                 ["API Key"] = "API Anahtarı",
