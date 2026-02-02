@@ -287,5 +287,17 @@ namespace AMWin_RichPresence.Properties {
             }
         }
 
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableAlbumInfo {
+            get {
+                return ((bool)(this["EnableAlbumInfo"]));
+            }
+            set {
+                this["EnableAlbumInfo"] = value;
+            }
+        }
     }
 }

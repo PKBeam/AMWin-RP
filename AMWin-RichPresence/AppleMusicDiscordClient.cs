@@ -120,7 +120,7 @@ internal class AppleMusicDiscordClient {
                 State = subtitle,
                 Assets = new Assets() {
                     LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey,
-                    LargeImageText = !string.IsNullOrWhiteSpace(songLyrics) ? songLyrics : songAlbum
+                    LargeImageText = !string.IsNullOrWhiteSpace(songLyrics) ? songLyrics : (AMWin_RichPresence.Properties.Settings.Default.EnableAlbumInfo ? songAlbum : null)
                 },
                 Type = ActivityType.Listening,
                 StatusDisplay = statusDisplay,

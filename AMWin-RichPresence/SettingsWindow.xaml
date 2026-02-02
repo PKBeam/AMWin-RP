@@ -42,6 +42,8 @@
                         <CheckBox x:Name="CheckBox_EnableDiscordRP" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableDiscordRP, Mode=TwoWay}" Click="CheckBox_EnableDiscordRP_Click" Content="Enable Discord RP"/>
 
                         <CheckBox x:Name="CheckBox_EnableRPCoverImages" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableRPCoverImages, Mode=TwoWay}" Click="CheckBox_EnableRPCoverImages_Click" Content="Enable cover images"/>
+                        
+                        <CheckBox x:Name="CheckBox_EnableAlbumInfo" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableAlbumInfo, Mode=TwoWay}" Click="CheckBox_EnableAlbumInfo_Click" Content="Enable album info"/>
 
                         <CheckBox x:Name="CheckBox_ShowRPWhenMusicPaused" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowRPWhenMusicPaused, Mode=TwoWay}" Click="CheckBox_ShowRPWhenMusicPaused_Click" Content="RP when music paused"/>
 

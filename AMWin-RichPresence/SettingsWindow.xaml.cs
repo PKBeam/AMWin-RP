@@ -74,6 +74,10 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
+        private void CheckBox_EnableAlbumInfo_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
         private void CheckBox_ShowRPWhenMusicPaused_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
