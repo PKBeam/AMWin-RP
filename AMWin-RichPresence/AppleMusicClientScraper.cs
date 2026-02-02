@@ -24,6 +24,7 @@ namespace AMWin_RichPresence {
         public List<string>? ArtistList = null;
         public string? CoverArtUrl = null;
         public string? SongUrl = null;
+        public string? ArtistUrl = null;
         public int? CurrentTime = null;
         public List<LyricLine>? SyncedLyrics = null;
         public bool LyricsSearched = false;
@@ -85,6 +86,7 @@ namespace AMWin_RichPresence {
             public int AlbumArt = 0;
             public int ArtistList = 0;
             public int SongUrl = 0;
+            public int ArtistUrl = 0;
 
             public WebReqFailCounters() { }
         };
@@ -389,6 +391,23 @@ namespace AMWin_RichPresence {
                     webReqFails.SongUrl = 0;
                 }
                 currentSong.SongUrl = result;
+            }
+
+            // ================================================
+            // Get artist url
+            // ------------------------------------------------
+
+            if (currentSong.ArtistUrl == null && webReqFails.ArtistUrl < webReqFails.MaxFails) {
+                var result = await webScraper.GetArtistUrl();
+                if (result == null) {
+                    webReqFails.ArtistUrl++;
+                    if (webReqFails.ArtistUrl == webReqFails.MaxFails) {
+                        logger?.Log("Reached max fails for GetArtistUrl.");
+                    }
+                } else {
+                    webReqFails.ArtistUrl = 0;
+                }
+                currentSong.ArtistUrl = result;
             }
 
             // ================================================

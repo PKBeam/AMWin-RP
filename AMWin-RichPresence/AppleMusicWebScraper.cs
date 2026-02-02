@@ -273,6 +273,42 @@ namespace AMWin_RichPresence {
             }
         }
 
+        // Get artist URL
+        public async Task<string?> GetArtistUrl() {
+            try {
+                return await GetArtistUrlAppleMusic();
+            } catch (Exception ex) {
+                logger?.Log($"[GetArtistUrl] An exception occurred: {ex}");
+                return null;
+            }
+        }
+        private async Task<string?> GetArtistUrlAppleMusic() {
+            try {
+                var result = await SearchSongs();
+                if (result != null) {
+                    return GetArtistUrl(result);
+                }
+                
+                result = await SearchTopResults();
+                if (result != null) {
+                    return GetArtistUrl(result);
+                }
+                return null;
+            } catch (Exception ex) {
+                logger?.Log($"[GetArtistUrlAppleMusic] An exception occurred: {ex}");
+                return null;
+            }
+        }
+        private string? GetArtistUrl(HtmlNode nodeWithSource) {
+            var subtitleNode = nodeWithSource.Descendants("span")
+                .FirstOrDefault(x => x.Attributes.Contains("data-testid") && x.Attributes["data-testid"].Value == "track-lockup-subtitle");
+            
+            var artistLinkNode = subtitleNode?.Descendants("a")
+                .FirstOrDefault(x => x.Attributes["href"].Value.Contains("/artist/"));
+                
+            return artistLinkNode?.GetAttributeValue("href", "");
+        }
+
         // Get album artwork image
         // -----------------------------------------------
         // Supported APIs: Last.FM, Apple Music web search

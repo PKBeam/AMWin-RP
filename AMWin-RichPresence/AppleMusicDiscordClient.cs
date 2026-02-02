@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Linq;
@@ -128,12 +129,24 @@ internal class AppleMusicDiscordClient {
                 StatusDisplay = statusDisplay,
             };
             
+            var buttons = new List<Button>();
+
             if (amInfo.SongUrl != null) {
-                var buttonLabel = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion.Equals("tr", StringComparison.OrdinalIgnoreCase) ? "Apple Music'de Dinle" : "Listen on Apple Music";
-                rp.Buttons = [new() {
-                    Label = buttonLabel, 
+                buttons.Add(new Button() {
+                    Label = Localization.IsTurkish ? Localization.Get("Apple Music'de Dinle") : Localization.Get("Listen on Apple Music"),
                     Url = amInfo.SongUrl
-                }];
+                });
+            }
+
+            if (amInfo.ArtistUrl != null) {
+                buttons.Add(new Button() {
+                    Label = Localization.IsTurkish ? Localization.Get("Sanatçıyı Görüntüle") : Localization.Get("View Artist"),
+                    Url = amInfo.ArtistUrl
+                });
+            }
+
+            if (buttons.Count > 0) {
+                rp.Buttons = buttons.ToArray();
             }
 
             if (amInfo.IsPaused) {
