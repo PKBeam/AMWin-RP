@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Linq;
@@ -29,11 +30,12 @@ internal class AppleMusicDiscordClient {
     bool enabled = false;
     Logger? logger;
     int maxStringLength = 127;
+    string songLyrics = string.Empty;
 
     public AppleMusicDiscordClient(
         string discordClientID, 
         bool enabled = true,
-        RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistAlbum,
+        RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistOnly,
         RPPreviewDisplayOptions previewOptions = RPPreviewDisplayOptions.Subtitle, 
         Logger? logger = null
     ) {
@@ -106,29 +108,51 @@ internal class AppleMusicDiscordClient {
             // TODO fix this to account for multibyte unicode characters
             subtitle = subtitle.Substring(0, 60) + "...";
         }
+        // update lyrics
+        songLyrics = string.Empty;
+        if (amInfo.SyncedLyrics != null && AMWin_RichPresence.Properties.Settings.Default.EnableSyncLyrics) {
+            var currentTime = amInfo.CurrentTime != null ? TimeSpan.FromSeconds((int)amInfo.CurrentTime) : (DateTime.UtcNow - (amInfo.PlaybackStart ?? DateTime.UtcNow));
+            songLyrics = LRCLibClient.GetCurrentLyric(amInfo.SyncedLyrics, currentTime);
+        }
+
         try {
             var rp = new RichPresence() {
                 Details = songName,
                 State = subtitle,
                 Assets = new Assets() {
-                    LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey,
-                    LargeImageText = songAlbum
+                    LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey ?? "",
+                    LargeImageText = (!string.IsNullOrWhiteSpace(songLyrics) ? songLyrics : (AMWin_RichPresence.Properties.Settings.Default.EnableAlbumInfo ? songAlbum : "")) ?? "",
+                    SmallImageKey = "",
+                    SmallImageText = ""
                 },
                 Type = ActivityType.Listening,
                 StatusDisplay = statusDisplay,
             };
             
+            var buttons = new List<Button>();
+
             if (amInfo.SongUrl != null) {
-                rp.Buttons = [new() {
-                    Label = "Listen on Apple Music", 
+                buttons.Add(new Button() {
+                    Label = Localization.Get("Listen on Apple Music"),
                     Url = amInfo.SongUrl
-                }];
+                });
+            }
+
+            if (amInfo.ArtistUrl != null) {
+                buttons.Add(new Button() {
+                    Label = Localization.Get("View Artist"),
+                    Url = amInfo.ArtistUrl
+                });
+            }
+
+            if (buttons.Count > 0) {
+                rp.Buttons = buttons.ToArray();
             }
 
             if (amInfo.IsPaused) {
-                rp.Assets.SmallImageKey = Constants.DiscordAppleMusicPauseImageKey;
+                rp.Assets.SmallImageKey = Constants.DiscordAppleMusicPauseImageKey ?? "";
             } else if (showSmallImage) {
-                rp.Assets.SmallImageKey = (!showBigImage || amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey;
+                rp.Assets.SmallImageKey = ((!showBigImage || amInfo.CoverArtUrl == null) ? Constants.DiscordAppleMusicPlayImageKey : Constants.DiscordAppleMusicImageKey) ?? "";
             }
 
             // add timestamps, if they're there

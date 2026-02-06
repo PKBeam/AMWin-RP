@@ -262,5 +262,42 @@ namespace AMWin_RichPresence.Properties {
                 this["RPDisplayChoice"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableSyncLyrics {
+            get {
+                return ((bool)(this["EnableSyncLyrics"]));
+            }
+            set {
+                this["EnableSyncLyrics"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ExtendLyricsLine {
+            get {
+                return ((bool)(this["ExtendLyricsLine"]));
+            }
+            set {
+                this["ExtendLyricsLine"] = value;
+            }
+        }
+
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableAlbumInfo {
+            get {
+                return ((bool)(this["EnableAlbumInfo"]));
+            }
+            set {
+                this["EnableAlbumInfo"] = value;
+            }
+        }
     }
 }

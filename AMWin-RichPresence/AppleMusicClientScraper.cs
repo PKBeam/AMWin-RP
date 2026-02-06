@@ -24,13 +24,22 @@ namespace AMWin_RichPresence {
         public List<string>? ArtistList = null;
         public string? CoverArtUrl = null;
         public string? SongUrl = null;
+        public string? ArtistUrl = null;
         public int? CurrentTime = null;
+        public List<LyricLine>? SyncedLyrics = null;
+        public bool LyricsSearched = false;
 
         public AppleMusicInfo(string songName, string songSubTitle, string songAlbum, string songArtist) {
-            this.SongName = songName;
-            this.SongSubTitle = songSubTitle;
-            this.SongAlbum = songAlbum;
-            this.SongArtist = songArtist;
+            this.SongName = Sanitize(songName);
+            this.SongSubTitle = Sanitize(songSubTitle);
+            this.SongAlbum = Sanitize(songAlbum);
+            this.SongArtist = Sanitize(songArtist);
+        }
+
+        private static string Sanitize(string s) {
+            if (string.IsNullOrEmpty(s)) return s;
+            // Remove common invisible/formatting characters used by Apple Music
+            return Regex.Replace(s, @"[\u200B-\u200F\u202A-\u202E]", "").Trim();
         }
 
         public override string ToString() {
@@ -77,6 +86,7 @@ namespace AMWin_RichPresence {
             public int AlbumArt = 0;
             public int ArtistList = 0;
             public int SongUrl = 0;
+            public int ArtistUrl = 0;
 
             public WebReqFailCounters() { }
         };
@@ -93,6 +103,7 @@ namespace AMWin_RichPresence {
         double? previousSongProgress;
         string appleMusicRegion;
         WebReqFailCounters webReqFails = new();
+        LRCLibClient lrclibClient;
 
         public AppleMusicClientScraper(string? lastFmApiKey, int refreshPeriodInSec, bool composerAsArtist, string appleMusicRegion, RefreshHandler refreshHandler, Logger? logger = null) {
             this.refreshHandler = refreshHandler;
@@ -100,6 +111,7 @@ namespace AMWin_RichPresence {
             this.lastFmApiKey = lastFmApiKey;
             this.composerAsArtist = composerAsArtist;
             this.appleMusicRegion = appleMusicRegion;
+            this.lrclibClient = new LRCLibClient(logger);
 
             timer = new Timer(refreshPeriodInSec * 1000);
             timer.Elapsed += Refresh;
@@ -280,8 +292,8 @@ namespace AMWin_RichPresence {
             int? currentTime = null;
             int? remainingDuration = null;
                 
-            var currentTimeElement = songFieldsPanel?.FindFirstChild("CurrentTime");
-            var remainingDurationElement = songFieldsPanel?.FindFirstChild("Duration");
+            var currentTimeElement = songFieldsPanel?.FindFirstChild(cf => cf.ByAutomationId("CurrentTime"));
+            var remainingDurationElement = songFieldsPanel?.FindFirstChild(cf => cf.ByAutomationId("Duration"));
 
             // use the Apple Music timestamps, if visible
             if (currentTimeElement != null && remainingDurationElement != null) {
@@ -380,24 +392,64 @@ namespace AMWin_RichPresence {
                 }
                 currentSong.SongUrl = result;
             }
+
+            // ================================================
+            // Get artist url
+            // ------------------------------------------------
+
+            if (currentSong.ArtistUrl == null && webReqFails.ArtistUrl < webReqFails.MaxFails) {
+                var result = await webScraper.GetArtistUrl();
+                if (result == null) {
+                    webReqFails.ArtistUrl++;
+                    if (webReqFails.ArtistUrl == webReqFails.MaxFails) {
+                        logger?.Log("Reached max fails for GetArtistUrl.");
+                    }
+                } else {
+                    webReqFails.ArtistUrl = 0;
+                }
+                currentSong.ArtistUrl = result;
+            }
+
+            // ================================================
+            // Get lyrics
+            // ------------------------------------------------
+
+            if (!currentSong.LyricsSearched && AMWin_RichPresence.Properties.Settings.Default.EnableSyncLyrics) {
+                currentSong.LyricsSearched = true;
+                var result = await lrclibClient.GetSyncedLyrics(currentSong.SongName, currentSong.SongArtist, currentSong.SongDuration);
+                if (result != null) {
+                    currentSong.SyncedLyrics = result.Lyrics;
+                }
+            }
         }
 
         // e.g. parse "-1:30" to 90 seconds
         private static int? ParseTimeString(string? time) {
 
-            if (time == null) {
+            if (string.IsNullOrWhiteSpace(time)) {
+                return null;
+            }
+
+            // A valid time string should not be the song name (case-insensitive check for common time-like titles)
+            // Most durations are less than an hour, and Apple Music format is usually M:SS or -M:SS
+            if (!Regex.IsMatch(time, @"^-?\d{1,3}:\d{2}$")) {
                 return null;
             }
 
             // remove leading "-"
-            if (time.Contains('-')) {
-                time = time.Split('-')[1];
+            string cleanTime = time;
+            if (cleanTime.Contains('-')) {
+                cleanTime = cleanTime.Split('-')[1];
             }
 
-            int min = int.Parse(time.Split(":")[0]);
-            int sec = int.Parse(time.Split(":")[1]);
+            var parts = cleanTime.Split(':');
+            if (parts.Length < 2) return null;
 
-            return min * 60 + sec;
+            if (int.TryParse(parts[0], out int min) && int.TryParse(parts[1], out int sec)) {
+                return min * 60 + sec;
+            }
+
+            return null;
         }
 
         private static Tuple<string, string, string?> ParseSongAlbumArtist(string songAlbumArtist, bool composerAsArtist) {

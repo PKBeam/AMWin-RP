@@ -42,29 +42,34 @@
                         <CheckBox x:Name="CheckBox_EnableDiscordRP" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableDiscordRP, Mode=TwoWay}" Click="CheckBox_EnableDiscordRP_Click" Content="Enable Discord RP"/>
 
                         <CheckBox x:Name="CheckBox_EnableRPCoverImages" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableRPCoverImages, Mode=TwoWay}" Click="CheckBox_EnableRPCoverImages_Click" Content="Enable cover images"/>
+                        
+                        <CheckBox x:Name="CheckBox_EnableAlbumInfo" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableAlbumInfo, Mode=TwoWay}" Click="CheckBox_EnableAlbumInfo_Click" Content="Enable album info"/>
 
                         <CheckBox x:Name="CheckBox_ShowRPWhenMusicPaused" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowRPWhenMusicPaused, Mode=TwoWay}" Click="CheckBox_ShowRPWhenMusicPaused_Click" Content="RP when music paused"/>
 
                         <CheckBox x:Name="CheckBox_ShowAppleMusicIcon" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowAppleMusicIcon, Mode=TwoWay}" Click="CheckBox_ShowAppleMusicIcon_Click" Content="Apple Music icon in status"/>
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center">Rich Presence subtitle</TextBlock>
-                            <ComboBox Margin="8 0 0 0" x:Name="ComboBox_RPSubtitleChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPSubtitleChoice, Mode=TwoWay}" SelectionChanged="ComboBox_RPSubtitleChoice_SelectionChanged">
-                                <!-- The order of these items matters! (check the enum in AppleMusicDiscordClient.cs) -->
-                                <ComboBoxItem>Artist only</ComboBoxItem>
-                                <ComboBoxItem>Artist and album</ComboBoxItem>
-                                <ComboBoxItem>Album only</ComboBoxItem>
-                            </ComboBox>
-                        </StackPanel>
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center">Rich Presence display</TextBlock>
                             <ComboBox Margin="8 10 0 0" x:Name="ComboBox_RPDisplayChoice" SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPDisplayChoice, Mode=TwoWay}" SelectionChanged="ComboBox_RPDisplayChoice_SelectionChanged">
                                 <!-- The order of these items matters! (check the enum in AppleMusicDiscordClient.cs) -->
-                                <ComboBoxItem>RP subtitle</ComboBoxItem>
-                                <ComboBoxItem>"Apple Music"</ComboBoxItem>
-                                <ComboBoxItem>Song name</ComboBoxItem>
+                                <ComboBoxItem>Artist Name</ComboBoxItem>
+                                <ComboBoxItem>Apple Music</ComboBoxItem>
+                                <ComboBoxItem>Song Name</ComboBoxItem>
                             </ComboBox>
+                        </StackPanel>
+
+
+                        <TextBlock FontSize="16" FontWeight="Bold" Padding="0 8 0 0" Margin="0 5 0 5" VerticalAlignment="Top">Lyrics settings</TextBlock>
+
+                        <CheckBox x:Name="CheckBox_EnableSyncLyrics" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableSyncLyrics, Mode=TwoWay}" Click="CheckBox_EnableSyncLyrics_Click" Content="Enable sync lyrics"/>
+
+                        <CheckBox x:Name="CheckBox_ExtendLyricsLine" IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableSyncLyrics}" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ExtendLyricsLine, Mode=TwoWay}" Click="CheckBox_ExtendLyricsLine_Click" Content="Extend lyrics line"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0 5 0 5">
+                            <Button x:Name="Button_OpenLyricCache" Content="Open saved lyrics" Margin="0 0 8 0" Click="Button_OpenLyricCache_Click" />
+                            <Button x:Name="Button_DeleteLyricCache" Content="Delete saved lyrics" Click="Button_DeleteLyricCache_Click" />
                         </StackPanel>
 
                         <TextBlock FontWeight="Bold" Padding="0 16 0 0" Margin="0 5 0 5" FontSize="16">Scrobbling settings</TextBlock>

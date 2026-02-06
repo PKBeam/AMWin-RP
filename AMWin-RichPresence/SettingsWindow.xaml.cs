@@ -23,6 +23,69 @@ namespace AMWin_RichPresence {
             TextBlock_VersionString.Text = Constants.ProgramVersion;
             AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion;
             LastfmPassword.Password = GetLastFMPassword();
+            LocalizeUI();
+        }
+
+        private void LocalizeUI() {
+            bool isTurkish = Localization.CurrentRegion == "tr";
+            
+            this.Title = isTurkish ? "AMWin-RichPresence Ayarlar" : "AMWin-RichPresence Settings";
+
+            CheckBox_RunOnStartup.Content = Localization.Get("Run when Windows starts");
+            CheckBox_CheckForUpdatesOnStartup.Content = Localization.Get("Check for updates on startup");
+            CheckBox_ClassicalComposerAsArtist.Content = Localization.Get("Treat composer as artist");
+            
+            // Find and translate TextBlocks in the main stack
+            var scrollViewer = (ScrollViewer)((Border)((DockPanel)((Grid)this.Content).Children[0]).Children[2]).Child;
+            var mainStack = (StackPanel)scrollViewer.Content;
+            
+            foreach (var child in mainStack.Children) {
+                if (child is TextBlock tb) {
+                    // Try to translate the text if it matches a known key
+                    string translated = Localization.Get(tb.Text);
+                    if (translated != tb.Text) tb.Text = translated;
+                    
+                    // Specific fallback check for already translated items to allow switching back to English
+                    if (!isTurkish) {
+                        if (tb.Text == "Discord ayarları") tb.Text = "Discord settings";
+                        else if (tb.Text == "Şarkı sözü ayarları") tb.Text = "Lyrics settings";
+                        else if (tb.Text == "Scrobbling ayarları") tb.Text = "Scrobbling settings";
+                    }
+                }
+                else if (child is StackPanel sp) {
+                    foreach (var spChild in sp.Children) {
+                        if (spChild is TextBlock spTb) {
+                            string translated = Localization.Get(spTb.Text);
+                            if (translated != spTb.Text) spTb.Text = translated;
+                        }
+                    }
+                }
+            }
+
+            CheckBox_EnableDiscordRP.Content = Localization.Get("Enable Discord RP");
+            CheckBox_EnableRPCoverImages.Content = Localization.Get("Enable cover images");
+            CheckBox_EnableAlbumInfo.Content = Localization.Get("Enable album info");
+            CheckBox_ShowRPWhenMusicPaused.Content = Localization.Get("RP when music paused");
+            CheckBox_ShowAppleMusicIcon.Content = Localization.Get("Apple Music icon in status");
+
+            int selectedIdx = ComboBox_RPDisplayChoice.SelectedIndex;
+            ComboBox_RPDisplayChoice.Items.Clear();
+            ComboBox_RPDisplayChoice.Items.Add(new ComboBoxItem { Content = Localization.Get("Artist Name") });
+            ComboBox_RPDisplayChoice.Items.Add(new ComboBoxItem { Content = Localization.Get("Apple Music") });
+            ComboBox_RPDisplayChoice.Items.Add(new ComboBoxItem { Content = Localization.Get("Song Name") });
+            ComboBox_RPDisplayChoice.SelectedIndex = selectedIdx;
+
+            CheckBox_EnableSyncLyrics.Content = Localization.Get("Enable sync lyrics");
+            CheckBox_ExtendLyricsLine.Content = Localization.Get("Extend lyrics line");
+            Button_OpenLyricCache.Content = Localization.Get("Open saved lyrics");
+            Button_DeleteLyricCache.Content = Localization.Get("Delete saved lyrics");
+
+            CheckBox_LastfmCleanAlbumName.Content = Localization.Get("Clean album name");
+            CheckBox_LastfmScrobblePrimary.Content = Localization.Get("Scrobble primary artist");
+            CheckBox_ScrobblePreferAppleMusicWebDuration.Content = Localization.Get("Prefer song duration from Apple Music Web");
+            CheckBox_LastfmEnable.Content = Localization.Get("Enable Last.FM");
+            CheckBox_ListenBrainzEnable.Content = Localization.Get("Enable ListenBrainz");
+            SaveLastFMCreds.Content = Localization.Get("Save Credentials");
         }
 
         private void CheckBox_RunOnStartup_Click(object sender, RoutedEventArgs e) {
@@ -74,6 +137,10 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
+        private void CheckBox_EnableAlbumInfo_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
         private void CheckBox_ShowRPWhenMusicPaused_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
@@ -82,16 +149,61 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
-        private void ComboBox_RPSubtitleChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            var newOption = AppleMusicDiscordClient.SubtitleOptionFromIndex(ComboBox_RPSubtitleChoice.SelectedIndex);
-            ((App)Application.Current).UpdateRPSubtitleDisplay(newOption);
-            SaveSettings();
-        }
-        
         private void ComboBox_RPDisplayChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var newOption = AppleMusicDiscordClient.PreviewOptionFromIndex(ComboBox_RPDisplayChoice.SelectedIndex);
             ((App)Application.Current).UpdateRPPreviewDisplay(newOption);
             SaveSettings();
+        }
+
+
+        private void CheckBox_EnableSyncLyrics_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
+        private void CheckBox_ExtendLyricsLine_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
+        private void Button_OpenLyricCache_Click(object sender, RoutedEventArgs e) {
+            var path = Path.Combine(Constants.AppDataFolder, "LyricCache");
+            if (!Directory.Exists(path)) {
+                Directory.CreateDirectory(path);
+            }
+            Process.Start(new ProcessStartInfo {
+                FileName = path,
+                UseShellExecute = true
+            });
+        }
+
+        private void Button_DeleteLyricCache_Click(object sender, RoutedEventArgs e) {
+            var path = Path.Combine(Constants.AppDataFolder, "LyricCache");
+            if (Directory.Exists(path)) {
+                var result = MessageBox.Show(
+                    Localization.Get("Are you sure you want to delete all saved lyrics?"),
+                    Localization.Get("Delete Saved Lyrics"), 
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes) {
+                    try {
+                        foreach (var file in Directory.GetFiles(path)) {
+                            File.Delete(file);
+                        }
+                        MessageBox.Show(
+                            Localization.Get("All saved lyrics have been deleted."), 
+                            Localization.Get("Lyrics Deleted"), 
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                    } catch (Exception ex) {
+                        MessageBox.Show(
+                            Localization.Get("Could not delete lyrics: ") + ex.Message, 
+                            Localization.Get("Error"), 
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            } else {
+                MessageBox.Show(
+                    Localization.Get("No saved lyrics found."), 
+                    Localization.Get("Information"), 
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void CheckBox_LastfmEnable_Click(object sender, RoutedEventArgs e) {
@@ -150,6 +262,7 @@ namespace AMWin_RichPresence {
             }
             SaveSettings();
             ((App)Application.Current).UpdateRegion();
+            LocalizeUI();
         }
         private void ScrobbleMaxTime_TextChanged(object sender, TextChangedEventArgs e) {
             try {
@@ -182,9 +295,15 @@ namespace AMWin_RichPresence {
                 // Signals the LastFM Scrobbler to re-init with new credentials
                 var result = await ((App)Application.Current).UpdateLastfmCreds();
                 if (result) {
-                    MessageBox.Show("The Last.FM credentials were successfully authenticated.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+                        Localization.Get("The Last.FM credentials were successfully authenticated."), 
+                        Localization.Get("Last.FM Authentication"), 
+                        MessageBoxButton.OK, MessageBoxImage.Information);
                 } else {
-                    MessageBox.Show("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked.", "Last.FM Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        Localization.Get("The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked."), 
+                        Localization.Get("Last.FM Authentication"), 
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
 
@@ -192,9 +311,15 @@ namespace AMWin_RichPresence {
                 // Signals the ListenBrainz Scrobbler to re-init with new credentials
                 var result = await ((App)Application.Current).UpdateListenBrainzCreds();
                 if (result) {
-                    MessageBox.Show("The ListenBrainz credentials were successfully authenticated.", "ListenBrainz Authentication", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(
+                        Localization.Get("The ListenBrainz credentials were successfully authenticated."), 
+                        Localization.Get("ListenBrainz Authentication"), 
+                        MessageBoxButton.OK, MessageBoxImage.Information);
                 } else {
-                    MessageBox.Show("The ListenBrainz credentials could not be authenticated. Please make sure you have entered the correct user token.", "ListenBrainz Authentication", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        Localization.Get("The ListenBrainz credentials could not be authenticated. Please make sure you have entered the correct user token."), 
+                        Localization.Get("ListenBrainz Authentication"), 
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             // Close();
