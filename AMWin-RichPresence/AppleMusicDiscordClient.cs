@@ -5,44 +5,34 @@ using System.Text;
 using System.Linq;
 using AMWin_RichPresence;
 using DiscordRPC;
+using System.Security.RightsManagement;
 
 internal class AppleMusicDiscordClient {
-    public enum RPSubtitleDisplayOptions {
-        ArtistOnly = 0, ArtistAlbum = 1, AlbumOnly = 2
+    public enum RPStatusDisplayOptions {
+        Artist = 0, AppleMusic = 1, SongName = 2
+     }
+
+    public static RPStatusDisplayOptions StatusDisplayOptionFromIndex(int i) {
+        return (RPStatusDisplayOptions)i;
     }
 
-    public static RPSubtitleDisplayOptions SubtitleOptionFromIndex(int i) {
-        return (RPSubtitleDisplayOptions)i;
-    }
-
-    public enum RPPreviewDisplayOptions {
-        Subtitle = 0, AppleMusic = 1, SongName = 2
-    }
-
-    public static RPPreviewDisplayOptions PreviewOptionFromIndex(int i) {
-        return (RPPreviewDisplayOptions)i;
-    }
-
-    public RPSubtitleDisplayOptions subtitleOptions;
-    public RPPreviewDisplayOptions previewOptions;
+    public RPStatusDisplayOptions statusDisplayOptions;
     DiscordRpcClient? client;
     string discordClientID;
     bool enabled = false;
     Logger? logger;
     int maxStringLength = 127;
-    string songLyrics = string.Empty;
+    string? songLyrics = null;
 
     public AppleMusicDiscordClient(
         string discordClientID, 
         bool enabled = true,
-        RPSubtitleDisplayOptions subtitleOptions = RPSubtitleDisplayOptions.ArtistOnly,
-        RPPreviewDisplayOptions previewOptions = RPPreviewDisplayOptions.Subtitle, 
+        RPStatusDisplayOptions statusDisplayOptions = RPStatusDisplayOptions.Artist, 
         Logger? logger = null
     ) {
         this.discordClientID = discordClientID;
         this.enabled = enabled;
-        this.subtitleOptions = subtitleOptions;
-        this.previewOptions = previewOptions;
+        this.statusDisplayOptions = statusDisplayOptions;
         this.logger = logger;
 
         if (enabled) {
@@ -50,7 +40,7 @@ internal class AppleMusicDiscordClient {
         }
     }
 
-    private string TrimString(string str) {
+    private string TrimString(string str, uint maxLength = 127) {
         return str.Length > maxStringLength ? str.Substring(0, maxStringLength - 1) : str;
     }
 
@@ -78,57 +68,45 @@ internal class AppleMusicDiscordClient {
         }
 
         // pick the subtitle format to show
-        var subtitle = "";
-        switch (subtitleOptions) {
-            case RPSubtitleDisplayOptions.ArtistAlbum:
-                subtitle = songSubtitle;
-                break;
-            case RPSubtitleDisplayOptions.ArtistOnly:
-                subtitle = songArtist;
-                break;
-            case RPSubtitleDisplayOptions.AlbumOnly:
-                subtitle = songAlbum;
-                break;
-        }
-
         var statusDisplay = StatusDisplayType.Details;
-        switch (previewOptions) {
-            case RPPreviewDisplayOptions.Subtitle:
+        switch (statusDisplayOptions) {
+            case RPStatusDisplayOptions.Artist:
                 statusDisplay = StatusDisplayType.State;
                 break;
-            case RPPreviewDisplayOptions.AppleMusic:
+            case RPStatusDisplayOptions.AppleMusic:
                 statusDisplay = StatusDisplayType.Name;
                 break;
-            case RPPreviewDisplayOptions.SongName:
+            case RPStatusDisplayOptions.SongName:
                 statusDisplay = StatusDisplayType.Details;
                 break;
         }
 
-        if (ASCIIEncoding.Unicode.GetByteCount(subtitle) > 128) {
+        if (ASCIIEncoding.Unicode.GetByteCount(songArtist) > 128) {
             // TODO fix this to account for multibyte unicode characters
-            subtitle = subtitle.Substring(0, 60) + "...";
+            songArtist = songArtist.Substring(0, 60) + "...";
         }
         // update lyrics
-        songLyrics = string.Empty;
-        if (amInfo.SyncedLyrics != null && AMWin_RichPresence.Properties.Settings.Default.EnableSyncLyrics) {
+        if (AMWin_RichPresence.Properties.Settings.Default.EnableSyncLyrics && amInfo.SyncedLyrics != null) {
             var currentTime = amInfo.CurrentTime != null ? TimeSpan.FromSeconds((int)amInfo.CurrentTime) : (DateTime.UtcNow - (amInfo.PlaybackStart ?? DateTime.UtcNow));
             songLyrics = LRCLibClient.GetCurrentLyric(amInfo.SyncedLyrics, currentTime);
+        } else {
+            songLyrics = null;
         }
 
         try {
             var rp = new RichPresence() {
                 Details = songName,
-                State = subtitle,
+                State = songArtist,
                 Assets = new Assets() {
                     LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey ?? "",
-                    LargeImageText = (!string.IsNullOrWhiteSpace(songLyrics) ? songLyrics : (AMWin_RichPresence.Properties.Settings.Default.EnableAlbumInfo ? songAlbum : "")) ?? "",
+                    LargeImageText = songLyrics ?? songAlbum,
                     SmallImageKey = "",
                     SmallImageText = ""
                 },
                 Type = ActivityType.Listening,
                 StatusDisplay = statusDisplay,
             };
-            
+
             var buttons = new List<Button>();
 
             if (amInfo.SongUrl != null) {
@@ -167,9 +145,9 @@ internal class AppleMusicDiscordClient {
                 logger?.Log($"Set Discord RP to:\n{amInfo}");
             }
 
-        } catch (Exception ex) {
-            logger?.Log($"Couldn't set Discord RP:\n{ex}");
-        }
+            } catch (Exception ex) {
+                logger?.Log($"Couldn't set Discord RP:\n{ex}");
+            }
 
     }
     public void Enable() {

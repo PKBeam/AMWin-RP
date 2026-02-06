@@ -64,7 +64,6 @@ namespace AMWin_RichPresence {
 
             CheckBox_EnableDiscordRP.Content = Localization.Get("Enable Discord RP");
             CheckBox_EnableRPCoverImages.Content = Localization.Get("Enable cover images");
-            CheckBox_EnableAlbumInfo.Content = Localization.Get("Enable album info");
             CheckBox_ShowRPWhenMusicPaused.Content = Localization.Get("RP when music paused");
             CheckBox_ShowAppleMusicIcon.Content = Localization.Get("Apple Music icon in status");
 
@@ -96,6 +95,7 @@ namespace AMWin_RichPresence {
             }
             SaveSettings();
         }
+
         private void CheckBox_CheckForUpdatesOnStartup_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
@@ -137,10 +137,6 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
-        private void CheckBox_EnableAlbumInfo_Click(object sender, RoutedEventArgs e) {
-            SaveSettings();
-        }
-
         private void CheckBox_ShowRPWhenMusicPaused_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
@@ -150,11 +146,10 @@ namespace AMWin_RichPresence {
         }
 
         private void ComboBox_RPDisplayChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            var newOption = AppleMusicDiscordClient.PreviewOptionFromIndex(ComboBox_RPDisplayChoice.SelectedIndex);
-            ((App)Application.Current).UpdateRPPreviewDisplay(newOption);
+            var newOption = AppleMusicDiscordClient.StatusDisplayOptionFromIndex(ComboBox_RPDisplayChoice.SelectedIndex);
+            ((App)Application.Current).UpdateRPStatusDisplay(newOption);
             SaveSettings();
         }
-
 
         private void CheckBox_EnableSyncLyrics_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
@@ -264,6 +259,7 @@ namespace AMWin_RichPresence {
             ((App)Application.Current).UpdateRegion();
             LocalizeUI();
         }
+
         private void ScrobbleMaxTime_TextChanged(object sender, TextChangedEventArgs e) {
             try {
                 int.Parse(ScrobbleMaxTime.Text);

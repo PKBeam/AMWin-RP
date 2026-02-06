@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+using Microsoft.VisualBasic;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -6,8 +8,7 @@ using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using Hardcodet.Wpf.TaskbarNotification;
-using Microsoft.VisualBasic;
+using static AppleMusicDiscordClient;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -75,10 +76,9 @@ namespace AMWin_RichPresence {
             }
 
             // start Discord RPC
-            var subtitleOptions = AppleMusicDiscordClient.RPSubtitleDisplayOptions.ArtistOnly;
-            var previewOptions = (AppleMusicDiscordClient.RPPreviewDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPDisplayChoice;
+            var statusDisplayOptions = (AppleMusicDiscordClient.RPStatusDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPDisplayChoice;
             var classicalComposerAsArtist = AMWin_RichPresence.Properties.Settings.Default.ClassicalComposerAsArtist;
-            discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, previewOptions: previewOptions, logger: logger);
+            discordClient = new(Constants.DiscordClientID, enabled: false, statusDisplayOptions: statusDisplayOptions, logger: logger);
 
             // start Last.FM scrobbler
             var amRegion = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion;
@@ -134,9 +134,8 @@ namespace AMWin_RichPresence {
             logger?.Log("Application finished");
         }
 
-
-        internal void UpdateRPPreviewDisplay(AppleMusicDiscordClient.RPPreviewDisplayOptions newVal) {
-            discordClient.previewOptions = newVal;
+        internal void UpdateRPStatusDisplay(AppleMusicDiscordClient.RPStatusDisplayOptions newVal) {
+            discordClient.statusDisplayOptions = newVal;
         }
 
         internal async Task<bool> UpdateLastfmCreds() {
