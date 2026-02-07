@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 using System.Linq;
 using AMWin_RichPresence;
 using DiscordRPC;
-using System.Security.RightsManagement;
+using Localisation = AMWin_RichPresence.Properties.Localisation;
 
 internal class AppleMusicDiscordClient {
     public enum RPStatusDisplayOptions {
@@ -111,14 +110,14 @@ internal class AppleMusicDiscordClient {
 
             if (amInfo.SongUrl != null) {
                 buttons.Add(new Button() {
-                    Label = Localization.Get("Listen on Apple Music"),
+                    Label = Localisation.DiscordButton_ListenOnAppleMusic,
                     Url = amInfo.SongUrl
                 });
             }
 
             if (amInfo.ArtistUrl != null) {
                 buttons.Add(new Button() {
-                    Label = Localization.Get("View Artist"),
+                    Label = Localisation.DiscordButton_ViewArtist,
                     Url = amInfo.ArtistUrl
                 });
             }
