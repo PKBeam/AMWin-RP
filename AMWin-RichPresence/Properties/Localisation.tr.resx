@@ -270,4 +270,7 @@
   <data name="Settings_TimeUnitSeconds" xml:space="preserve">
     <value>sn</value>
   </data>
+  <data name="Taskbar_Settings_Title" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
 </root>

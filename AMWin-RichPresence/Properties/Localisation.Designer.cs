@@ -313,7 +313,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Discord.
+        ///   Looks up a localized string similar to Discord RP.
         /// </summary>
         public static string Settings_Discord_SectionTitleShort {
             get {
@@ -619,7 +619,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Get the length of the song from the Apple Music website instead of the Last.FM website..
+        ///   Looks up a localized string similar to Get the length of the song from the Apple Music website instead of the Last.FM website. Slower but may yield better results..
         /// </summary>
         public static string Settings_Scrobbling_SongDurationChoice_Description {
             get {
@@ -642,6 +642,24 @@ namespace AMWin_RichPresence.Properties {
         public static string Settings_Title {
             get {
                 return ResourceManager.GetString("Settings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string Taskbar_Exit_Title {
+            get {
+                return ResourceManager.GetString("Taskbar_Exit_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Taskbar_Settings_Title {
+            get {
+                return ResourceManager.GetString("Taskbar_Settings_Title", resourceCulture);
             }
         }
     }

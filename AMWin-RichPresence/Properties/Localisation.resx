@@ -292,7 +292,7 @@
     <value>The country code of the region of your Apple Account (e.g. US).</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice_Description" xml:space="preserve">
-    <value>Get the length of the song from the Apple Music website instead of the Last.FM website.</value>
+    <value>Get the length of the song from the Apple Music website instead of the Last.FM website. Slower but may yield better results.</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime_Description" xml:space="preserve">
     <value>After this amount of time has passed, scrobble the song if it hasn't been scrobbled already.</value>
@@ -311,5 +311,11 @@
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName_Description" xml:space="preserve">
     <value>Remove common suffixes like "Single" and "EP" from album names.</value>
+  </data>
+  <data name="Taskbar_Settings_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Taskbar_Exit_Title" xml:space="preserve">
+    <value>Exit</value>
   </data>
 </root>
