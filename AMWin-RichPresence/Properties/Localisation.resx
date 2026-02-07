@@ -145,7 +145,7 @@
     <value>Show Apple Music icon</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
-    <value>User status display</value>
+    <value>Show Discord status as</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_Artist" xml:space="preserve">
     <value>Artist name</value>
@@ -166,25 +166,25 @@
     <value>Keep lyrics during instrumental breaks</value>
   </data>
   <data name="Settings_Discord_Lyrics_OpenCache" xml:space="preserve">
-    <value>Show cache</value>
+    <value>Show lyrics cache</value>
   </data>
   <data name="Settings_Discord_Lyrics_ClearCache" xml:space="preserve">
-    <value>Clear cache</value>
+    <value>Clear lyrics cache</value>
   </data>
   <data name="Settings_Scrobbling_SectionTitle" xml:space="preserve">
     <value>Scrobbling</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName" xml:space="preserve">
-    <value>Clean album name</value>
+    <value>Clean up album name</value>
   </data>
   <data name="Settings_Scrobbling_ScrobblePrimaryArtist" xml:space="preserve">
-    <value>Scrobble primary artist</value>
+    <value>Only scrobble the first artist</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice" xml:space="preserve">
-    <value>Use song duration from Apple Music web</value>
+    <value>Use song duration from Apple Music website</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime" xml:space="preserve">
-    <value>Max time before scrobble (sec)</value>
+    <value>Maximum scrobble wait:</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SectionTitle" xml:space="preserve">
     <value>Last.FM</value>
@@ -208,13 +208,13 @@
     <value>User token</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Enable" xml:space="preserve">
-    <value>Enable Last.FM</value>
+    <value>Enable Last.FM scrobbling</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_Enable" xml:space="preserve">
-    <value>Enable ListenBrainz</value>
+    <value>Enable ListenBrainz scrobbling</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SaveCredentials" xml:space="preserve">
-    <value>SaveCredentials</value>
+    <value>Save credentials</value>
   </data>
   <data name="Message_ClearLyricCache" xml:space="preserve">
     <value>Are you sure you want to delete all saved lyrics?</value>
@@ -269,5 +269,47 @@
   </data>
   <data name="Message_AppUpdate" xml:space="preserve">
     <value>A new update for AMWin-RP is available. Would you like to view the releases?</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_TimeUnitSeconds" xml:space="preserve">
+    <value>sec</value>
+  </data>
+  <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
+    <value>The input is not a valid region code for Apple Music.</value>
+  </data>
+  <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
+    <value>For classical music tracks, use the composer as the artist instead of the performer.</value>
+  </data>
+  <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
+    <value>Shows the Apple Music icon next to the album artwork in the Rich Presence display.</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
+    <value>During breaks in the music, keep showing the last played lyrics.</value>
+  </data>
+  <data name="Settings_General_AppleMusicRegion_Description" xml:space="preserve">
+    <value>The country code of the region of your Apple Account (e.g. US).</value>
+  </data>
+  <data name="Settings_Scrobbling_SongDurationChoice_Description" xml:space="preserve">
+    <value>Get the length of the song from the Apple Music website instead of the Last.FM website.</value>
+  </data>
+  <data name="Settings_Scrobbling_ScrobbleTime_Description" xml:space="preserve">
+    <value>After this amount of time has passed, scrobble the song if it hasn't been scrobbled already.</value>
+  </data>
+  <data name="Message_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Message_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Settings_General_SectionTitle" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Settings_Discord_SectionTitleShort" xml:space="preserve">
+    <value>Discord RP</value>
+  </data>
+  <data name="Settings_Scrobbling_CleanAlbumName_Description" xml:space="preserve">
+    <value>Remove common suffixes like "Single" and "EP" from album names.</value>
   </data>
 </root>

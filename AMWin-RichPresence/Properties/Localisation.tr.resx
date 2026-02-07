@@ -184,7 +184,7 @@
     <value>Şarkı süresini Apple Music Web'den almayı tercih et</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime" xml:space="preserve">
-    <value>Scrobble öncesi max süre (sn)</value>
+    <value>Scrobble öncesi max süre:</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SectionTitle" xml:space="preserve">
     <value>Last.FM</value>
@@ -263,5 +263,11 @@
   </data>
   <data name="DiscordButton_ViewArtist" xml:space="preserve">
     <value>Sanatçıyı Görüntüle</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="Settings_TimeUnitSeconds" xml:space="preserve">
+    <value>sn</value>
   </data>
 </root>

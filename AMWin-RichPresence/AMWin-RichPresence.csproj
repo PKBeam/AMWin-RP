@@ -8,7 +8,7 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\AMWinRP.ico</ApplicationIcon>
     <AssemblyVersion>1.0</AssemblyVersion>
-    <FileVersion>1.5.3</FileVersion>
+    <FileVersion>1.6.0</FileVersion>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -17,6 +17,12 @@
   <ItemGroup>
     <None Remove="Resources\AMWinRP-128x.png" />
     <None Remove="Resources\AMWinRP.ico" />
+    <None Remove="Resources\GitHub_Invertocat_Black.png" />
+    <None Remove="Resources\GitHub_Invertocat_White.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\GitHub_Invertocat_White.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,11 +33,13 @@
     <PackageReference Include="Inflatable.Lastfm" Version="1.2.0" />
     <PackageReference Include="MetaBrainz.ListenBrainz" Version="4.0.0" />
     <PackageReference Include="Meziantou.Framework.Win32.CredentialManager" Version="1.7.11" />
+    <PackageReference Include="WPF-UI" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\AMWinRP-128x.png" />
     <Resource Include="Resources\AMWinRP.ico" />
+    <Resource Include="Resources\GitHub_Invertocat_Black.png" />
   </ItemGroup>
 
   <ItemGroup>

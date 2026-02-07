@@ -223,6 +223,24 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Message_No {
+            get {
+                return ResourceManager.GetString("Message_No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Message_Yes {
+            get {
+                return ResourceManager.GetString("Message_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Discord Rich Presence.
         /// </summary>
         public static string Settings_Discord_EnableRP {
@@ -232,7 +250,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear cache.
+        ///   Looks up a localized string similar to Clear lyrics cache.
         /// </summary>
         public static string Settings_Discord_Lyrics_ClearCache {
             get {
@@ -250,7 +268,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show cache.
+        ///   Looks up a localized string similar to Show lyrics cache.
         /// </summary>
         public static string Settings_Discord_Lyrics_OpenCache {
             get {
@@ -277,11 +295,29 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to During breaks in the music, keep showing the last played lyrics..
+        /// </summary>
+        public static string Settings_Discord_Lyrics_ShowDuringBreak_Description {
+            get {
+                return ResourceManager.GetString("Settings_Discord_Lyrics_ShowDuringBreak_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discord Rich Presence.
         /// </summary>
         public static string Settings_Discord_SectionTitle {
             get {
                 return ResourceManager.GetString("Settings_Discord_SectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discord.
+        /// </summary>
+        public static string Settings_Discord_SectionTitleShort {
+            get {
+                return ResourceManager.GetString("Settings_Discord_SectionTitleShort", resourceCulture);
             }
         }
         
@@ -304,6 +340,15 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shows the Apple Music icon next to the album artwork in the Rich Presence display..
+        /// </summary>
+        public static string Settings_Discord_ShowAppleMusicIcon_Description {
+            get {
+                return ResourceManager.GetString("Settings_Discord_ShowAppleMusicIcon_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show when music is paused.
         /// </summary>
         public static string Settings_Discord_ShowWhenPaused {
@@ -313,7 +358,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User status display.
+        ///   Looks up a localized string similar to Show Discord status as.
         /// </summary>
         public static string Settings_Discord_UserStatusDisplay {
             get {
@@ -358,11 +403,29 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The country code of the region of your Apple Account (e.g. US)..
+        /// </summary>
+        public static string Settings_General_AppleMusicRegion_Description {
+            get {
+                return ResourceManager.GetString("Settings_General_AppleMusicRegion_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Treat composer as artist.
         /// </summary>
         public static string Settings_General_ComposerAsArtist {
             get {
                 return ResourceManager.GetString("Settings_General_ComposerAsArtist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For classical music tracks, use the composer as the artist instead of the performer..
+        /// </summary>
+        public static string Settings_General_ComposerAsArtist_Description {
+            get {
+                return ResourceManager.GetString("Settings_General_ComposerAsArtist_Description", resourceCulture);
             }
         }
         
@@ -376,6 +439,24 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string Settings_General_SectionTitle {
+            get {
+                return ResourceManager.GetString("Settings_General_SectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The input is not a valid region code for Apple Music..
+        /// </summary>
+        public static string Settings_General_TooltipAppleMusicRegionError {
+            get {
+                return ResourceManager.GetString("Settings_General_TooltipAppleMusicRegionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for updates on startup.
         /// </summary>
         public static string Settings_General_UpdateOnStartup {
@@ -385,11 +466,20 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clean album name.
+        ///   Looks up a localized string similar to Clean up album name.
         /// </summary>
         public static string Settings_Scrobbling_CleanAlbumName {
             get {
                 return ResourceManager.GetString("Settings_Scrobbling_CleanAlbumName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove common suffixes like &quot;Single&quot; and &quot;EP&quot; from album names..
+        /// </summary>
+        public static string Settings_Scrobbling_CleanAlbumName_Description {
+            get {
+                return ResourceManager.GetString("Settings_Scrobbling_CleanAlbumName_Description", resourceCulture);
             }
         }
         
@@ -412,7 +502,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Last.FM.
+        ///   Looks up a localized string similar to Enable Last.FM scrobbling.
         /// </summary>
         public static string Settings_Scrobbling_LastFM_Enable {
             get {
@@ -430,7 +520,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SaveCredentials.
+        ///   Looks up a localized string similar to Save credentials.
         /// </summary>
         public static string Settings_Scrobbling_LastFM_SaveCredentials {
             get {
@@ -457,7 +547,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable ListenBrainz.
+        ///   Looks up a localized string similar to Enable ListenBrainz scrobbling.
         /// </summary>
         public static string Settings_Scrobbling_ListenBrainz_Enable {
             get {
@@ -484,7 +574,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scrobble primary artist.
+        ///   Looks up a localized string similar to Only scrobble the first artist.
         /// </summary>
         public static string Settings_Scrobbling_ScrobblePrimaryArtist {
             get {
@@ -493,11 +583,20 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max time before scrobble (sec).
+        ///   Looks up a localized string similar to Maximum scrobble wait:.
         /// </summary>
         public static string Settings_Scrobbling_ScrobbleTime {
             get {
                 return ResourceManager.GetString("Settings_Scrobbling_ScrobbleTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After this amount of time has passed, scrobble the song if it hasn&apos;t been scrobbled already..
+        /// </summary>
+        public static string Settings_Scrobbling_ScrobbleTime_Description {
+            get {
+                return ResourceManager.GetString("Settings_Scrobbling_ScrobbleTime_Description", resourceCulture);
             }
         }
         
@@ -511,11 +610,38 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use song duration from Apple Music web.
+        ///   Looks up a localized string similar to Use song duration from Apple Music website.
         /// </summary>
         public static string Settings_Scrobbling_SongDurationChoice {
             get {
                 return ResourceManager.GetString("Settings_Scrobbling_SongDurationChoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get the length of the song from the Apple Music website instead of the Last.FM website..
+        /// </summary>
+        public static string Settings_Scrobbling_SongDurationChoice_Description {
+            get {
+                return ResourceManager.GetString("Settings_Scrobbling_SongDurationChoice_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sec.
+        /// </summary>
+        public static string Settings_TimeUnitSeconds {
+            get {
+                return ResourceManager.GetString("Settings_TimeUnitSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings_Title {
+            get {
+                return ResourceManager.GetString("Settings_Title", resourceCulture);
             }
         }
     }

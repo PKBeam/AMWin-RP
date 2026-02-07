@@ -6,7 +6,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using Wpf.Ui.Appearance;
 using Localisation = AMWin_RichPresence.Properties.Localisation;
+using MessageBox = Wpf.Ui.Controls.MessageBox;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -171,17 +174,22 @@ namespace AMWin_RichPresence {
 
             // TODO add support for multiple beta versions (i.e. b1 and b2)
             if (numverRemote > numverLocal || (numverRemote == numverLocal && verLocal.Contains('b') && !verRemote.Contains('b'))) {
-                var res = MessageBox.Show(
-                    Localisation.Message_AppUpdate,
-                    Localisation.Message_AppUpdate_Title,
-                    MessageBoxButton.YesNo, 
-                    MessageBoxImage.Information);
-                if (res == MessageBoxResult.Yes) {
-                    Process.Start(new ProcessStartInfo {
-                        FileName = Constants.GithubReleasesUrl,
-                        UseShellExecute = true
-                    });
-                }
+                Application.Current.Dispatcher.Invoke((Action)async delegate {
+                    var result = await new MessageBox {
+                        Title = Localisation.Message_AppUpdate_Title,
+                        Content = Localisation.Message_AppUpdate,
+                        IsCloseButtonEnabled = false,
+                        PrimaryButtonText = Localisation.Message_Yes,
+                        SecondaryButtonText = Localisation.Message_No
+                    }.ShowDialogAsync();
+
+                    if (result == MessageBoxResult.Primary) {
+                        Process.Start(new ProcessStartInfo {
+                            FileName = Constants.GithubReleasesUrl,
+                            UseShellExecute = true
+                        });
+                    }
+                });
             }
         }
     }

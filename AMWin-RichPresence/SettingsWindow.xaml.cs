@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Meziantou.Framework.Win32;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -6,21 +7,31 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Meziantou.Framework.Win32;
+using System.Windows.Media.Imaging;
+using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 using Localisation = AMWin_RichPresence.Properties.Localisation;
+using MessageBox = Wpf.Ui.Controls.MessageBox;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace AMWin_RichPresence {
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
     /// </summary>
-    public partial class SettingsWindow : Window {
+    public partial class SettingsWindow : FluentWindow {
         private bool amRegionValid { 
             get { return Constants.ValidAppleMusicRegions.Contains(AppleMusicRegion.Text.ToLower()); }
         }
         public SettingsWindow() {
+            ApplicationThemeManager.ApplySystemTheme(); 
+            SystemThemeWatcher.Watch(this);
             InitializeComponent();
-            TextBlock_VersionString.Text = Constants.ProgramVersion;
-            AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion;
+            string imagePath = IsDarkMode()
+                ? "/Resources/GitHub_Invertocat_White.png"
+                : "/Resources/GitHub_Invertocat_Black.png";
+
+            Image_GitHub.Source = new BitmapImage(new Uri(imagePath, UriKind.Relative));
+            AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion.ToUpper();
             LastfmPassword.Password = GetLastFMPassword();
         }
 
@@ -47,17 +58,8 @@ namespace AMWin_RichPresence {
         }
 
         private void AppleMusicRegion_TextChanged(object sender, TextChangedEventArgs e) {
-            if (amRegionValid) {
-                Application.Current.Resources.Remove("TextControlFocusedBorderBrush");
-            } else {
-                Application.Current.Resources["TextControlFocusedBorderBrush"] = new SolidColorBrush(Colors.Red);
-                if (AppleMusicRegion.Text.Length > 2) {
-                    AppleMusicRegion.Text = AppleMusicRegion.Text.Substring(0, 2);
-                }
-            }
-            AppleMusicRegion.Text = AppleMusicRegion.Text.ToUpper();
-            AppleMusicRegion.CaretIndex = Math.Max(0, AppleMusicRegion.Text.Length);
-
+            AppleMusicRegion.CharacterCasing = CharacterCasing.Upper;
+            AppleMusicRegionStatusIcon.Visibility = amRegionValid ? Visibility.Hidden : Visibility.Visible;
         }
 
         private void AppleMusicRegion_LostFocus(object sender, RoutedEventArgs e) {
@@ -107,34 +109,52 @@ namespace AMWin_RichPresence {
             });
         }
 
-        private void Button_DeleteLyricCache_Click(object sender, RoutedEventArgs e) {
+        private async void Button_DeleteLyricCache_Click(object sender, RoutedEventArgs e) {
             var path = Path.Combine(Constants.AppDataFolder, "LyricCache");
             if (Directory.Exists(path)) {
-                var result = MessageBox.Show(
-                    Localisation.Message_ClearLyricCache,
-                    Localisation.Message_ClearLyricCache_Title, 
-                    MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (result == MessageBoxResult.Yes) {
+                var result = await new MessageBox {
+                    Title = Localisation.Message_ClearLyricCache,
+                    Content = Localisation.Message_ClearLyricCache,
+                    IsCloseButtonEnabled = false,
+                    PrimaryButtonText = Localisation.Message_Yes,
+                    SecondaryButtonText = Localisation.Message_No,
+                    Owner = this,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                }.ShowDialogAsync();
+
+                if (result == MessageBoxResult.Primary) {
                     try {
                         foreach (var file in Directory.GetFiles(path)) {
                             File.Delete(file);
                         }
-                        MessageBox.Show(
-                            Localisation.Message_ClearedLyricCache,
-                            Localisation.Message_ClearedLyricCache_Title,
-                            MessageBoxButton.OK, MessageBoxImage.Information);
+                        await new MessageBox {
+                            Title = Localisation.Message_ClearedLyricCache_Title,
+                            Content = Localisation.Message_ClearedLyricCache,
+                            IsPrimaryButtonEnabled = false,
+                            IsSecondaryButtonEnabled = false,
+                            Owner = this,
+                            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                        }.ShowDialogAsync();
                     } catch (Exception ex) {
-                        MessageBox.Show(
-                            Localisation.Message_ClearLyricCache_Fail + ex.Message,
-                            Localisation.Message_Error,
-                            MessageBoxButton.OK, MessageBoxImage.Error);
+                        await new MessageBox {
+                            Title = Localisation.Message_Error,
+                            Content = Localisation.Message_ClearLyricCache_Fail + ex.Message,
+                            IsPrimaryButtonEnabled = false,
+                            IsSecondaryButtonEnabled = false,
+                            Owner = this,
+                            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                        }.ShowDialogAsync();
                     }
                 }
             } else {
-                MessageBox.Show(
-                    Localisation.Message_ClearLyricCache_FailNotFound,
-                    Localisation.Message_Information,
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+                await new MessageBox {
+                    Title = Localisation.Message_Information,
+                    Content = Localisation.Message_ClearLyricCache_FailNotFound,
+                    IsPrimaryButtonEnabled = false,
+                    IsSecondaryButtonEnabled = false,
+                    Owner = this,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                }.ShowDialogAsync();
             }
         }
 
@@ -227,40 +247,90 @@ namespace AMWin_RichPresence {
                 // Signals the LastFM Scrobbler to re-init with new credentials
                 var result = await ((App)Application.Current).UpdateLastfmCreds();
                 if (result) {
-                    MessageBox.Show(
-                        Localisation.Message_LastFM_Authentication_Success,
-                        Localisation.Message_LastFM_Authentication_Title,
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    await new MessageBox {
+                        Title = Localisation.Message_LastFM_Authentication_Title,
+                        Content = Localisation.Message_LastFM_Authentication_Success,
+                        IsPrimaryButtonEnabled = false,
+                        IsSecondaryButtonEnabled = false,
+                        Owner = this,
+                        WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    }.ShowDialogAsync();
                 } else {
-                    MessageBox.Show(
-                        Localisation.Message_LastFM_Authentication_Fail,
-                        Localisation.Message_LastFM_Authentication_Title,
-                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    await new MessageBox {
+                        Title = Localisation.Message_LastFM_Authentication_Title,
+                        Content = Localisation.Message_LastFM_Authentication_Fail,
+                        IsPrimaryButtonEnabled = false,
+                        IsSecondaryButtonEnabled = false,
+                        Owner = this,
+                        WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    }.ShowDialogAsync();
                 }
             }
+        }
 
+        private async void SaveListenBrainzCreds_Click(object sender, RoutedEventArgs e) {
             if (Properties.Settings.Default.ListenBrainzEnable) {
                 // Signals the ListenBrainz Scrobbler to re-init with new credentials
                 var result = await ((App)Application.Current).UpdateListenBrainzCreds();
                 if (result) {
-                    MessageBox.Show(
-                        Localisation.Message_ListenBrainz_Authentication_Success,
-                        Localisation.Message_ListenBrainz_Authentication_Title,
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    await new MessageBox {
+                        Title = Localisation.Message_ListenBrainz_Authentication_Title,
+                        Content = Localisation.Message_ListenBrainz_Authentication_Success,
+                        IsPrimaryButtonEnabled = false,
+                        IsSecondaryButtonEnabled = false,
+                        Owner = this,
+                        WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    }.ShowDialogAsync();
                 } else {
-                    MessageBox.Show(
-                        Localisation.Message_LastFM_Authentication_Fail,
-                        Localisation.Message_LastFM_Authentication_Title,
-                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    await new MessageBox {
+                        Title = Localisation.Message_ListenBrainz_Authentication_Title,
+                        Content = Localisation.Message_ListenBrainz_Authentication_Fail,
+                        IsPrimaryButtonEnabled = false,
+                        IsSecondaryButtonEnabled = false,
+                        Owner = this,
+                        WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    }.ShowDialogAsync();
                 }
             }
-            // Close();
         }
 
         public static string GetLastFMPassword() {
             // Read the stored password from Windows Credential Manager and use it to log into Last.FM
             var cred = CredentialManager.ReadCredential(applicationName: Constants.LastFMCredentialTargetName);
             return cred?.Password ?? String.Empty;
+        }
+
+        private void GitHubButton_Click(object sender, RoutedEventArgs e) {
+            Process.Start(new ProcessStartInfo {
+                FileName = Constants.GithubRepoUrl,
+                UseShellExecute = true
+            });
+        }
+
+        private bool IsDarkMode() {
+            var lightTheme = Microsoft.Win32.Registry.GetValue(
+                @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize",
+                "AppsUseLightTheme", 1);
+
+            return lightTheme is int value && value == 0;
+        }
+
+        private void NavItemGeneral_Click(object sender, RoutedEventArgs e) {
+            ScrollViewerSettings.ScrollToVerticalOffset(
+                SectionTitleGeneral.TranslatePoint(new Point(0, 0), ScrollViewerTop).Y
+            );
+        }
+
+        private void NavItemDiscord_Click(object sender, RoutedEventArgs e) {
+            ScrollViewerSettings.ScrollToVerticalOffset(
+                SectionTitleDiscord.TranslatePoint(new Point(0, 0), ScrollViewerTop).Y
+            );
+        }
+
+        private void NavItemScrobbling_Click(object sender, RoutedEventArgs e) {
+            ScrollViewerSettings.ScrollToVerticalOffset(
+                SectionTitleScrobbling.TranslatePoint(new Point(0, 0), ScrollViewerTop).Y
+            );
         }
     }
 }
