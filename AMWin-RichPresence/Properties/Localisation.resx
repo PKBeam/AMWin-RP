@@ -1,0 +1,321 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Settings_General_UpdateOnStartup" xml:space="preserve">
+    <value>Check for updates on startup</value>
+  </data>
+  <data name="Settings_General_ComposerAsArtist" xml:space="preserve">
+    <value>Treat composer as artist</value>
+  </data>
+  <data name="Settings_General_RunOnWindowsStartup" xml:space="preserve">
+    <value>Run when Windows starts</value>
+  </data>
+  <data name="Settings_General_AppleMusicRegion" xml:space="preserve">
+    <value>Apple Music region</value>
+  </data>
+  <data name="Settings_Discord_SectionTitle" xml:space="preserve">
+    <value>Discord Rich Presence</value>
+  </data>
+  <data name="Settings_Discord_EnableRP" xml:space="preserve">
+    <value>Enable Discord Rich Presence</value>
+  </data>
+  <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
+    <value>Show album artwork</value>
+  </data>
+  <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
+    <value>Show when music is paused</value>
+  </data>
+  <data name="Settings_Discord_ShowAppleMusicIcon" xml:space="preserve">
+    <value>Show Apple Music icon</value>
+  </data>
+  <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
+    <value>Show Discord status as</value>
+  </data>
+  <data name="Settings_Discord_UserStatusDisplay_Artist" xml:space="preserve">
+    <value>Artist name</value>
+  </data>
+  <data name="Settings_Discord_UserStatusDisplay_SongName" xml:space="preserve">
+    <value>Song name</value>
+  </data>
+  <data name="Settings_Discord_UserStatusDisplay_AppleMusic" xml:space="preserve">
+    <value>Apple Music</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_SectionTitle" xml:space="preserve">
+    <value>Synced Lyrics (experimental)</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_EnableLyrics" xml:space="preserve">
+    <value>Show song lyrics in Rich Presence</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_ShowDuringBreak" xml:space="preserve">
+    <value>Keep lyrics during instrumental breaks</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_OpenCache" xml:space="preserve">
+    <value>Show lyrics cache</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_ClearCache" xml:space="preserve">
+    <value>Clear lyrics cache</value>
+  </data>
+  <data name="Settings_Scrobbling_SectionTitle" xml:space="preserve">
+    <value>Scrobbling</value>
+  </data>
+  <data name="Settings_Scrobbling_CleanAlbumName" xml:space="preserve">
+    <value>Clean up album name</value>
+  </data>
+  <data name="Settings_Scrobbling_ScrobblePrimaryArtist" xml:space="preserve">
+    <value>Only scrobble the first artist</value>
+  </data>
+  <data name="Settings_Scrobbling_SongDurationChoice" xml:space="preserve">
+    <value>Use song duration from Apple Music website</value>
+  </data>
+  <data name="Settings_Scrobbling_ScrobbleTime" xml:space="preserve">
+    <value>Maximum scrobble wait:</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_SectionTitle" xml:space="preserve">
+    <value>Last.FM</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_ApiKey" xml:space="preserve">
+    <value>API key</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_ApiSecret" xml:space="preserve">
+    <value>API secret</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Settings_Scrobbling_ListenBrainz_SectionTitle" xml:space="preserve">
+    <value>ListenBrainz</value>
+  </data>
+  <data name="Settings_Scrobbling_ListenBrainz_UserToken" xml:space="preserve">
+    <value>User token</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_Enable" xml:space="preserve">
+    <value>Enable Last.FM scrobbling</value>
+  </data>
+  <data name="Settings_Scrobbling_ListenBrainz_Enable" xml:space="preserve">
+    <value>Enable ListenBrainz scrobbling</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_SaveCredentials" xml:space="preserve">
+    <value>Save credentials</value>
+  </data>
+  <data name="Message_ClearLyricCache" xml:space="preserve">
+    <value>Are you sure you want to delete all saved lyrics?</value>
+  </data>
+  <data name="Message_ClearLyricCache_Title" xml:space="preserve">
+    <value>Delete Cached Lyrics</value>
+  </data>
+  <data name="Message_ClearedLyricCache" xml:space="preserve">
+    <value>All saved lyrics have been deleted.</value>
+  </data>
+  <data name="Message_ClearedLyricCache_Title" xml:space="preserve">
+    <value>Lyrics Deleted</value>
+  </data>
+  <data name="Message_ClearLyricCache_Fail" xml:space="preserve">
+    <value>Could not delete lyrics: </value>
+  </data>
+  <data name="Message_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Message_ClearLyricCache_FailNotFound" xml:space="preserve">
+    <value>No saved lyrics found.</value>
+  </data>
+  <data name="Message_Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Message_LastFM_Authentication_Title" xml:space="preserve">
+    <value>Last.FM Authentication</value>
+  </data>
+  <data name="Message_LastFM_Authentication_Fail" xml:space="preserve">
+    <value>The Last.FM credentials could not be authenticated. Please make sure you have entered the correct username and password, and that your account is not currently locked.</value>
+  </data>
+  <data name="Message_ListenBrainz_Authentication_Title" xml:space="preserve">
+    <value>ListenBrainz Authentication</value>
+  </data>
+  <data name="Message_LastFM_Authentication_Success" xml:space="preserve">
+    <value>The Last.FM credentials were successfully authenticated.</value>
+  </data>
+  <data name="Message_ListenBrainz_Authentication_Fail" xml:space="preserve">
+    <value>The ListenBrainz credentials could not be authenticated. Please make sure you have entered the correct user token.</value>
+  </data>
+  <data name="Message_ListenBrainz_Authentication_Success" xml:space="preserve">
+    <value>The ListenBrainz credentials were successfully authenticated.</value>
+  </data>
+  <data name="DiscordButton_ListenOnAppleMusic" xml:space="preserve">
+    <value>Listen on Apple Music</value>
+  </data>
+  <data name="DiscordButton_ViewArtist" xml:space="preserve">
+    <value>View Artist</value>
+  </data>
+  <data name="Message_AppUpdate_Title" xml:space="preserve">
+    <value>New update available</value>
+  </data>
+  <data name="Message_AppUpdate" xml:space="preserve">
+    <value>A new update for AMWin-RP is available. Would you like to view the releases?</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_TimeUnitSeconds" xml:space="preserve">
+    <value>sec</value>
+  </data>
+  <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
+    <value>The input is not a valid region code for Apple Music.</value>
+  </data>
+  <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
+    <value>For classical music tracks, use the composer as the artist instead of the performer.</value>
+  </data>
+  <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
+    <value>Shows the Apple Music icon next to the album artwork in the Rich Presence display.</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
+    <value>During breaks in the music, keep showing the last played lyrics.</value>
+  </data>
+  <data name="Settings_General_AppleMusicRegion_Description" xml:space="preserve">
+    <value>The country code of the region of your Apple Account (e.g. US).</value>
+  </data>
+  <data name="Settings_Scrobbling_SongDurationChoice_Description" xml:space="preserve">
+    <value>Get the length of the song from the Apple Music website instead of the Last.FM website. Slower but may yield better results.</value>
+  </data>
+  <data name="Settings_Scrobbling_ScrobbleTime_Description" xml:space="preserve">
+    <value>After this amount of time has passed, scrobble the song if it hasn't been scrobbled already.</value>
+  </data>
+  <data name="Message_Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Message_No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Settings_General_SectionTitle" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Settings_Discord_SectionTitleShort" xml:space="preserve">
+    <value>Discord RP</value>
+  </data>
+  <data name="Settings_Scrobbling_CleanAlbumName_Description" xml:space="preserve">
+    <value>Remove common suffixes like "Single" and "EP" from album names.</value>
+  </data>
+  <data name="Taskbar_Settings_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Taskbar_Exit_Title" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+</root>

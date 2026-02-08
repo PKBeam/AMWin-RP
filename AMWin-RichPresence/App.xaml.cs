@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Security.Policy;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using Hardcodet.Wpf.TaskbarNotification;
-using Microsoft.VisualBasic;
+using Wpf.Ui.Appearance;
+using Localisation = AMWin_RichPresence.Properties.Localisation;
+using MessageBox = Wpf.Ui.Controls.MessageBox;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -75,10 +77,9 @@ namespace AMWin_RichPresence {
             }
 
             // start Discord RPC
-            var subtitleOptions = (AppleMusicDiscordClient.RPSubtitleDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPSubtitleChoice;
-            var previewOptions = (AppleMusicDiscordClient.RPPreviewDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPDisplayChoice;
+            var statusDisplayOptions = (AppleMusicDiscordClient.RPStatusDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPDisplayChoice;
             var classicalComposerAsArtist = AMWin_RichPresence.Properties.Settings.Default.ClassicalComposerAsArtist;
-            discordClient = new(Constants.DiscordClientID, enabled: false, subtitleOptions: subtitleOptions, previewOptions: previewOptions, logger: logger);
+            discordClient = new(Constants.DiscordClientID, enabled: false, statusDisplayOptions: statusDisplayOptions, logger: logger);
 
             // start Last.FM scrobbler
             var amRegion = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion;
@@ -134,12 +135,8 @@ namespace AMWin_RichPresence {
             logger?.Log("Application finished");
         }
 
-        internal void UpdateRPSubtitleDisplay(AppleMusicDiscordClient.RPSubtitleDisplayOptions newVal) {
-            discordClient.subtitleOptions = newVal;
-        }
-
-        internal void UpdateRPPreviewDisplay(AppleMusicDiscordClient.RPPreviewDisplayOptions newVal) {
-            discordClient.previewOptions = newVal;
+        internal void UpdateRPStatusDisplay(AppleMusicDiscordClient.RPStatusDisplayOptions newVal) {
+            discordClient.statusDisplayOptions = newVal;
         }
 
         internal async Task<bool> UpdateLastfmCreds() {
@@ -177,13 +174,22 @@ namespace AMWin_RichPresence {
 
             // TODO add support for multiple beta versions (i.e. b1 and b2)
             if (numverRemote > numverLocal || (numverRemote == numverLocal && verLocal.Contains('b') && !verRemote.Contains('b'))) {
-                var res = MessageBox.Show("A new update for AMWin-RP is available.\nWould you like to view the releases?", "New update available", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                if (res == MessageBoxResult.Yes) {
-                    Process.Start(new ProcessStartInfo {
-                        FileName = Constants.GithubReleasesUrl,
-                        UseShellExecute = true
-                    });
-                }
+                Application.Current.Dispatcher.Invoke((Action)async delegate {
+                    var result = await new MessageBox {
+                        Title = Localisation.Message_AppUpdate_Title,
+                        Content = Localisation.Message_AppUpdate,
+                        IsCloseButtonEnabled = false,
+                        PrimaryButtonText = Localisation.Message_Yes,
+                        SecondaryButtonText = Localisation.Message_No
+                    }.ShowDialogAsync();
+
+                    if (result == MessageBoxResult.Primary) {
+                        Process.Start(new ProcessStartInfo {
+                            FileName = Constants.GithubReleasesUrl,
+                            UseShellExecute = true
+                        });
+                    }
+                });
             }
         }
     }

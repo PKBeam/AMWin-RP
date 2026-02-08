@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Settings_General_UpdateOnStartup" xml:space="preserve">
+    <value>Açılışta güncellemeleri kontrol et</value>
+  </data>
+  <data name="Settings_General_ComposerAsArtist" xml:space="preserve">
+    <value>Besteciyi sanatçı olarak kabul et</value>
+  </data>
+  <data name="Settings_General_RunOnWindowsStartup" xml:space="preserve">
+    <value>Windows başladığında çalıştır</value>
+  </data>
+  <data name="Settings_General_AppleMusicRegion" xml:space="preserve">
+    <value>Apple Music bölgesi</value>
+  </data>
+  <data name="Settings_Discord_SectionTitle" xml:space="preserve">
+    <value>Discord ayarları</value>
+  </data>
+  <data name="Settings_Discord_EnableRP" xml:space="preserve">
+    <value>Discord RP'yi etkinleştir</value>
+  </data>
+  <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
+    <value>Kapak resimlerini göster</value>
+  </data>
+  <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
+    <value>Müzik duraklatıldığında RP'yi kapatma</value>
+  </data>
+  <data name="Settings_Discord_ShowAppleMusicIcon" xml:space="preserve">
+    <value>Durumda Apple Music ikonunu göster</value>
+  </data>
+  <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
+    <value>Discord Durum görünümü</value>
+  </data>
+  <data name="Settings_Discord_UserStatusDisplay_Artist" xml:space="preserve">
+    <value>Sanatçı Adı</value>
+  </data>
+  <data name="Settings_Discord_UserStatusDisplay_SongName" xml:space="preserve">
+    <value>Şarkı Adı</value>
+  </data>
+  <data name="Settings_Discord_UserStatusDisplay_AppleMusic" xml:space="preserve">
+    <value>Apple Music</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_SectionTitle" xml:space="preserve">
+    <value>Şarkı sözü ayarları</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_EnableLyrics" xml:space="preserve">
+    <value>Senkronize şarkı sözlerini etkinleştir</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_ShowDuringBreak" xml:space="preserve">
+    <value>Söz satırını sonraki söze kadar uzat</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_OpenCache" xml:space="preserve">
+    <value>Kaydedilen sözleri aç</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_ClearCache" xml:space="preserve">
+    <value>Kaydedilen sözleri sil</value>
+  </data>
+  <data name="Settings_Scrobbling_SectionTitle" xml:space="preserve">
+    <value>Scrobbling ayarları</value>
+  </data>
+  <data name="Settings_Scrobbling_CleanAlbumName" xml:space="preserve">
+    <value>Albüm adını temizle</value>
+  </data>
+  <data name="Settings_Scrobbling_ScrobblePrimaryArtist" xml:space="preserve">
+    <value>Sadece ana sanatçıyı scrobble et</value>
+  </data>
+  <data name="Settings_Scrobbling_SongDurationChoice" xml:space="preserve">
+    <value>Şarkı süresini Apple Music Web'den almayı tercih et</value>
+  </data>
+  <data name="Settings_Scrobbling_ScrobbleTime" xml:space="preserve">
+    <value>Scrobble öncesi max süre:</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_SectionTitle" xml:space="preserve">
+    <value>Last.FM</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_ApiKey" xml:space="preserve">
+    <value>API Anahtarı</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_ApiSecret" xml:space="preserve">
+    <value>API Gizli Anahtarı</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_Username" xml:space="preserve">
+    <value>Kullanıcı adı</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_Password" xml:space="preserve">
+    <value>Şifre</value>
+  </data>
+  <data name="Settings_Scrobbling_ListenBrainz_SectionTitle" xml:space="preserve">
+    <value>ListenBrainz</value>
+  </data>
+  <data name="Settings_Scrobbling_ListenBrainz_UserToken" xml:space="preserve">
+    <value>Kullanıcı tokeni</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_Enable" xml:space="preserve">
+    <value>Last.FM'i etkinleştir</value>
+  </data>
+  <data name="Settings_Scrobbling_ListenBrainz_Enable" xml:space="preserve">
+    <value>ListenBrainz'i etkinleştir</value>
+  </data>
+  <data name="Settings_Scrobbling_LastFM_SaveCredentials" xml:space="preserve">
+    <value>Kimlik Bilgilerini Kaydet</value>
+  </data>
+  <data name="Message_ClearLyricCache" xml:space="preserve">
+    <value>Tüm kaydedilen sözleri silmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="Message_ClearLyricCache_Title" xml:space="preserve">
+    <value>Kaydedilen Sözleri Sil</value>
+  </data>
+  <data name="Message_ClearedLyricCache" xml:space="preserve">
+    <value>Tüm kaydedilen sözler silindi.</value>
+  </data>
+  <data name="Message_ClearedLyricCache_Title" xml:space="preserve">
+    <value>Sözler Silindi</value>
+  </data>
+  <data name="Message_ClearLyricCache_Fail" xml:space="preserve">
+    <value>Sözler silinemedi: </value>
+  </data>
+  <data name="Message_Error" xml:space="preserve">
+    <value>Hata</value>
+  </data>
+  <data name="Message_ClearLyricCache_FailNotFound" xml:space="preserve">
+    <value>Kaydedilen söz bulunamadı.</value>
+  </data>
+  <data name="Message_Information" xml:space="preserve">
+    <value>Bilgi</value>
+  </data>
+  <data name="Message_LastFM_Authentication_Title" xml:space="preserve">
+    <value>Last.FM Doğrulaması</value>
+  </data>
+  <data name="Message_LastFM_Authentication_Fail" xml:space="preserve">
+    <value>Last.FM kimlik bilgileri doğrulanamadı. Lütfen kullanıcı adı ve şifrenizi doğru girdiğinizden ve hesabınızın kilitli olmadığından emin olun.</value>
+  </data>
+  <data name="Message_ListenBrainz_Authentication_Title" xml:space="preserve">
+    <value>ListenBrainz Doğrulaması</value>
+  </data>
+  <data name="Message_LastFM_Authentication_Success" xml:space="preserve">
+    <value>Last.FM kimlik bilgileri başarıyla doğrulandı.</value>
+  </data>
+  <data name="Message_ListenBrainz_Authentication_Fail" xml:space="preserve">
+    <value>ListenBrainz kimlik bilgileri doğrulanamadı. Lütfen kullanıcı tokeninizi doğru girdiğinizden emin olun.</value>
+  </data>
+  <data name="Message_ListenBrainz_Authentication_Success" xml:space="preserve">
+    <value>ListenBrainz kimlik bilgileri başarıyla doğrulandı.</value>
+  </data>
+  <data name="DiscordButton_ListenOnAppleMusic" xml:space="preserve">
+    <value>Apple Music'de Dinle</value>
+  </data>
+  <data name="DiscordButton_ViewArtist" xml:space="preserve">
+    <value>Sanatçıyı Görüntüle</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="Settings_TimeUnitSeconds" xml:space="preserve">
+    <value>sn</value>
+  </data>
+  <data name="Taskbar_Settings_Title" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+</root>

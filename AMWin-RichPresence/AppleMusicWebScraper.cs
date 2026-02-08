@@ -13,7 +13,7 @@ using System.Drawing;
 namespace AMWin_RichPresence {
     internal class AppleMusicWebScraper
     {
-        private static readonly Regex DurationRegex = new Regex(@"(?<=Duration )[0-9]*:[0-9]{2}", RegexOptions.Compiled);
+        private static readonly Regex DurationRegex = new Regex(@"(\d{1,3}:\d{2})", RegexOptions.Compiled);
         private static readonly Regex ImageUrlRegex = new Regex(@"http\S*?(?= \d{2,3}w)", RegexOptions.Compiled);
         Logger? logger;
         string? lastFmApiKey;
@@ -273,6 +273,42 @@ namespace AMWin_RichPresence {
             }
         }
 
+        // Get artist URL
+        public async Task<string?> GetArtistUrl() {
+            try {
+                return await GetArtistUrlAppleMusic();
+            } catch (Exception ex) {
+                logger?.Log($"[GetArtistUrl] An exception occurred: {ex}");
+                return null;
+            }
+        }
+        private async Task<string?> GetArtistUrlAppleMusic() {
+            try {
+                var result = await SearchSongs();
+                if (result != null) {
+                    return GetArtistUrl(result);
+                }
+                
+                result = await SearchTopResults();
+                if (result != null) {
+                    return GetArtistUrl(result);
+                }
+                return null;
+            } catch (Exception ex) {
+                logger?.Log($"[GetArtistUrlAppleMusic] An exception occurred: {ex}");
+                return null;
+            }
+        }
+        private string? GetArtistUrl(HtmlNode nodeWithSource) {
+            var subtitleNode = nodeWithSource.Descendants("span")
+                .FirstOrDefault(x => x.Attributes.Contains("data-testid") && x.Attributes["data-testid"].Value == "track-lockup-subtitle");
+            
+            var artistLinkNode = subtitleNode?.Descendants("a")
+                .FirstOrDefault(x => x.Attributes["href"].Value.Contains("/artist/"));
+                
+            return artistLinkNode?.GetAttributeValue("href", "");
+        }
+
         // Get album artwork image
         // -----------------------------------------------
         // Supported APIs: Last.FM, Apple Music web search
@@ -326,7 +362,13 @@ namespace AMWin_RichPresence {
                 .ToList();
             var imgUrls = imgSources[0].Attributes["srcset"].Value;
 
-            return ImageUrlRegex.Matches(imgUrls).Last().Value;
+            var url = ImageUrlRegex.Matches(imgUrls).Last().Value;
+            return UpscaleImageUrl(url);
+        }
+
+        private string UpscaleImageUrl(string url) {
+            // Replace resolution part (e.g. 96x96bb-60.jpg) with 1024x1024bb.jpg for high quality
+            return Regex.Replace(url, @"/\d+x\d+.*\.jpg$", "/1024x1024bb.jpg");
         }
 
         private string? GetSongUrl(HtmlNode nodeWithSource) {
@@ -389,20 +431,80 @@ namespace AMWin_RichPresence {
         private async Task<string?> GetSongDurationFromAlbumPage(string url) {
             HtmlDocument doc = await GetURL(url, "GetSongDurationFromAlbumPage");
             try {
-                var desc = doc.DocumentNode
+                // 1. Try music:song:duration meta tag
+                var durationNode = doc.DocumentNode.Descendants("meta")
+                    .FirstOrDefault(x => x.Attributes.Contains("property") && x.Attributes["property"].Value == "music:song:duration");
+                if (durationNode != null) {
+                    var isoDuration = durationNode.GetAttributeValue("content", "");
+                    var parsed = ParseIso8601Duration(isoDuration);
+                    if (parsed != null) return parsed;
+                }
+
+                // 2. Try application/ld+json (Fallback schema)
+                var jsonNode = doc.DocumentNode.SelectSingleNode("//script[@type='application/ld+json']");
+                if (jsonNode != null) {
+                    try {
+                        using var jsonDoc = JsonDocument.Parse(jsonNode.InnerText);
+                        if (jsonDoc.RootElement.TryGetProperty("tracks", out var tracks) && tracks.ValueKind == JsonValueKind.Array && tracks.GetArrayLength() > 0) {
+                            var firstTrack = tracks[0];
+                            if (firstTrack.TryGetProperty("duration", out var dProp)) {
+                                var parsed = ParseIso8601Duration(dProp.GetString() ?? "");
+                                if (parsed != null) return parsed;
+                            }
+                        }
+                    } catch { }
+                }
+
+                // 3. Fallback to og:description regex (Original method)
+                var descNode = doc.DocumentNode
                     .Descendants("meta")
-                    .First(x => x.Attributes.Contains("property") && x.Attributes["property"].Value == "og:description");
+                    .FirstOrDefault(x => x.Attributes.Contains("property") && x.Attributes["property"].Value == "og:description");
 
-                var str = desc.Attributes["content"].Value;
-                var duration = DurationRegex.Matches(str).First().Value;
+                var str = descNode?.Attributes["content"]?.Value ?? "";
+                var titleNode = doc.DocumentNode
+                    .Descendants("meta")
+                    .FirstOrDefault(x => x.Attributes.Contains("property") && x.Attributes["property"].Value == "og:title");
+                var titleStr = titleNode?.Attributes["content"]?.Value ?? "";
 
-                // check that the result actually is the song
-                if (HttpUtility.HtmlDecode(str).Contains(songName)) {
+                var matches = DurationRegex.Matches(str);
+                if (matches.Count == 0) {
+                    var bodyText = doc.DocumentNode.InnerText ?? "";
+                    matches = DurationRegex.Matches(bodyText);
+                    if (matches.Count == 0) return null;
+                }
+                var duration = matches.Last().Value;
+
+                string decodedDesc = HttpUtility.HtmlDecode(str);
+                string decodedTitle = HttpUtility.HtmlDecode(titleStr);
+                if (decodedDesc.Contains(songName, StringComparison.OrdinalIgnoreCase) || 
+                    decodedTitle.Contains(songName, StringComparison.OrdinalIgnoreCase)) {
                     return duration;
                 }
                 return null;
             } catch (Exception ex) {
                 logger?.Log($"[GetSongDurationFromAlbumPage] An exception occurred: {ex}");
+                return null;
+            }
+        }
+
+        private string? ParseIso8601Duration(string isoDuration) {
+            if (string.IsNullOrEmpty(isoDuration) || !isoDuration.StartsWith("PT")) return null;
+            try {
+                // ISO 8601 format: PT2M5S
+                int minutes = 0;
+                int seconds = 0;
+
+                var mMatch = Regex.Match(isoDuration, @"(\d+)M");
+                if (mMatch.Success) minutes = int.Parse(mMatch.Groups[1].Value);
+
+                var sMatch = Regex.Match(isoDuration, @"(\d+)S");
+                if (sMatch.Success) seconds = int.Parse(sMatch.Groups[1].Value);
+
+                var hMatch = Regex.Match(isoDuration, @"(\d+)H");
+                if (hMatch.Success) minutes += int.Parse(hMatch.Groups[1].Value) * 60;
+
+                return $"{minutes}:{seconds:D2}";
+            } catch {
                 return null;
             }
         }

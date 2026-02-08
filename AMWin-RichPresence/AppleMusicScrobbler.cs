@@ -3,12 +3,9 @@ using IF.Lastfm.Core.Objects;
 using IF.Lastfm.Core.Scrobblers;
 using MetaBrainz.ListenBrainz;
 using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace AMWin_RichPresence {
     internal interface IScrobblerCredentials { }
