@@ -18,6 +18,7 @@ namespace AMWin_RichPresence {
     /// </summary>
     public partial class App : Application {
         private static readonly CultureInfo InitialUICulture = CultureInfo.CurrentUICulture;
+        private const string OpenSettingsWindowArg = "--open-settings-window";
 
         private TaskbarIcon? taskbarIcon;
         private AppleMusicClientScraper amScraper;
@@ -45,6 +46,18 @@ namespace AMWin_RichPresence {
             Thread.CurrentThread.CurrentUICulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
             Localisation.Culture = culture;
+        }
+
+        internal static void RestartApplication(bool openSettingsWindow = false) {
+            var exePath = Constants.ExePath;
+            if (!string.IsNullOrWhiteSpace(exePath)) {
+                Process.Start(new ProcessStartInfo {
+                    FileName = exePath,
+                    Arguments = openSettingsWindow ? OpenSettingsWindowArg : "",
+                    UseShellExecute = true
+                });
+            }
+            Application.Current.Shutdown();
         }
 
         public LastFmCredentials lastFmCredentials {
@@ -152,6 +165,13 @@ namespace AMWin_RichPresence {
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
             taskbarIcon = (TaskbarIcon)FindResource("TaskbarIcon");
+            if (e.Args.Contains(OpenSettingsWindowArg, StringComparer.OrdinalIgnoreCase)) {
+                Current.Dispatcher.BeginInvoke(new Action(() => {
+                    var settingsWindow = new SettingsWindow();
+                    settingsWindow.Show();
+                    settingsWindow.Focus();
+                }));
+            }
         }
 
         private void Application_Exit(object sender, ExitEventArgs e) {

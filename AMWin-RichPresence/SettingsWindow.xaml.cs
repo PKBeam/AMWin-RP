@@ -65,11 +65,11 @@ namespace AMWin_RichPresence {
         private void InitializeLanguageSelector() {
             TextBlock_LanguageLabel.Text = GetLocalisedString("Settings_General_Language", "Language");
             TextBlock_LanguageDescription.Text = GetLocalisedString("Settings_General_Language_Description", "Restart the app after changing the language.");
-            ComboBoxItem_LanguageSystem.Content = GetLocalisedString("Settings_General_Language_System", "System default");
-            ComboBoxItem_LanguageEnglish.Content = GetLocalisedString("Settings_General_Language_English", "English");
-            ComboBoxItem_LanguageTurkish.Content = GetLocalisedString("Settings_General_Language_Turkish", "Turkce");
-            ComboBoxItem_LanguageKorean.Content = GetLocalisedString("Settings_General_Language_Korean", "Korean");
-            ComboBoxItem_LanguageJapanese.Content = GetLocalisedString("Settings_General_Language_Japanese", "Japanese");
+            ComboBoxItem_LanguageSystem.Content = GetLocalisedString("Settings_General_Language_System", "System default (System default)");
+            ComboBoxItem_LanguageEnglish.Content = GetLocalisedString("Settings_General_Language_English", "English (English)");
+            ComboBoxItem_LanguageTurkish.Content = GetLocalisedString("Settings_General_Language_Turkish", "Turkce (Turkce)");
+            ComboBoxItem_LanguageKorean.Content = GetLocalisedString("Settings_General_Language_Korean", "Korean (한국어)");
+            ComboBoxItem_LanguageJapanese.Content = GetLocalisedString("Settings_General_Language_Japanese", "Japanese (Japanese)");
 
             var selectedLanguage = App.NormalizeLanguageCode(Properties.Settings.Default.Language);
             if (!String.Equals(selectedLanguage, Properties.Settings.Default.Language, StringComparison.Ordinal)) {
@@ -121,7 +121,7 @@ namespace AMWin_RichPresence {
             }.ShowDialogAsync();
 
             if (result == MessageBoxResult.Primary) {
-                RestartApplication();
+                App.RestartApplication(openSettingsWindow: true);
             }
         }
 
@@ -270,17 +270,6 @@ namespace AMWin_RichPresence {
 
         private static void SaveSettings() {
             Properties.Settings.Default.Save();
-        }
-
-        private static void RestartApplication() {
-            var exePath = Constants.ExePath;
-            if (!string.IsNullOrWhiteSpace(exePath)) {
-                Process.Start(new ProcessStartInfo {
-                    FileName = exePath,
-                    UseShellExecute = true
-                });
-            }
-            Application.Current.Shutdown();
         }
 
         private void UpdateAppleMusicRegion() {

@@ -325,19 +325,19 @@
     <value>언어를 변경한 후 앱을 다시 시작해야 완전히 적용됩니다.</value>
   </data>
   <data name="Settings_General_Language_System" xml:space="preserve">
-    <value>시스템 기본값</value>
+    <value>시스템 기본값 (System default)</value>
   </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
-    <value>영어</value>
+    <value>영어 (English)</value>
   </data>
   <data name="Settings_General_Language_Turkish" xml:space="preserve">
-    <value>터키어</value>
+    <value>터키어 (Türkçe)</value>
   </data>
   <data name="Settings_General_Language_Korean" xml:space="preserve">
-    <value>한국어</value>
+    <value>한국어 (한국어)</value>
   </data>
   <data name="Settings_General_Language_Japanese" xml:space="preserve">
-    <value>일본어</value>
+    <value>일본어 (日本語)</value>
   </data>
   <data name="Message_RestartRequired_Title" xml:space="preserve">
     <value>다시 시작 필요</value>
