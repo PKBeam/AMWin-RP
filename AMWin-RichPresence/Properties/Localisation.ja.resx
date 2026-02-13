@@ -118,231 +118,231 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_General_UpdateOnStartup" xml:space="preserve">
-    <value>Açılışta güncellemeleri kontrol et</value>
+    <value>起動時にアップデートを確認</value>
   </data>
   <data name="Settings_General_ComposerAsArtist" xml:space="preserve">
-    <value>Besteciyi sanatçı olarak kabul et</value>
+    <value>作曲者をアーティストとして扱う</value>
   </data>
   <data name="Settings_General_RunOnWindowsStartup" xml:space="preserve">
-    <value>Windows başladığında çalıştır</value>
+    <value>Windows起動時に実行</value>
   </data>
   <data name="Settings_General_AppleMusicRegion" xml:space="preserve">
-    <value>Apple Music bölgesi</value>
+    <value>Apple Musicの地域</value>
   </data>
   <data name="Settings_Discord_SectionTitle" xml:space="preserve">
-    <value>Discord ayarları</value>
+    <value>Discord リッチプレゼンス</value>
   </data>
   <data name="Settings_Discord_EnableRP" xml:space="preserve">
-    <value>Discord RP'yi etkinleştir</value>
+    <value>Discord リッチプレゼンスを有効化</value>
   </data>
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
-    <value>Kapak resimlerini göster</value>
+    <value>アルバムアートを表示</value>
   </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
-    <value>Müzik duraklatıldığında RP'yi kapatma</value>
+    <value>音楽が一時停止中でも表示</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon" xml:space="preserve">
-    <value>Durumda Apple Music ikonunu göster</value>
+    <value>Apple Musicアイコンを表示</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
-    <value>Discord Durum görünümü</value>
+    <value>Discordステータスの表示内容</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_Artist" xml:space="preserve">
-    <value>Sanatçı Adı</value>
+    <value>アーティスト名</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_SongName" xml:space="preserve">
-    <value>Şarkı Adı</value>
+    <value>曲名</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_AppleMusic" xml:space="preserve">
     <value>Apple Music</value>
   </data>
   <data name="Settings_Discord_Lyrics_SectionTitle" xml:space="preserve">
-    <value>Şarkı sözü ayarları</value>
+    <value>同期歌詞（実験機能）</value>
   </data>
   <data name="Settings_Discord_Lyrics_EnableLyrics" xml:space="preserve">
-    <value>Senkronize şarkı sözlerini etkinleştir</value>
+    <value>リッチプレゼンスに歌詞を表示</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak" xml:space="preserve">
-    <value>Söz satırını sonraki söze kadar uzat</value>
+    <value>間奏中も歌詞を維持</value>
   </data>
   <data name="Settings_Discord_Lyrics_OpenCache" xml:space="preserve">
-    <value>Kaydedilen sözleri aç</value>
+    <value>歌詞キャッシュを開く</value>
   </data>
   <data name="Settings_Discord_Lyrics_ClearCache" xml:space="preserve">
-    <value>Kaydedilen sözleri sil</value>
+    <value>歌詞キャッシュを削除</value>
   </data>
   <data name="Settings_Scrobbling_SectionTitle" xml:space="preserve">
-    <value>Scrobbling ayarları</value>
+    <value>スクロブリング</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName" xml:space="preserve">
-    <value>Albüm adını temizle</value>
+    <value>アルバム名を整形</value>
   </data>
   <data name="Settings_Scrobbling_ScrobblePrimaryArtist" xml:space="preserve">
-    <value>Sadece ana sanatçıyı scrobble et</value>
+    <value>最初のアーティストのみスクロブル</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice" xml:space="preserve">
-    <value>Şarkı süresini Apple Music Web'den almayı tercih et</value>
+    <value>Apple Musicサイトの曲長を使用</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime" xml:space="preserve">
-    <value>Scrobble öncesi max süre:</value>
+    <value>最大スクロブル待機時間:</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SectionTitle" xml:space="preserve">
     <value>Last.FM</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_ApiKey" xml:space="preserve">
-    <value>API Anahtarı</value>
+    <value>APIキー</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_ApiSecret" xml:space="preserve">
-    <value>API Gizli Anahtarı</value>
+    <value>APIシークレット</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Username" xml:space="preserve">
-    <value>Kullanıcı adı</value>
+    <value>ユーザー名</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Password" xml:space="preserve">
-    <value>Şifre</value>
+    <value>パスワード</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_SectionTitle" xml:space="preserve">
     <value>ListenBrainz</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_UserToken" xml:space="preserve">
-    <value>Kullanıcı tokeni</value>
+    <value>ユーザートークン</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Enable" xml:space="preserve">
-    <value>Last.FM'i etkinleştir</value>
+    <value>Last.FM スクロブリングを有効化</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_Enable" xml:space="preserve">
-    <value>ListenBrainz'i etkinleştir</value>
+    <value>ListenBrainz スクロブリングを有効化</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SaveCredentials" xml:space="preserve">
-    <value>Kimlik Bilgilerini Kaydet</value>
+    <value>認証情報を保存</value>
   </data>
   <data name="Message_ClearLyricCache" xml:space="preserve">
-    <value>Tüm kaydedilen sözleri silmek istediğinize emin misiniz?</value>
+    <value>保存された歌詞をすべて削除しますか？</value>
   </data>
   <data name="Message_ClearLyricCache_Title" xml:space="preserve">
-    <value>Kaydedilen Sözleri Sil</value>
+    <value>キャッシュした歌詞を削除</value>
   </data>
   <data name="Message_ClearedLyricCache" xml:space="preserve">
-    <value>Tüm kaydedilen sözler silindi.</value>
+    <value>保存された歌詞をすべて削除しました。</value>
   </data>
   <data name="Message_ClearedLyricCache_Title" xml:space="preserve">
-    <value>Sözler Silindi</value>
+    <value>歌詞を削除しました</value>
   </data>
   <data name="Message_ClearLyricCache_Fail" xml:space="preserve">
-    <value>Sözler silinemedi: </value>
+    <value>歌詞を削除できませんでした: </value>
   </data>
   <data name="Message_Error" xml:space="preserve">
-    <value>Hata</value>
+    <value>エラー</value>
   </data>
   <data name="Message_ClearLyricCache_FailNotFound" xml:space="preserve">
-    <value>Kaydedilen söz bulunamadı.</value>
+    <value>保存された歌詞が見つかりません。</value>
   </data>
   <data name="Message_Information" xml:space="preserve">
-    <value>Bilgi</value>
+    <value>情報</value>
   </data>
   <data name="Message_LastFM_Authentication_Title" xml:space="preserve">
-    <value>Last.FM Doğrulaması</value>
+    <value>Last.FM 認証</value>
   </data>
   <data name="Message_LastFM_Authentication_Fail" xml:space="preserve">
-    <value>Last.FM kimlik bilgileri doğrulanamadı. Lütfen kullanıcı adı ve şifrenizi doğru girdiğinizden ve hesabınızın kilitli olmadığından emin olun.</value>
+    <value>Last.FM の認証情報を確認できませんでした。ユーザー名とパスワードが正しいこと、およびアカウントがロックされていないことを確認してください。</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Title" xml:space="preserve">
-    <value>ListenBrainz Doğrulaması</value>
+    <value>ListenBrainz 認証</value>
   </data>
   <data name="Message_LastFM_Authentication_Success" xml:space="preserve">
-    <value>Last.FM kimlik bilgileri başarıyla doğrulandı.</value>
+    <value>Last.FM の認証情報を確認しました。</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Fail" xml:space="preserve">
-    <value>ListenBrainz kimlik bilgileri doğrulanamadı. Lütfen kullanıcı tokeninizi doğru girdiğinizden emin olun.</value>
+    <value>ListenBrainz の認証情報を確認できませんでした。ユーザートークンが正しいことを確認してください。</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Success" xml:space="preserve">
-    <value>ListenBrainz kimlik bilgileri başarıyla doğrulandı.</value>
+    <value>ListenBrainz の認証情報を確認しました。</value>
   </data>
   <data name="DiscordButton_ListenOnAppleMusic" xml:space="preserve">
-    <value>Apple Music'de Dinle</value>
+    <value>Apple Musicで聴く</value>
   </data>
   <data name="DiscordButton_ViewArtist" xml:space="preserve">
-    <value>Sanatçıyı Görüntüle</value>
-  </data>
-  <data name="Settings_Title" xml:space="preserve">
-    <value>Ayarlar</value>
-  </data>
-  <data name="Settings_TimeUnitSeconds" xml:space="preserve">
-    <value>sn</value>
-  </data>
-  <data name="Taskbar_Settings_Title" xml:space="preserve">
-    <value>Ayarlar</value>
-  </data>
-  <data name="Taskbar_Exit_Title" xml:space="preserve">
-    <value>Cikis</value>
+    <value>アーティストを表示</value>
   </data>
   <data name="Message_AppUpdate_Title" xml:space="preserve">
-    <value>Yeni guncelleme mevcut</value>
+    <value>新しいアップデートがあります</value>
   </data>
   <data name="Message_AppUpdate" xml:space="preserve">
-    <value>AMWin-RP icin yeni bir guncelleme mevcut. Surumleri goruntulemek ister misiniz?</value>
+    <value>AMWin-RP の新しいアップデートがあります。リリースページを開きますか？</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Settings_TimeUnitSeconds" xml:space="preserve">
+    <value>秒</value>
   </data>
   <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
-    <value>Girilen deger Apple Music icin gecerli bir bolge kodu degil.</value>
+    <value>入力は Apple Music の有効な地域コードではありません。</value>
   </data>
   <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
-    <value>Klasik parcalarda sanatci yerine besteciyi kullanir.</value>
+    <value>クラシック曲では演奏者ではなく作曲者をアーティストとして使用します。</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
-    <value>Rich Presence ekraninda album kapaginin yaninda Apple Music ikonunu gosterir.</value>
+    <value>リッチプレゼンス表示で、アルバムアートの横に Apple Music アイコンを表示します。</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
-    <value>Muzikteki bosluklarda son gosterilen sarki sozunu gostermeye devam eder.</value>
+    <value>音楽の区切りでも、直前の歌詞を表示し続けます。</value>
   </data>
   <data name="Settings_General_AppleMusicRegion_Description" xml:space="preserve">
-    <value>Apple hesabinizin bolge ulke kodu (orn. TR).</value>
+    <value>Apple アカウントの地域コード（例: JP）。</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice_Description" xml:space="preserve">
-    <value>Sarki suresini Last.FM yerine Apple Music web sitesinden alir. Daha yavas ama daha iyi sonuclar verebilir.</value>
+    <value>Last.FM ではなく Apple Music のWebサイトから曲の長さを取得します。遅くなりますが精度が上がる場合があります。</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime_Description" xml:space="preserve">
-    <value>Bu sure gectiginde sarki henuz scrobble edilmediyse scrobble edilir.</value>
+    <value>この時間が経過した時点で、まだスクロブルされていない曲をスクロブルします。</value>
   </data>
   <data name="Message_Yes" xml:space="preserve">
-    <value>Evet</value>
+    <value>はい</value>
   </data>
   <data name="Message_No" xml:space="preserve">
-    <value>Hayir</value>
+    <value>いいえ</value>
   </data>
   <data name="Settings_General_SectionTitle" xml:space="preserve">
-    <value>Genel</value>
+    <value>一般</value>
   </data>
   <data name="Settings_Discord_SectionTitleShort" xml:space="preserve">
     <value>Discord RP</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName_Description" xml:space="preserve">
-    <value>Album adlarindan "Single" ve "EP" gibi yaygin ekleri kaldirir.</value>
+    <value>アルバム名から「Single」や「EP」など一般的な接尾辞を削除します。</value>
+  </data>
+  <data name="Taskbar_Settings_Title" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Taskbar_Exit_Title" xml:space="preserve">
+    <value>終了</value>
   </data>
   <data name="Settings_General_Language" xml:space="preserve">
-    <value>Dil</value>
+    <value>言語</value>
   </data>
   <data name="Settings_General_Language_Description" xml:space="preserve">
-    <value>Dil degisikligini tam uygulamak icin uygulamayi yeniden baslatin.</value>
+    <value>言語を変更した後は、完全に適用するためにアプリを再起動してください。</value>
   </data>
   <data name="Settings_General_Language_System" xml:space="preserve">
-    <value>Sistem varsayilani (System default)</value>
+    <value>システム既定 (System default)</value>
   </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
-    <value>Ingilizce (English)</value>
+    <value>英語 (English)</value>
   </data>
   <data name="Settings_General_Language_Turkish" xml:space="preserve">
-    <value>Turkce (Türkçe)</value>
+    <value>トルコ語 (Türkçe)</value>
   </data>
   <data name="Settings_General_Language_Korean" xml:space="preserve">
-    <value>Korece (한국어)</value>
+    <value>韓国語 (한국어)</value>
   </data>
   <data name="Settings_General_Language_Japanese" xml:space="preserve">
-    <value>Japonca (日本語)</value>
+    <value>日本語 (日本語)</value>
   </data>
   <data name="Message_RestartRequired_Title" xml:space="preserve">
-    <value>Yeniden baslatma gerekli</value>
+    <value>再起動が必要です</value>
   </data>
   <data name="Message_RestartRequired_Content" xml:space="preserve">
-    <value>Dil degisikligini uygulamak icin simdi yeniden baslatilsin mi?</value>
+    <value>言語変更を適用するために今すぐ再起動しますか？</value>
   </data>
 </root>

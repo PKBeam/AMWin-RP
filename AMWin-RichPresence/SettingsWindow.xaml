@@ -77,6 +77,28 @@
                                     Text="{x:Static properties:Localisation.Settings_General_ComposerAsArtist_Description}"/>
 
                                 <StackPanel Orientation="Horizontal" Margin="10 10 0 2">
+                                    <TextBlock
+                                        x:Name="TextBlock_LanguageLabel"
+                                        VerticalAlignment="Center"
+                                        Text="Language"/>
+                                    <ComboBox
+                                        x:Name="ComboBox_Language"
+                                        Width="170"
+                                        Margin="10 0 0 0"
+                                        SelectionChanged="ComboBox_Language_SelectionChanged">
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageSystem" Tag="" Content="System default (System default)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageEnglish" Tag="en" Content="English (English)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageTurkish" Tag="tr" Content="Turkce (Türkçe)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageKorean" Tag="ko" Content="Korean (한국어)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageJapanese" Tag="ja" Content="Japanese (日本語)"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBlock
+                                    x:Name="TextBlock_LanguageDescription"
+                                    Margin="10 5 0 10" FontSize="12" VerticalAlignment="Center" TextWrapping="Wrap"
+                                    Text="Restart the app after changing the language."/>
+
+                                <StackPanel Orientation="Horizontal" Margin="10 10 0 2">
                                     <TextBlock 
                                         VerticalAlignment="Center"
                                         Text="{x:Static properties:Localisation.Settings_General_AppleMusicRegion}"/>

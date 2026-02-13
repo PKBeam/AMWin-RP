@@ -318,4 +318,31 @@
   <data name="Taskbar_Exit_Title" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="Settings_General_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_General_Language_Description" xml:space="preserve">
+    <value>Restart the app after changing the language to fully apply it.</value>
+  </data>
+  <data name="Settings_General_Language_System" xml:space="preserve">
+    <value>System default (System default)</value>
+  </data>
+  <data name="Settings_General_Language_English" xml:space="preserve">
+    <value>English (English)</value>
+  </data>
+  <data name="Settings_General_Language_Turkish" xml:space="preserve">
+    <value>Turkish (Türkçe)</value>
+  </data>
+  <data name="Settings_General_Language_Korean" xml:space="preserve">
+    <value>Korean (한국어)</value>
+  </data>
+  <data name="Settings_General_Language_Japanese" xml:space="preserve">
+    <value>Japanese (日本語)</value>
+  </data>
+  <data name="Message_RestartRequired_Title" xml:space="preserve">
+    <value>Restart Required</value>
+  </data>
+  <data name="Message_RestartRequired_Content" xml:space="preserve">
+    <value>Restart now to apply the language change?</value>
+  </data>
 </root>
