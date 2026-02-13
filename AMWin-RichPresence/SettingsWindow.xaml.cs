@@ -69,6 +69,7 @@ namespace AMWin_RichPresence {
             ComboBoxItem_LanguageEnglish.Content = GetLocalisedString("Settings_General_Language_English", "English");
             ComboBoxItem_LanguageTurkish.Content = GetLocalisedString("Settings_General_Language_Turkish", "Turkce");
             ComboBoxItem_LanguageKorean.Content = GetLocalisedString("Settings_General_Language_Korean", "Korean");
+            ComboBoxItem_LanguageJapanese.Content = GetLocalisedString("Settings_General_Language_Japanese", "Japanese");
 
             var selectedLanguage = App.NormalizeLanguageCode(Properties.Settings.Default.Language);
             if (!String.Equals(selectedLanguage, Properties.Settings.Default.Language, StringComparison.Ordinal)) {
@@ -80,6 +81,7 @@ namespace AMWin_RichPresence {
                 "en" => ComboBoxItem_LanguageEnglish,
                 "tr" => ComboBoxItem_LanguageTurkish,
                 "ko" => ComboBoxItem_LanguageKorean,
+                "ja" => ComboBoxItem_LanguageJapanese,
                 _ => ComboBoxItem_LanguageSystem
             };
 

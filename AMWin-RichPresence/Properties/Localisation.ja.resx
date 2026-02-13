@@ -118,231 +118,231 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_General_UpdateOnStartup" xml:space="preserve">
-    <value>시작 시 업데이트 확인</value>
+    <value>起動時にアップデートを確認</value>
   </data>
   <data name="Settings_General_ComposerAsArtist" xml:space="preserve">
-    <value>작곡가를 아티스트로 표시</value>
+    <value>作曲者をアーティストとして扱う</value>
   </data>
   <data name="Settings_General_RunOnWindowsStartup" xml:space="preserve">
-    <value>Windows 시작 시 실행</value>
+    <value>Windows起動時に実行</value>
   </data>
   <data name="Settings_General_AppleMusicRegion" xml:space="preserve">
-    <value>Apple Music 지역</value>
+    <value>Apple Musicの地域</value>
   </data>
   <data name="Settings_Discord_SectionTitle" xml:space="preserve">
-    <value>Discord Rich Presence</value>
+    <value>Discord リッチプレゼンス</value>
   </data>
   <data name="Settings_Discord_EnableRP" xml:space="preserve">
-    <value>Discord Rich Presence 사용</value>
+    <value>Discord リッチプレゼンスを有効化</value>
   </data>
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
-    <value>앨범 아트 표시</value>
+    <value>アルバムアートを表示</value>
   </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
-    <value>음악이 일시정지되어도 표시</value>
+    <value>音楽が一時停止中でも表示</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon" xml:space="preserve">
-    <value>Apple Music 아이콘 표시</value>
+    <value>Apple Musicアイコンを表示</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
-    <value>Discord 상태 표시 방식</value>
+    <value>Discordステータスの表示内容</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_Artist" xml:space="preserve">
-    <value>아티스트 이름</value>
+    <value>アーティスト名</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_SongName" xml:space="preserve">
-    <value>곡 이름</value>
+    <value>曲名</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_AppleMusic" xml:space="preserve">
     <value>Apple Music</value>
   </data>
   <data name="Settings_Discord_Lyrics_SectionTitle" xml:space="preserve">
-    <value>동기화 가사 (실험 기능)</value>
+    <value>同期歌詞（実験機能）</value>
   </data>
   <data name="Settings_Discord_Lyrics_EnableLyrics" xml:space="preserve">
-    <value>Rich Presence에 가사 표시</value>
+    <value>リッチプレゼンスに歌詞を表示</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak" xml:space="preserve">
-    <value>연주 구간에도 가사 유지</value>
+    <value>間奏中も歌詞を維持</value>
   </data>
   <data name="Settings_Discord_Lyrics_OpenCache" xml:space="preserve">
-    <value>가사 캐시 열기</value>
+    <value>歌詞キャッシュを開く</value>
   </data>
   <data name="Settings_Discord_Lyrics_ClearCache" xml:space="preserve">
-    <value>가사 캐시 비우기</value>
+    <value>歌詞キャッシュを削除</value>
   </data>
   <data name="Settings_Scrobbling_SectionTitle" xml:space="preserve">
-    <value>스크로블링</value>
+    <value>スクロブリング</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName" xml:space="preserve">
-    <value>앨범 이름 정리</value>
+    <value>アルバム名を整形</value>
   </data>
   <data name="Settings_Scrobbling_ScrobblePrimaryArtist" xml:space="preserve">
-    <value>첫 번째 아티스트만 스크로블</value>
+    <value>最初のアーティストのみスクロブル</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice" xml:space="preserve">
-    <value>Apple Music 웹사이트의 곡 길이 사용</value>
+    <value>Apple Musicサイトの曲長を使用</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime" xml:space="preserve">
-    <value>최대 스크로블 대기 시간:</value>
+    <value>最大スクロブル待機時間:</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SectionTitle" xml:space="preserve">
     <value>Last.FM</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_ApiKey" xml:space="preserve">
-    <value>API 키</value>
+    <value>APIキー</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_ApiSecret" xml:space="preserve">
-    <value>API 시크릿</value>
+    <value>APIシークレット</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Username" xml:space="preserve">
-    <value>사용자 이름</value>
+    <value>ユーザー名</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Password" xml:space="preserve">
-    <value>비밀번호</value>
+    <value>パスワード</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_SectionTitle" xml:space="preserve">
     <value>ListenBrainz</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_UserToken" xml:space="preserve">
-    <value>사용자 토큰</value>
+    <value>ユーザートークン</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Enable" xml:space="preserve">
-    <value>Last.FM 스크로블링 사용</value>
+    <value>Last.FM スクロブリングを有効化</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_Enable" xml:space="preserve">
-    <value>ListenBrainz 스크로블링 사용</value>
+    <value>ListenBrainz スクロブリングを有効化</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SaveCredentials" xml:space="preserve">
-    <value>자격 증명 저장</value>
+    <value>認証情報を保存</value>
   </data>
   <data name="Message_ClearLyricCache" xml:space="preserve">
-    <value>저장된 가사를 모두 삭제하시겠습니까?</value>
+    <value>保存された歌詞をすべて削除しますか？</value>
   </data>
   <data name="Message_ClearLyricCache_Title" xml:space="preserve">
-    <value>캐시된 가사 삭제</value>
+    <value>キャッシュした歌詞を削除</value>
   </data>
   <data name="Message_ClearedLyricCache" xml:space="preserve">
-    <value>저장된 가사가 모두 삭제되었습니다.</value>
+    <value>保存された歌詞をすべて削除しました。</value>
   </data>
   <data name="Message_ClearedLyricCache_Title" xml:space="preserve">
-    <value>가사 삭제 완료</value>
+    <value>歌詞を削除しました</value>
   </data>
   <data name="Message_ClearLyricCache_Fail" xml:space="preserve">
-    <value>가사를 삭제할 수 없습니다: </value>
+    <value>歌詞を削除できませんでした: </value>
   </data>
   <data name="Message_Error" xml:space="preserve">
-    <value>오류</value>
+    <value>エラー</value>
   </data>
   <data name="Message_ClearLyricCache_FailNotFound" xml:space="preserve">
-    <value>저장된 가사를 찾을 수 없습니다.</value>
+    <value>保存された歌詞が見つかりません。</value>
   </data>
   <data name="Message_Information" xml:space="preserve">
-    <value>정보</value>
+    <value>情報</value>
   </data>
   <data name="Message_LastFM_Authentication_Title" xml:space="preserve">
-    <value>Last.FM 인증</value>
+    <value>Last.FM 認証</value>
   </data>
   <data name="Message_LastFM_Authentication_Fail" xml:space="preserve">
-    <value>Last.FM 자격 증명을 인증할 수 없습니다. 사용자 이름과 비밀번호를 확인하고 계정이 잠겨 있지 않은지 확인하세요.</value>
+    <value>Last.FM の認証情報を確認できませんでした。ユーザー名とパスワードが正しいこと、およびアカウントがロックされていないことを確認してください。</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Title" xml:space="preserve">
-    <value>ListenBrainz 인증</value>
+    <value>ListenBrainz 認証</value>
   </data>
   <data name="Message_LastFM_Authentication_Success" xml:space="preserve">
-    <value>Last.FM 자격 증명이 인증되었습니다.</value>
+    <value>Last.FM の認証情報を確認しました。</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Fail" xml:space="preserve">
-    <value>ListenBrainz 자격 증명을 인증할 수 없습니다. 사용자 토큰을 확인하세요.</value>
+    <value>ListenBrainz の認証情報を確認できませんでした。ユーザートークンが正しいことを確認してください。</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Success" xml:space="preserve">
-    <value>ListenBrainz 자격 증명이 인증되었습니다.</value>
+    <value>ListenBrainz の認証情報を確認しました。</value>
   </data>
   <data name="DiscordButton_ListenOnAppleMusic" xml:space="preserve">
-    <value>Apple Music에서 듣기</value>
+    <value>Apple Musicで聴く</value>
   </data>
   <data name="DiscordButton_ViewArtist" xml:space="preserve">
-    <value>아티스트 보기</value>
+    <value>アーティストを表示</value>
   </data>
   <data name="Message_AppUpdate_Title" xml:space="preserve">
-    <value>새 업데이트 사용 가능</value>
+    <value>新しいアップデートがあります</value>
   </data>
   <data name="Message_AppUpdate" xml:space="preserve">
-    <value>AMWin-RP의 새 업데이트가 있습니다. 릴리스 페이지를 보시겠습니까?</value>
+    <value>AMWin-RP の新しいアップデートがあります。リリースページを開きますか？</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
-    <value>설정</value>
+    <value>設定</value>
   </data>
   <data name="Settings_TimeUnitSeconds" xml:space="preserve">
-    <value>초</value>
+    <value>秒</value>
   </data>
   <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
-    <value>입력한 값이 Apple Music의 유효한 지역 코드가 아닙니다.</value>
+    <value>入力は Apple Music の有効な地域コードではありません。</value>
   </data>
   <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
-    <value>클래식 트랙에서 연주자 대신 작곡가를 아티스트로 사용합니다.</value>
+    <value>クラシック曲では演奏者ではなく作曲者をアーティストとして使用します。</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
-    <value>Rich Presence에서 앨범 아트 옆에 Apple Music 아이콘을 표시합니다.</value>
+    <value>リッチプレゼンス表示で、アルバムアートの横に Apple Music アイコンを表示します。</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
-    <value>음악의 공백 구간에서도 마지막 가사 줄을 계속 표시합니다.</value>
+    <value>音楽の区切りでも、直前の歌詞を表示し続けます。</value>
   </data>
   <data name="Settings_General_AppleMusicRegion_Description" xml:space="preserve">
-    <value>Apple 계정 지역의 국가 코드입니다 (예: KR).</value>
+    <value>Apple アカウントの地域コード（例: JP）。</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice_Description" xml:space="preserve">
-    <value>Last.FM 대신 Apple Music 웹사이트에서 곡 길이를 가져옵니다. 더 느리지만 더 정확할 수 있습니다.</value>
+    <value>Last.FM ではなく Apple Music のWebサイトから曲の長さを取得します。遅くなりますが精度が上がる場合があります。</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime_Description" xml:space="preserve">
-    <value>이 시간이 지나면 아직 스크로블되지 않은 곡을 스크로블합니다.</value>
+    <value>この時間が経過した時点で、まだスクロブルされていない曲をスクロブルします。</value>
   </data>
   <data name="Message_Yes" xml:space="preserve">
-    <value>예</value>
+    <value>はい</value>
   </data>
   <data name="Message_No" xml:space="preserve">
-    <value>아니요</value>
+    <value>いいえ</value>
   </data>
   <data name="Settings_General_SectionTitle" xml:space="preserve">
-    <value>일반</value>
+    <value>一般</value>
   </data>
   <data name="Settings_Discord_SectionTitleShort" xml:space="preserve">
     <value>Discord RP</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName_Description" xml:space="preserve">
-    <value>앨범 이름에서 "Single", "EP" 같은 일반 접미사를 제거합니다.</value>
+    <value>アルバム名から「Single」や「EP」など一般的な接尾辞を削除します。</value>
   </data>
   <data name="Taskbar_Settings_Title" xml:space="preserve">
-    <value>설정</value>
+    <value>設定</value>
   </data>
   <data name="Taskbar_Exit_Title" xml:space="preserve">
-    <value>종료</value>
+    <value>終了</value>
   </data>
   <data name="Settings_General_Language" xml:space="preserve">
-    <value>언어</value>
+    <value>言語</value>
   </data>
   <data name="Settings_General_Language_Description" xml:space="preserve">
-    <value>언어를 변경한 후 앱을 다시 시작해야 완전히 적용됩니다.</value>
+    <value>言語を変更した後は、完全に適用するためにアプリを再起動してください。</value>
   </data>
   <data name="Settings_General_Language_System" xml:space="preserve">
-    <value>시스템 기본값</value>
+    <value>システム既定</value>
   </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
-    <value>영어</value>
+    <value>英語</value>
   </data>
   <data name="Settings_General_Language_Turkish" xml:space="preserve">
-    <value>터키어</value>
+    <value>トルコ語</value>
   </data>
   <data name="Settings_General_Language_Korean" xml:space="preserve">
-    <value>한국어</value>
+    <value>韓国語</value>
   </data>
   <data name="Settings_General_Language_Japanese" xml:space="preserve">
-    <value>일본어</value>
+    <value>日本語</value>
   </data>
   <data name="Message_RestartRequired_Title" xml:space="preserve">
-    <value>다시 시작 필요</value>
+    <value>再起動が必要です</value>
   </data>
   <data name="Message_RestartRequired_Content" xml:space="preserve">
-    <value>언어 변경을 적용하려면 지금 다시 시작할까요?</value>
+    <value>言語変更を適用するために今すぐ再起動しますか？</value>
   </data>
 </root>
