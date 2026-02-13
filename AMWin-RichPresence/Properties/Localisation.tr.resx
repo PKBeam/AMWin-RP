@@ -273,4 +273,73 @@
   <data name="Taskbar_Settings_Title" xml:space="preserve">
     <value>Ayarlar</value>
   </data>
+  <data name="Taskbar_Exit_Title" xml:space="preserve">
+    <value>Cikis</value>
+  </data>
+  <data name="Message_AppUpdate_Title" xml:space="preserve">
+    <value>Yeni guncelleme mevcut</value>
+  </data>
+  <data name="Message_AppUpdate" xml:space="preserve">
+    <value>AMWin-RP icin yeni bir guncelleme mevcut. Surumleri goruntulemek ister misiniz?</value>
+  </data>
+  <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
+    <value>Girilen deger Apple Music icin gecerli bir bolge kodu degil.</value>
+  </data>
+  <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
+    <value>Klasik parcalarda sanatci yerine besteciyi kullanir.</value>
+  </data>
+  <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
+    <value>Rich Presence ekraninda album kapaginin yaninda Apple Music ikonunu gosterir.</value>
+  </data>
+  <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
+    <value>Muzikteki bosluklarda son gosterilen sarki sozunu gostermeye devam eder.</value>
+  </data>
+  <data name="Settings_General_AppleMusicRegion_Description" xml:space="preserve">
+    <value>Apple hesabinizin bolge ulke kodu (orn. TR).</value>
+  </data>
+  <data name="Settings_Scrobbling_SongDurationChoice_Description" xml:space="preserve">
+    <value>Sarki suresini Last.FM yerine Apple Music web sitesinden alir. Daha yavas ama daha iyi sonuclar verebilir.</value>
+  </data>
+  <data name="Settings_Scrobbling_ScrobbleTime_Description" xml:space="preserve">
+    <value>Bu sure gectiginde sarki henuz scrobble edilmediyse scrobble edilir.</value>
+  </data>
+  <data name="Message_Yes" xml:space="preserve">
+    <value>Evet</value>
+  </data>
+  <data name="Message_No" xml:space="preserve">
+    <value>Hayir</value>
+  </data>
+  <data name="Settings_General_SectionTitle" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="Settings_Discord_SectionTitleShort" xml:space="preserve">
+    <value>Discord RP</value>
+  </data>
+  <data name="Settings_Scrobbling_CleanAlbumName_Description" xml:space="preserve">
+    <value>Album adlarindan "Single" ve "EP" gibi yaygin ekleri kaldirir.</value>
+  </data>
+  <data name="Settings_General_Language" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="Settings_General_Language_Description" xml:space="preserve">
+    <value>Dil degisikligini tam uygulamak icin uygulamayi yeniden baslatin.</value>
+  </data>
+  <data name="Settings_General_Language_System" xml:space="preserve">
+    <value>Sistem varsayilani</value>
+  </data>
+  <data name="Settings_General_Language_English" xml:space="preserve">
+    <value>Ingilizce</value>
+  </data>
+  <data name="Settings_General_Language_Turkish" xml:space="preserve">
+    <value>Turkce</value>
+  </data>
+  <data name="Settings_General_Language_Korean" xml:space="preserve">
+    <value>Korece</value>
+  </data>
+  <data name="Message_RestartRequired_Title" xml:space="preserve">
+    <value>Yeniden baslatma gerekli</value>
+  </data>
+  <data name="Message_RestartRequired_Content" xml:space="preserve">
+    <value>Dil degisikligini uygulamak icin simdi yeniden baslatilsin mi?</value>
+  </data>
 </root>
