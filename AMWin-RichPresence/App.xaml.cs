@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
-using Wpf.Ui.Appearance;
 using Localisation = AMWin_RichPresence.Properties.Localisation;
 using MessageBox = Wpf.Ui.Controls.MessageBox;
 using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;

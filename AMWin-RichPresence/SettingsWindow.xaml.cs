@@ -206,11 +206,9 @@ namespace AMWin_RichPresence {
 
         private void UpdateAppleMusicRegion() {
             if (amRegionValid) {
-                AppleMusicRegion.Resources.Remove("TextControlFocusedBorderBrush");
                 Properties.Settings.Default.AppleMusicRegion = AppleMusicRegion.Text.ToLower();
             } else {
-                AppleMusicRegion.Resources["TextControlFocusedBorderBrush"] = Brushes.Red;
-                AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion;
+                AppleMusicRegion.Text = Properties.Settings.Default.AppleMusicRegion.ToUpper();
             }
             SaveSettings();
             ((App)Application.Current).UpdateRegion();

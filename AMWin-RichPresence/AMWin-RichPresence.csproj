@@ -12,6 +12,7 @@
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+	<GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
   </PropertyGroup>
 
   <ItemGroup>

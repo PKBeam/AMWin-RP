@@ -277,7 +277,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synced Lyrics (experimental).
+        ///   Looks up a localized string similar to Synced Lyrics.
         /// </summary>
         public static string Settings_Discord_Lyrics_SectionTitle {
             get {
@@ -448,7 +448,7 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The input is not a valid region code for Apple Music..
+        ///   Looks up a localized string similar to Invalid region code.
         /// </summary>
         public static string Settings_General_TooltipAppleMusicRegionError {
             get {

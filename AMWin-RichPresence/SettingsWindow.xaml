@@ -1,15 +1,17 @@
-﻿<ui:FluentWindow x:Class="AMWin_RichPresence.SettingsWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:AMWin_RichPresence"
-        xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-        mc:Ignorable="d"
-        Icon="/Resources/AMWinRP.ico"
-        ExtendsContentIntoTitleBar="True"
-        Title="{x:Static properties:Localisation.Settings_Title}" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" MinWidth="400" Width="600" Height="850">
+﻿<ui:FluentWindow 
+    x:Class="AMWin_RichPresence.SettingsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:AMWin_RichPresence"
+    xmlns:properties="clr-namespace:AMWin_RichPresence.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    mc:Ignorable="d"
+    Title="{x:Static properties:Localisation.Settings_Title}" 
+    Icon="/Resources/AMWinRP.ico"
+    ExtendsContentIntoTitleBar="True" ResizeMode="CanResize" WindowStartupLocation="CenterScreen"
+    MinWidth="515" Width="600" Height="850">
     <Grid TextElement.FontSize="14">
         <ui:TitleBar/>
         <DockPanel>
@@ -17,20 +19,22 @@
                 <DockPanel Margin="10 5 0 0">
                     <Image HorizontalAlignment="Left" Margin="0 0 0 0" Source="/Resources/AMWinRP-128x.png"/>
                     <StackPanel Orientation="Vertical" Grid.Column="1" Margin="16 0 0 0">
-                        <TextBlock FontWeight="Bold" FontSize="20" Margin="0 0 0 3" Text="{x:Static local:Constants.ApplicationStylisedName}"/>
-                        <TextBlock x:Name="TextBlock_VersionString" VerticalAlignment="Bottom" FontWeight="Light" FontSize="16" Text="{x:Static local:Constants.ProgramVersion}"/>
+                        <TextBlock
+                            FontWeight="Bold" FontSize="20" Margin="0 0 0 3"
+                            Text="{x:Static local:Constants.ApplicationStylisedName}"/>
+                        <TextBlock
+                            VerticalAlignment="Bottom" FontWeight="Light" FontSize="17"
+                            Text="{x:Static local:Constants.ProgramVersion}"/>
                     </StackPanel>
                     <Button
                         Grid.Column="2" Width="35" Margin="0 10 10 0" VerticalAlignment="Bottom"
                         Background="Transparent" BorderThickness="0" Padding="0" Cursor="Hand" HorizontalAlignment="Right"
-                        Click="GitHubButton_Click"
-                    >
-                        <Image x:Name="Image_GitHub" Source="/Resources/GitHub_Invertocat_Black.png" />
+                        Click="GitHubButton_Click">
+                        <Image x:Name="Image_GitHub" Source="/Resources/GitHub_Invertocat_Black.png"/>
                     </Button>
                 </DockPanel>
             </Border>
-            <ui:NavigationView DockPanel.Dock="Left" 
-                               IsBackButtonVisible="Collapsed" IsFooterSeparatorVisible="False" IsTopSeparatorVisible="False" OpenPaneLength="130" PaneDisplayMode="Left" IsPaneOpen="True">
+            <ui:NavigationView DockPanel.Dock="Left" IsBackButtonVisible="Collapsed" IsFooterSeparatorVisible="False" IsTopSeparatorVisible="False" OpenPaneLength="130" PaneDisplayMode="Left" IsPaneOpen="True">
                 <ui:NavigationView.MenuItems>
                     <ui:NavigationViewItem
                         x:Name="NavItemGeneral"
@@ -52,26 +56,30 @@
                     <Border>
                         <ScrollViewer x:Name="ScrollViewerSettings" VerticalScrollBarVisibility="Auto">
                             <StackPanel x:Name="ScrollViewerTop" Orientation="Vertical" Margin="20 0 25 20">
-
                                 <!-- General settings -->
-                                <TextBlock x:Name="SectionTitleGeneral"
-                                           FontSize="18" FontWeight="Bold" Padding="0 15 0 5" Margin="0 0 0 7" VerticalAlignment="Top" 
-                                           Text="{x:Static properties:Localisation.Settings_General_SectionTitle}"/>
+                                <TextBlock
+                                    x:Name="SectionTitleGeneral"
+                                    FontSize="18" FontWeight="Bold" Padding="0 15 0 5" Margin="0 0 0 7" VerticalAlignment="Top" 
+                                    Text="{x:Static properties:Localisation.Settings_General_SectionTitle}"/>
 
-                                <CheckBox x:Name="CheckBox_RunOnStartup" 
-                                        IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=RunOnStartup, Mode=TwoWay}" 
-                                        Click="CheckBox_RunOnStartup_Click" 
-                                        Content="{x:Static properties:Localisation.Settings_General_RunOnWindowsStartup}"/>
+                                <CheckBox
+                                    x:Name="CheckBox_RunOnStartup" 
+                                    IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=RunOnStartup, Mode=TwoWay}" 
+                                    Click="CheckBox_RunOnStartup_Click" 
+                                    Content="{x:Static properties:Localisation.Settings_General_RunOnWindowsStartup}"/>
 
-                                <CheckBox x:Name="CheckBox_CheckForUpdatesOnStartup" 
-                                          IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=CheckForUpdatesOnStartup, Mode=TwoWay}" 
-                                          Click="CheckBox_CheckForUpdatesOnStartup_Click" 
-                                          Content="{x:Static properties:Localisation.Settings_General_UpdateOnStartup}"/>
+                                <CheckBox
+                                    x:Name="CheckBox_CheckForUpdatesOnStartup" 
+                                    IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=CheckForUpdatesOnStartup, Mode=TwoWay}" 
+                                    Click="CheckBox_CheckForUpdatesOnStartup_Click" 
+                                    Content="{x:Static properties:Localisation.Settings_General_UpdateOnStartup}"/>
 
-                                <CheckBox x:Name="CheckBox_ClassicalComposerAsArtist" 
-                                          IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ClassicalComposerAsArtist, Mode=TwoWay}" 
-                                          Click="CheckBox_ClassicalComposerAsArtist_Click"
-                                          Content="{x:Static properties:Localisation.Settings_General_ComposerAsArtist}"/>
+                                <CheckBox
+                                    x:Name="CheckBox_ClassicalComposerAsArtist" 
+                                    IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ClassicalComposerAsArtist, Mode=TwoWay}" 
+                                    Click="CheckBox_ClassicalComposerAsArtist_Click"
+                                    Content="{x:Static properties:Localisation.Settings_General_ComposerAsArtist}"/>
+                                
                                 <TextBlock 
                                     Margin="40 0 0 10" FontSize="12"  VerticalAlignment="Center" TextWrapping="Wrap"
                                     Text="{x:Static properties:Localisation.Settings_General_ComposerAsArtist_Description}"/>
@@ -81,19 +89,22 @@
                                         VerticalAlignment="Center"
                                         Text="{x:Static properties:Localisation.Settings_General_AppleMusicRegion}"/>
                                     <TextBox 
-                                        x:Name="AppleMusicRegion" Margin="10 0 0 0" Padding="7 6 0 0" Width="40" HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Cascadia Code" FontSize="16" MaxLength="2"
+                                        x:Name="AppleMusicRegion" Margin="10 0 0 0" Padding="7 6 0 5" Width="40" HorizontalAlignment="Left" TextWrapping="Wrap" FontFamily="Cascadia Mono" FontSize="16" MaxLength="2"
                                         TextChanged="AppleMusicRegion_TextChanged" 
                                         LostFocus="AppleMusicRegion_LostFocus" 
-                                        KeyDown="AppleMusicRegion_KeyDown">
-                                    </TextBox>
-                                    <TextBlock x:Name="AppleMusicRegionStatusIcon" FontFamily="Segoe Fluent Icons" Margin="12 5 0 0"  FontSize="24" Text="&#xE783;" ToolTip="{x:Static properties:Localisation.Settings_General_TooltipAppleMusicRegionError}"/>
+                                        KeyDown="AppleMusicRegion_KeyDown"/>
+                                    <StackPanel x:Name="AppleMusicRegionStatusIcon" Orientation="Horizontal">
+                                        <ui:FontIcon Glyph="&#xE783;" FontFamily="Segoe Fluent Icons" Margin="12 4 0 0" FontSize="20"/>
+                                        <TextBlock Margin="5 8 0 0" FontSize="12" Text="{x:Static properties:Localisation.Settings_General_TooltipAppleMusicRegionError}"/>
+                                    </StackPanel>
                                 </StackPanel>
                                 <TextBlock 
                                     Margin="10 5 0 10" FontSize="12"  VerticalAlignment="Center" TextWrapping="Wrap"
                                     Text="{x:Static properties:Localisation.Settings_General_AppleMusicRegion_Description}"/>
 
                                 <!-- Discord RP settings -->
-                                <TextBlock x:Name="SectionTitleDiscord"
+                                <TextBlock
+                                    x:Name="SectionTitleDiscord"
                                     FontSize="18" FontWeight="Bold" Padding="0 15 0 5" Margin="0 10 0 7" VerticalAlignment="Top" 
                                     Text="{x:Static properties:Localisation.Settings_Discord_SectionTitle}"/>
 
@@ -136,8 +147,7 @@
                                         x:Name="ComboBox_RPDisplayChoice" 
                                         IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableDiscordRP}" 
                                         SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=RPDisplayChoice, Mode=TwoWay}" 
-                                        SelectionChanged="ComboBox_RPDisplayChoice_SelectionChanged"
-                                    >
+                                        SelectionChanged="ComboBox_RPDisplayChoice_SelectionChanged">
                                         <!-- The order of these items matters! (check the enum in AppleMusicDiscordClient.cs) -->
                                         <ComboBoxItem Content="{x:Static properties:Localisation.Settings_Discord_UserStatusDisplay_Artist}"/>
                                         <ComboBoxItem Content="{x:Static properties:Localisation.Settings_Discord_UserStatusDisplay_AppleMusic}"/>
@@ -219,15 +229,17 @@
                                     Text="{x:Static properties:Localisation.Settings_Scrobbling_SongDurationChoice_Description}"/>
 
                                 <StackPanel Orientation="Horizontal" Margin="10 10 0 5">
-                                    <TextBlock VerticalAlignment="Center" Padding="0 0 0 1" 
-                                               Text="{x:Static properties:Localisation.Settings_Scrobbling_ScrobbleTime}"/>
+                                    <TextBlock
+                                        VerticalAlignment="Center" Padding="0 0 0 1" 
+                                        Text="{x:Static properties:Localisation.Settings_Scrobbling_ScrobbleTime}"/>
                                     <TextBox 
                                         x:Name="ScrobbleMaxTime" Width="60" Margin="10 0 7 2" Padding="7 5 7 5" TextWrapping="Wrap" HorizontalContentAlignment="Right"
                                         MaxLines="1" MaxLength="5"
                                         Text="{Binding Source={x:Static properties:Settings.Default}, Path=ScrobbleMaxWait}"
                                         TextChanged="ScrobbleMaxTime_TextChanged"/>
-                                    <TextBlock VerticalAlignment="Center" Padding="0 0 0 1" 
-                                               Text="{x:Static properties:Localisation.Settings_TimeUnitSeconds}"/>
+                                    <TextBlock
+                                        VerticalAlignment="Center" Padding="0 0 0 1" 
+                                        Text="{x:Static properties:Localisation.Settings_TimeUnitSeconds}"/>
                                 </StackPanel>
                                 <TextBlock 
                                     Margin="10 0 0 10" FontSize="12"  VerticalAlignment="Center" TextWrapping="Wrap"
@@ -238,7 +250,7 @@
                                     <StackPanel>
                                         <DockPanel Margin="0 0 0 10">
                                             <TextBlock
-                                                 FontSize="16" FontWeight="SemiBold"
+                                                FontSize="16" FontWeight="SemiBold"
                                                 Text="{x:Static properties:Localisation.Settings_Scrobbling_LastFM_SectionTitle}"/>
                                             <StackPanel HorizontalAlignment="Right">
                                             <ui:ToggleSwitch 
@@ -251,14 +263,15 @@
                                             VerticalAlignment="Center"
                                             Text="{x:Static properties:Localisation.Settings_Scrobbling_LastFM_ApiKey}"/>
                                         <TextBox 
-                                            x:Name="LastfmAPIKey" Margin="0 7 0 10" TextWrapping="Wrap"
+                                            x:Name="LastfmAPIKey" Margin="0 7 0 10" TextWrapping="Wrap" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}" 
                                             Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}"/>
 
-                                        <TextBlock VerticalAlignment="Center" 
-                                           Text="{x:Static properties:Localisation.Settings_Scrobbling_LastFM_ApiSecret}"/>
+                                        <TextBlock
+                                            VerticalAlignment="Center" 
+                                            Text="{x:Static properties:Localisation.Settings_Scrobbling_LastFM_ApiSecret}"/>
                                         <TextBox 
-                                            x:Name="LastfmSecret" Margin="0 7 0 10" TextWrapping="Wrap"
+                                            x:Name="LastfmSecret" Margin="0 7 0 10" TextWrapping="Wrap" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}" 
                                             Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}"/>
 
@@ -276,7 +289,7 @@
                                         <PasswordBox 
                                             x:Name="LastfmPassword"  Margin="0 7 0 10" VerticalAlignment="Center"
                                             PasswordChar="●"
-                                            IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}" />
+                                            IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}"/>
 
                                         <Button 
                                             x:Name="SaveLastFMCreds" Margin="0 7 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" 
@@ -304,7 +317,7 @@
                                             VerticalAlignment="Center"
                                             Text="{x:Static properties:Localisation.Settings_Scrobbling_ListenBrainz_UserToken}"/>
                                         <TextBox 
-                                            x:Name="ListenBrainzUserToken" Margin="0 7 0 10" 
+                                            x:Name="ListenBrainzUserToken" Margin="0 7 0 10" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_ListenBrainzEnable}" 
                                             Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.ListenBrainzUserToken, Mode=TwoWay}" 
                                             TextWrapping="Wrap"/>               
@@ -312,7 +325,7 @@
                                         <Button x:Name="SaveListenBrainzCreds" Margin="0 7 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" 
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_ListenBrainzEnable}" 
                                             Content="{x:Static properties:Localisation.Settings_Scrobbling_LastFM_SaveCredentials}"
-                                            Click="SaveListenBrainzCreds_Click" />
+                                            Click="SaveListenBrainzCreds_Click"/>
                                     </StackPanel>
                                 </ui:Card>
                             </StackPanel>

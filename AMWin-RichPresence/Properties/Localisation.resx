@@ -157,7 +157,7 @@
     <value>Apple Music</value>
   </data>
   <data name="Settings_Discord_Lyrics_SectionTitle" xml:space="preserve">
-    <value>Synced Lyrics (experimental)</value>
+    <value>Synced Lyrics</value>
   </data>
   <data name="Settings_Discord_Lyrics_EnableLyrics" xml:space="preserve">
     <value>Show song lyrics in Rich Presence</value>
@@ -277,7 +277,7 @@
     <value>sec</value>
   </data>
   <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
-    <value>The input is not a valid region code for Apple Music.</value>
+    <value>Invalid region code</value>
   </data>
   <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
     <value>For classical music tracks, use the composer as the artist instead of the performer.</value>
