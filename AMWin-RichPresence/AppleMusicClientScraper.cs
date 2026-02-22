@@ -225,12 +225,10 @@ namespace AMWin_RichPresence {
             var songName = songNameElement.Name;
             var songAlbumArtist = songAlbumArtistElement.Name;
 
-            // the mini player doubles the album/artist string (when hovered over) to mimic an infinite scroll effect
+            // the mini player duplicates the album/artist string by a power of two (when hovered over) to mimic an infinite scroll effect
             if (isMiniPlayer) {
-                var deduped = DuduplicateSongAlbumArtistString(songAlbumArtist);
-                if (deduped != null) { 
-                    songAlbumArtist = deduped;
-                }
+                songName = DeduplicatedString(songName) ?? songName;
+                songAlbumArtist = DeduplicatedString(songAlbumArtist) ?? songAlbumArtist;
             }
 
             string songArtist = "";
@@ -479,11 +477,12 @@ namespace AMWin_RichPresence {
             return new(songArtist, songAlbum, songPerformer);
         }
 
-        private static string? DuduplicateSongAlbumArtistString(string s) {
+        // if the string is duplicated, halve it recursively
+        private static string? DeduplicatedString(string s) {
             string firstHalf = s.Substring(0, (s.Length + 1) / 2 - 1);
             string secondHalf = s.Substring((s.Length + 1) / 2);
             if (firstHalf == secondHalf) {
-                return firstHalf;
+                return DeduplicatedString(firstHalf) ?? firstHalf;
             }
             return null;
         }
