@@ -1,38 +1,37 @@
 # AMWin-RP 
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) &nbsp; ([日本語](https://github.com/PKBeam/AMWin-RP/blob/master/README-JA.md))
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) &nbsp; ([한국어](README-KO.md) | [日本語](README-JA.md))
 
 A Discord Rich Presence client for Apple Music's native Windows app.  
 Also includes scrobbling for Last.FM and ListenBrainz.
 
-<image src=https://github.com/user-attachments/assets/f3b9c100-8999-4c09-b013-8be27b25889f width=350 />  
+<image width=450 src="https://github.com/user-attachments/assets/df5d6a83-4630-4384-b521-bc80c286a499" />
 &nbsp; &nbsp; 
 <image src=https://github.com/user-attachments/assets/ea63ddf1-d822-4ffd-be9d-24e13701fce9 width=300 />
 
 ## Installation
 AMWin-RP requires Windows 11 24H2 or later.
 
-Builds for x64 and ARM64 can be found [here](https://github.com/PKBeam/AMWin-RP/releases).  
-Download the package, unzip it and place the contents somewhere safe.  
+Builds can be found [here](https://github.com/PKBeam/AMWin-RP/releases).  
 
 ### Which release do I use?
-There are two release files: the standard one and one marked as `NoRuntime`.
+Pick x64 or ARM64 based on what processor your PC has.  
+Then there are two files to choose from: the standard one and one marked as `NoRuntime`.
 
 If in doubt, use the unlabelled release (i.e. the one without `NoRuntime`).  
 This version works universally, but is larger in size because it bundles the components of .NET that are needed for the app to run.
 
-The `NoRuntime` release is much smaller, but requires you to have the [.NET 10.0 desktop runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) installed.  
+The `NoRuntime` release is much smaller, but requires you to have the [.NET 10 desktop runtime](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) installed.  
 If you don't have this runtime installed, the app will prompt you to do it when it opens.
 
 ## Usage
 You need the [Microsoft store version](https://apps.microsoft.com/detail/9PFHDD62MXS1) of Apple Music to use AMWin-RP.  
-No other version of Apple Music is supported.
 
 - Open the .exe to start the app.
 - AMWin-RP runs in the background, minimised to the system tray.  
 - Double clicking on the tray icon brings up the settings window.
   - From here you can adjust individual settings such as run on startup, scrobbling and song detection.  
 - The app can be closed by right-clicking on the tray icon and selecting "Exit".  
-- By default, the Apple Music app must be open and currently playing music (i.e. not paused) in order for the rich presence to show.
+- By default, the Apple Music app must be open and currently playing music (i.e. not paused) in order for Rich Presence to show.
 
 **Note**: If you use virtual desktops, AMWin-RP and Apple Music must be in the same desktop.  
 This is a technical limitation of the UI Automation library used to scrape the Apple Music client app.

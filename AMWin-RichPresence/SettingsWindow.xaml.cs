@@ -1,4 +1,4 @@
-﻿using Meziantou.Framework.Win32;
+using Meziantou.Framework.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -19,13 +19,18 @@ namespace AMWin_RichPresence {
     /// Interaction logic for SettingsWindow.xaml
     /// </summary>
     public partial class SettingsWindow : FluentWindow {
-        private bool amRegionValid { 
+        private bool isLanguageSelectorInitialized;
+
+        private bool amRegionValid {
             get { return Constants.ValidAppleMusicRegions.Contains(AppleMusicRegion.Text.ToLower()); }
         }
+
         public SettingsWindow() {
-            ApplicationThemeManager.ApplySystemTheme(); 
+            ApplicationThemeManager.ApplySystemTheme();
             SystemThemeWatcher.Watch(this);
             InitializeComponent();
+            InitializeLanguageSelector();
+
             string imagePath = IsDarkMode()
                 ? "/Resources/GitHub_Invertocat_White.png"
                 : "/Resources/GitHub_Invertocat_Black.png";
@@ -55,6 +60,69 @@ namespace AMWin_RichPresence {
 
         private void CheckBox_EnableRPCoverImages_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
+        }
+
+        private void InitializeLanguageSelector() {
+            TextBlock_LanguageLabel.Text = GetLocalisedString("Settings_General_Language", "Language");
+            TextBlock_LanguageDescription.Text = GetLocalisedString("Settings_General_Language_Description", "Restart the app after changing the language.");
+            ComboBoxItem_LanguageSystem.Content = GetLocalisedString("Settings_General_Language_System", "System default (System default)");
+            ComboBoxItem_LanguageEnglish.Content = GetLocalisedString("Settings_General_Language_English", "English (English)");
+            ComboBoxItem_LanguageTurkish.Content = GetLocalisedString("Settings_General_Language_Turkish", "Turkce (Turkce)");
+            ComboBoxItem_LanguageKorean.Content = GetLocalisedString("Settings_General_Language_Korean", "Korean (한국어)");
+            ComboBoxItem_LanguageJapanese.Content = GetLocalisedString("Settings_General_Language_Japanese", "Japanese (Japanese)");
+
+            var selectedLanguage = App.NormalizeLanguageCode(Properties.Settings.Default.Language);
+            if (!String.Equals(selectedLanguage, Properties.Settings.Default.Language, StringComparison.Ordinal)) {
+                Properties.Settings.Default.Language = selectedLanguage;
+                SaveSettings();
+            }
+
+            ComboBox_Language.SelectedItem = selectedLanguage switch {
+                "en" => ComboBoxItem_LanguageEnglish,
+                "tr" => ComboBoxItem_LanguageTurkish,
+                "ko" => ComboBoxItem_LanguageKorean,
+                "ja" => ComboBoxItem_LanguageJapanese,
+                _ => ComboBoxItem_LanguageSystem
+            };
+
+            isLanguageSelectorInitialized = true;
+        }
+
+        private static string GetLocalisedString(string key, string fallback) {
+            return Localisation.ResourceManager.GetString(key, Localisation.Culture) ?? fallback;
+        }
+
+        private async void ComboBox_Language_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (!isLanguageSelectorInitialized) {
+                return;
+            }
+
+            if (ComboBox_Language.SelectedItem is not ComboBoxItem selectedItem || selectedItem.Tag is not string selectedLanguage) {
+                return;
+            }
+
+            var normalizedLanguage = App.NormalizeLanguageCode(selectedLanguage);
+            if (normalizedLanguage == App.NormalizeLanguageCode(Properties.Settings.Default.Language)) {
+                return;
+            }
+
+            Properties.Settings.Default.Language = normalizedLanguage;
+            SaveSettings();
+            App.ApplyLanguagePreference();
+
+            var result = await new MessageBox {
+                Title = GetLocalisedString("Message_RestartRequired_Title", "Restart Required"),
+                Content = GetLocalisedString("Message_RestartRequired_Content", "Restart now to apply the language change?"),
+                IsCloseButtonEnabled = false,
+                PrimaryButtonText = Localisation.Message_Yes,
+                SecondaryButtonText = Localisation.Message_No,
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            }.ShowDialogAsync();
+
+            if (result == MessageBoxResult.Primary) {
+                App.RestartApplication(openSettingsWindow: true);
+            }
         }
 
         private void AppleMusicRegion_TextChanged(object sender, TextChangedEventArgs e) {

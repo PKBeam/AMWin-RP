@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Localisation = AMWin_RichPresence.Properties.Localisation;
@@ -15,6 +16,8 @@ namespace AMWin_RichPresence {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
+        private static readonly CultureInfo InitialUICulture = CultureInfo.CurrentUICulture;
+        private const string OpenSettingsWindowArg = "--open-settings-window";
 
         private TaskbarIcon? taskbarIcon;
         private AppleMusicClientScraper amScraper;
@@ -22,6 +25,39 @@ namespace AMWin_RichPresence {
         private AppleMusicLastFmScrobbler lastFmScrobblerClient;
         private AppleMusicListenBrainzScrobbler listenBrainzScrobblerClient;
         private Logger? logger;
+
+        internal static string NormalizeLanguageCode(string? languageCode) {
+            return languageCode?.Trim().ToLowerInvariant() switch {
+                "en" => "en",
+                "tr" => "tr",
+                "ko" => "ko",
+                "ja" => "ja",
+                _ => ""
+            };
+        }
+
+        internal static void ApplyLanguagePreference() {
+            var languageCode = NormalizeLanguageCode(AMWin_RichPresence.Properties.Settings.Default.Language);
+            var culture = languageCode == ""
+                ? InitialUICulture
+                : CultureInfo.GetCultureInfo(languageCode);
+
+            Thread.CurrentThread.CurrentUICulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            Localisation.Culture = culture;
+        }
+
+        internal static void RestartApplication(bool openSettingsWindow = false) {
+            var exePath = Constants.ExePath;
+            if (!string.IsNullOrWhiteSpace(exePath)) {
+                Process.Start(new ProcessStartInfo {
+                    FileName = exePath,
+                    Arguments = openSettingsWindow ? OpenSettingsWindowArg : "",
+                    UseShellExecute = true
+                });
+            }
+            Application.Current.Shutdown();
+        }
 
         public LastFmCredentials lastFmCredentials {
             get {
@@ -43,12 +79,14 @@ namespace AMWin_RichPresence {
         }
 
         public App() {
+            ApplyLanguagePreference();
 
             // make logger
             try {
                 logger = new Logger();
                 logger.Log("Application started");
                 logger.Log($"{Environment.OSVersion}");
+                logger.Log($"Using UI language: {CultureInfo.CurrentUICulture.Name}");
             } catch {
                 logger = null;
             }
@@ -126,6 +164,13 @@ namespace AMWin_RichPresence {
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
             taskbarIcon = (TaskbarIcon)FindResource("TaskbarIcon");
+            if (e.Args.Contains(OpenSettingsWindowArg, StringComparer.OrdinalIgnoreCase)) {
+                Current.Dispatcher.BeginInvoke(new Action(() => {
+                    var settingsWindow = new SettingsWindow();
+                    settingsWindow.Show();
+                    settingsWindow.Focus();
+                }));
+            }
         }
 
         private void Application_Exit(object sender, ExitEventArgs e) {
