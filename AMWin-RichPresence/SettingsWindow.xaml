@@ -91,7 +91,7 @@
                                         Text="Language"/>
                                     <ComboBox
                                         x:Name="ComboBox_Language"
-                                        Width="170"
+                                        Width="245"
                                         Margin="10 0 0 0"
                                         SelectionChanged="ComboBox_Language_SelectionChanged">
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageSystem" Tag="" Content="System default (System default)"/>
