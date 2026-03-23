@@ -32,6 +32,7 @@ namespace AMWin_RichPresence {
                 "tr" => "tr",
                 "ko" => "ko",
                 "ja" => "ja",
+                "ru" => "ru",
                 _ => ""
             };
         }

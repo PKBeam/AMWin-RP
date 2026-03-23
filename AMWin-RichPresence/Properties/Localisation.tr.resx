@@ -339,6 +339,9 @@
   <data name="Settings_General_Language_Japanese" xml:space="preserve">
     <value>Japonca (日本語)</value>
   </data>
+  <data name="Settings_General_Language_Russian" xml:space="preserve">
+    <value>Rusca (Русский)</value>
+  </data>
   <data name="Message_RestartRequired_Title" xml:space="preserve">
     <value>Yeniden baslatma gerekli</value>
   </data>
