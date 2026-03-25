@@ -4,9 +4,9 @@
 Un cliente de Discord Rich Presence para la app nativa de Apple Music en Windows.
 Además incluye scrobbling para Last.FM y ListenBrainz.
 
-<image width=450 src="https://github.com/user-attachments/assets/99a3ee0e-3b60-4e78-9f59-9d5429c195cb" />
+<image width=450 src="https://github.com/user-attachments/assets/7a8e738a-d7af-4a67-9cf4-f4cf9c3c31d1" />
 &nbsp; &nbsp; 
-<image src=https://github.com/user-attachments/assets/4b4605d4-6107-4c09-a047-d6d29cdb435c width=300 />
+<image src=https://github.com/user-attachments/assets/f5464285-77de-4f98-ac8c-38dca5991c7f width=300 />
 
 ## Instalación
 AMWin-RP requiere de Windows 11 24H2 o posterior.
