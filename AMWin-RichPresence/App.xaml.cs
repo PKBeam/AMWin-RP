@@ -27,11 +27,14 @@ namespace AMWin_RichPresence {
         private Logger? logger;
 
         internal static string NormalizeLanguageCode(string? languageCode) {
-            return languageCode?.Trim().ToLowerInvariant() switch {
+            return languageCode?.Trim().ToLowerInvariant() switch
+            {
                 "en" => "en",
                 "tr" => "tr",
                 "ko" => "ko",
                 "ja" => "ja",
+                "ru" => "ru",
+                "es" => "es",
                 _ => ""
             };
         }
