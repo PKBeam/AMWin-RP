@@ -274,7 +274,7 @@
     <value>Ajustes</value>
   </data>
   <data name="Settings_TimeUnitSeconds" xml:space="preserve">
-    <value>"</value>
+    <value>segundos</value>
   </data>
   <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
     <value>Código de región no válido</value>
