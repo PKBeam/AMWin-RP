@@ -142,6 +142,7 @@
                                     IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableRPCoverImages, Mode=TwoWay}" 
                                     Click="CheckBox_EnableRPCoverImages_Click" 
                                     Content="{x:Static properties:Localisation.Settings_Discord_ShowAlbumArt}"/>
+
                                 <CheckBox 
                                     x:Name="CheckBox_ShowRPAlbumTitle" 
                                     IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableDiscordRP}" 
