@@ -51,7 +51,7 @@ internal class AppleMusicDiscordClient {
         }
     }
 
-    public void SetPresence(AppleMusicInfo amInfo, bool showSmallImage, bool showBigImage) {
+    public void SetPresence(AppleMusicInfo amInfo, bool showSmallImage, bool showBigImage, bool showAlbumTitle) {
         if (!enabled) {
             return;
         }
@@ -98,7 +98,7 @@ internal class AppleMusicDiscordClient {
                 State = songArtist,
                 Assets = new Assets() {
                     LargeImageKey = (showBigImage ? amInfo.CoverArtUrl : null) ?? Constants.DiscordAppleMusicImageKey ?? "",
-                    LargeImageText = songLyrics ?? songAlbum,
+                    LargeImageText = songLyrics ?? (showAlbumTitle ? songAlbum : ""),
                     SmallImageKey = "",
                     SmallImageText = ""
                 },

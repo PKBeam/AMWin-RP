@@ -110,6 +110,18 @@ namespace AMWin_RichPresence.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowAlbumTitle {
+            get {
+                return ((bool)(this["ShowAlbumTitle"]));
+            }
+            set {
+                this["ShowAlbumTitle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool EnableDiscordRP {
             get {
                 return ((bool)(this["EnableDiscordRP"]));

@@ -138,6 +138,9 @@
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
     <value>アルバムアートを表示</value>
   </data>
+  <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
+    <value>アルバムタイトルを表示</value>
+  </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
     <value>音楽が一時停止中でも表示</value>
   </data>
@@ -284,6 +287,9 @@
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
     <value>リッチプレゼンス表示で、アルバムアートの横に Apple Music アイコンを表示します。</value>
+  </data>
+  <data name="Settings_Discord_ShowAlbumTitle_Description" xml:space="preserve">
+    <value>リッチプレゼンス表示で、曲とアーティストの下にアルバムタイトルを表示します。</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
     <value>音楽の区切りでも、直前の歌詞を表示し続けます。</value>

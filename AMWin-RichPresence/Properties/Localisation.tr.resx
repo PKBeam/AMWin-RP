@@ -144,6 +144,9 @@
   <data name="Settings_Discord_ShowAppleMusicIcon" xml:space="preserve">
     <value>Durumda Apple Music ikonunu göster</value>
   </data>
+  <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
+    <value>[Translate]</value>
+  </data>
   <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
     <value>Discord Durum görünümü</value>
   </data>
@@ -287,6 +290,9 @@
   </data>
   <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
     <value>Klasik parcalarda sanatci yerine besteciyi kullanir.</value>
+  </data>
+  <data name="Settings_Discord_ShowAlbumTitle_Description" xml:space="preserve">
+    <value>[TRANSLATE]</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
     <value>Rich Presence ekraninda album kapaginin yaninda Apple Music ikonunu gosterir.</value>
