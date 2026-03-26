@@ -82,6 +82,8 @@ namespace AMWin_RichPresence {
                 "tr" => ComboBoxItem_LanguageTurkish,
                 "ko" => ComboBoxItem_LanguageKorean,
                 "ja" => ComboBoxItem_LanguageJapanese,
+                "ru" => ComboBoxItem_LanguageRussian,
+                "es" => ComboBoxItem_LanguageSpanish,
                 _ => ComboBoxItem_LanguageSystem
             };
 
