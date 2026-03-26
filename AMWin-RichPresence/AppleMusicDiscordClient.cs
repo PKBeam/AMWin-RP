@@ -24,9 +24,9 @@ internal class AppleMusicDiscordClient {
     string? songLyrics = null;
 
     public AppleMusicDiscordClient(
-        string discordClientID, 
+        string discordClientID,
         bool enabled = true,
-        RPStatusDisplayOptions statusDisplayOptions = RPStatusDisplayOptions.Artist, 
+        RPStatusDisplayOptions statusDisplayOptions = RPStatusDisplayOptions.Artist,
         Logger? logger = null
     ) {
         this.discordClientID = discordClientID;
@@ -64,6 +64,11 @@ internal class AppleMusicDiscordClient {
         // hack to show 1-character song names
         while (songName.Length < 2) {
             songName += "\u0000";
+        }
+        //
+        // hack to show 1-character album names
+        while (songAlbum.Length < 2) {
+            songAlbum += "\u0000";
         }
 
         // pick the subtitle format to show
