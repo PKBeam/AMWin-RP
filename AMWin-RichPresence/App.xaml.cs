@@ -1,4 +1,4 @@
-﻿using Hardcodet.Wpf.TaskbarNotification;
+﻿﻿using Hardcodet.Wpf.TaskbarNotification;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -32,6 +32,8 @@ namespace AMWin_RichPresence {
                 "tr" => "tr",
                 "ko" => "ko",
                 "ja" => "ja",
+                "ru" => "ru",
+                "es" => "es",
                 _ => ""
             };
         }
