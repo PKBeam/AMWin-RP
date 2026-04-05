@@ -99,6 +99,7 @@
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageTurkish" Tag="tr" Content="Turkce (Türkçe)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageKorean" Tag="ko" Content="Korean (한국어)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageJapanese" Tag="ja" Content="Japanese (日本語)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageRussian" Tag="ru" Content="Russian (Русский)"/>
                                     </ComboBox>
                                 </StackPanel>
                                 <TextBlock
