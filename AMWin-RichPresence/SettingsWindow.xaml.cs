@@ -153,6 +153,9 @@ namespace AMWin_RichPresence {
         private void CheckBox_ShowAppleMusicIcon_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
+        private void CheckBox_ShowAlbumTitle_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
 
         private void ComboBox_RPDisplayChoice_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var newOption = AppleMusicDiscordClient.StatusDisplayOptionFromIndex(ComboBox_RPDisplayChoice.SelectedIndex);

@@ -138,6 +138,9 @@
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
     <value>Show album artwork</value>
   </data>
+  <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
+    <value>Show album title</value>
+  </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
     <value>Show when music is paused</value>
   </data>
@@ -284,6 +287,9 @@
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
     <value>Shows the Apple Music icon next to the album artwork in the Rich Presence display.</value>
+  </data>
+  <data name="Settings_Discord_ShowAlbumTitle_Description" xml:space="preserve">
+    <value>Shows the album title below the song and artist in the Rich Presence display.</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
     <value>During breaks in the music, keep showing the last played lyrics.</value>

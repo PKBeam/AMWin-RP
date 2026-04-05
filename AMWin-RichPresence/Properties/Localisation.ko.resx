@@ -138,6 +138,9 @@
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
     <value>앨범 아트 표시</value>
   </data>
+  <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
+    <value>[TRANSLATE]</value>
+  </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
     <value>음악이 일시정지되어도 표시</value>
   </data>
@@ -287,6 +290,9 @@
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
     <value>음악의 공백 구간에서도 마지막 가사 줄을 계속 표시합니다.</value>
+  </data>
+  <data name="Settings_Discord_AlbumTitle_Description" xml:space="preserve">
+    <value>[TRANSLATE]</value>
   </data>
   <data name="Settings_General_AppleMusicRegion_Description" xml:space="preserve">
     <value>Apple 계정 지역의 국가 코드입니다 (예: KR).</value>

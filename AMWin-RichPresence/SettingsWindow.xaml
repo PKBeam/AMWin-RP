@@ -79,7 +79,7 @@
                                     IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ClassicalComposerAsArtist, Mode=TwoWay}" 
                                     Click="CheckBox_ClassicalComposerAsArtist_Click"
                                     Content="{x:Static properties:Localisation.Settings_General_ComposerAsArtist}"/>
-                                
+
                                 <TextBlock 
                                     Margin="40 0 0 10" FontSize="12"  VerticalAlignment="Center" TextWrapping="Wrap"
                                     Text="{x:Static properties:Localisation.Settings_General_ComposerAsArtist_Description}"/>
@@ -144,6 +144,13 @@
                                     Click="CheckBox_EnableRPCoverImages_Click" 
                                     Content="{x:Static properties:Localisation.Settings_Discord_ShowAlbumArt}"/>
 
+                                <CheckBox 
+                                    x:Name="CheckBox_ShowRPAlbumTitle" 
+                                    IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableDiscordRP}" 
+                                    IsChecked="{Binding ShowAlbumTitle, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" 
+                                    Click="CheckBox_ShowAlbumTitle_Click" 
+                                    Content="{x:Static properties:Localisation.Settings_Discord_ShowAlbumTitle}"/>
+
                                 <CheckBox
                                     x:Name="CheckBox_ShowRPWhenMusicPaused" 
                                     IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableDiscordRP}" 
@@ -197,7 +204,7 @@
                                         <TextBlock 
                                             Margin="0 0 0 15" FontSize="12"  VerticalAlignment="Center" TextWrapping="Wrap"
                                             Text="{x:Static properties:Localisation.Settings_Discord_Lyrics_EnableLyrics}"/>
-                                        
+
                                         <CheckBox 
                                             x:Name="CheckBox_ExtendLyricsLine" 
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableSyncLyrics}"
@@ -217,10 +224,10 @@
                                                 x:Name="Button_DeleteLyricCache"
                                                 Content="{x:Static properties:Localisation.Settings_Discord_Lyrics_ClearCache}" 
                                                 Click="Button_DeleteLyricCache_Click"/>
-                                        </StackPanel>   
+                                        </StackPanel>
                                     </StackPanel>
                                 </ui:Card>
-                                
+
                                 <!-- Scrobbling settings -->
                                 <TextBlock 
                                     x:Name="SectionTitleScrobbling"
@@ -276,7 +283,7 @@
                                                 FontSize="16" FontWeight="SemiBold"
                                                 Text="{x:Static properties:Localisation.Settings_Scrobbling_LastFM_SectionTitle}"/>
                                             <StackPanel HorizontalAlignment="Right">
-                                            <ui:ToggleSwitch 
+                                                <ui:ToggleSwitch 
                                                 x:Name="CheckBox_LastfmEnable" Margin="0 2 0 10"
                                                 IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmEnable, Mode=TwoWay}"
                                                 Click="CheckBox_LastfmEnable_Click"/>
@@ -343,7 +350,7 @@
                                             x:Name="ListenBrainzUserToken" Margin="0 7 0 10" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_ListenBrainzEnable}" 
                                             Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.ListenBrainzUserToken, Mode=TwoWay}" 
-                                            TextWrapping="Wrap"/>               
+                                            TextWrapping="Wrap"/>
 
                                         <Button x:Name="SaveListenBrainzCreds" Margin="0 7 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" 
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_ListenBrainzEnable}" 
