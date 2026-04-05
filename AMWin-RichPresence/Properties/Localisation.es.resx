@@ -118,243 +118,237 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_General_UpdateOnStartup" xml:space="preserve">
-    <value>시작 시 업데이트 확인</value>
+    <value>Comprobar actualizaciones al iniciar</value>
   </data>
   <data name="Settings_General_ComposerAsArtist" xml:space="preserve">
-    <value>작곡가를 아티스트로 표시</value>
+    <value>Considerar al compositor como artista</value>
   </data>
   <data name="Settings_General_RunOnWindowsStartup" xml:space="preserve">
-    <value>Windows 시작 시 실행</value>
+    <value>Ejecutar al iniciar Windows</value>
   </data>
   <data name="Settings_General_AppleMusicRegion" xml:space="preserve">
-    <value>Apple Music 지역</value>
+    <value>Región de Apple Music</value>
   </data>
   <data name="Settings_Discord_SectionTitle" xml:space="preserve">
     <value>Discord Rich Presence</value>
   </data>
   <data name="Settings_Discord_EnableRP" xml:space="preserve">
-    <value>Discord Rich Presence 사용</value>
+    <value>Habilitar Discord Rich Presence</value>
   </data>
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
-    <value>앨범 아트 표시</value>
-  </data>
-  <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
-    <value>[TRANSLATE]</value>
+    <value>Mostrar portada del álbum</value>
   </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
-    <value>음악이 일시정지되어도 표시</value>
+    <value>Mostrar cuando la música está pausada</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon" xml:space="preserve">
-    <value>Apple Music 아이콘 표시</value>
+    <value>Mostrar icono de Apple Music</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
-    <value>Discord 상태 표시 방식</value>
+    <value>Mostrar estado de Discord como</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_Artist" xml:space="preserve">
-    <value>아티스트 이름</value>
+    <value>Nombre del artista</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_SongName" xml:space="preserve">
-    <value>곡 이름</value>
+    <value>Título de la canción</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_AppleMusic" xml:space="preserve">
     <value>Apple Music</value>
   </data>
   <data name="Settings_Discord_Lyrics_SectionTitle" xml:space="preserve">
-    <value>동기화 가사 (실험 기능)</value>
+    <value>Letra Sincronizada</value>
   </data>
   <data name="Settings_Discord_Lyrics_EnableLyrics" xml:space="preserve">
-    <value>Rich Presence에 가사 표시</value>
+    <value>Mostrar letra de la canción en Rich Presence</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak" xml:space="preserve">
-    <value>연주 구간에도 가사 유지</value>
+    <value>Mantener letra en secciones instrumentales</value>
   </data>
   <data name="Settings_Discord_Lyrics_OpenCache" xml:space="preserve">
-    <value>가사 캐시 열기</value>
+    <value>Abrir caché de letras</value>
   </data>
   <data name="Settings_Discord_Lyrics_ClearCache" xml:space="preserve">
-    <value>가사 캐시 비우기</value>
+    <value>Limpiar caché de letras</value>
   </data>
   <data name="Settings_Scrobbling_SectionTitle" xml:space="preserve">
-    <value>스크로블링</value>
+    <value>Scrobbling</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName" xml:space="preserve">
-    <value>앨범 이름 정리</value>
+    <value>Limpiar nombre del álbum</value>
   </data>
   <data name="Settings_Scrobbling_ScrobblePrimaryArtist" xml:space="preserve">
-    <value>첫 번째 아티스트만 스크로블</value>
+    <value>Solo scrobblear el primer artista</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice" xml:space="preserve">
-    <value>Apple Music 웹사이트의 곡 길이 사용</value>
+    <value>Usar la duración de la canción de la web de Apple Music</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime" xml:space="preserve">
-    <value>최대 스크로블 대기 시간:</value>
+    <value>Máxima espera para scrobblear:</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SectionTitle" xml:space="preserve">
     <value>Last.FM</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_ApiKey" xml:space="preserve">
-    <value>API 키</value>
+    <value>Clave API</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_ApiSecret" xml:space="preserve">
-    <value>API 시크릿</value>
+    <value>API Secret</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Username" xml:space="preserve">
-    <value>사용자 이름</value>
+    <value>Nombre de usuario</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Password" xml:space="preserve">
-    <value>비밀번호</value>
+    <value>Contraseña</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_SectionTitle" xml:space="preserve">
     <value>ListenBrainz</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_UserToken" xml:space="preserve">
-    <value>사용자 토큰</value>
+    <value>Token de usuario</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Enable" xml:space="preserve">
-    <value>Last.FM 스크로블링 사용</value>
+    <value>Habilitar scrobbling de Last.FM</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_Enable" xml:space="preserve">
-    <value>ListenBrainz 스크로블링 사용</value>
+    <value>Habilitar scrobbling de ListenBrainz</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SaveCredentials" xml:space="preserve">
-    <value>자격 증명 저장</value>
+    <value>Guardar credenciales</value>
   </data>
   <data name="Message_ClearLyricCache" xml:space="preserve">
-    <value>저장된 가사를 모두 삭제하시겠습니까?</value>
+    <value>¿Estás seguro de eliminar todas las letras guardadas?</value>
   </data>
   <data name="Message_ClearLyricCache_Title" xml:space="preserve">
-    <value>캐시된 가사 삭제</value>
+    <value>Eliminar letras en caché</value>
   </data>
   <data name="Message_ClearedLyricCache" xml:space="preserve">
-    <value>저장된 가사가 모두 삭제되었습니다.</value>
+    <value>Todas las letras guardadas han sido eliminadas.</value>
   </data>
   <data name="Message_ClearedLyricCache_Title" xml:space="preserve">
-    <value>가사 삭제 완료</value>
+    <value>Letras Eliminadas</value>
   </data>
   <data name="Message_ClearLyricCache_Fail" xml:space="preserve">
-    <value>가사를 삭제할 수 없습니다: </value>
+    <value>No se logró eliminar las letars: </value>
   </data>
   <data name="Message_Error" xml:space="preserve">
-    <value>오류</value>
+    <value>Error</value>
   </data>
   <data name="Message_ClearLyricCache_FailNotFound" xml:space="preserve">
-    <value>저장된 가사를 찾을 수 없습니다.</value>
+    <value>No se han encontrado letras guardadas.</value>
   </data>
   <data name="Message_Information" xml:space="preserve">
-    <value>정보</value>
+    <value>Información</value>
   </data>
   <data name="Message_LastFM_Authentication_Title" xml:space="preserve">
-    <value>Last.FM 인증</value>
+    <value>Autenticación de Last.FM</value>
   </data>
   <data name="Message_LastFM_Authentication_Fail" xml:space="preserve">
-    <value>Last.FM 자격 증명을 인증할 수 없습니다. 사용자 이름과 비밀번호를 확인하고 계정이 잠겨 있지 않은지 확인하세요.</value>
+    <value>Las credenciales de Last.FM no han podido ser autenticadas. Por favor asegúrate de haber introducido correctamente el usuario y contraseña, y que su cuenta no esté actualmente bloqueada.</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Title" xml:space="preserve">
-    <value>ListenBrainz 인증</value>
+    <value>Autenticación de ListenBrainz</value>
   </data>
   <data name="Message_LastFM_Authentication_Success" xml:space="preserve">
-    <value>Last.FM 자격 증명이 인증되었습니다.</value>
+    <value>Se han autenticado exitosamente las credenciales de Last.FM.</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Fail" xml:space="preserve">
-    <value>ListenBrainz 자격 증명을 인증할 수 없습니다. 사용자 토큰을 확인하세요.</value>
+    <value>Las credenciales de ListenBrainz no han podido ser autenticadas. Por favor asegúrate de haber introducido correctamente el token de usuario.</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Success" xml:space="preserve">
-    <value>ListenBrainz 자격 증명이 인증되었습니다.</value>
+    <value>Se han autenticado exitosamente las credenciales de ListenBrainz.</value>
   </data>
   <data name="DiscordButton_ListenOnAppleMusic" xml:space="preserve">
-    <value>Apple Music에서 듣기</value>
+    <value>Escuchar en Apple Music</value>
   </data>
   <data name="DiscordButton_ViewArtist" xml:space="preserve">
-    <value>아티스트 보기</value>
+    <value>Ver Artista</value>
   </data>
   <data name="Message_AppUpdate_Title" xml:space="preserve">
-    <value>새 업데이트 사용 가능</value>
+    <value>Nueva actualización disponible</value>
   </data>
   <data name="Message_AppUpdate" xml:space="preserve">
-    <value>AMWin-RP의 새 업데이트가 있습니다. 릴리스 페이지를 보시겠습니까?</value>
+    <value>Una nueva actualización para AMWin-RP está disponible. ¿Te gustaría ver las versiones?</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
-    <value>설정</value>
+    <value>Ajustes</value>
   </data>
   <data name="Settings_TimeUnitSeconds" xml:space="preserve">
-    <value>초</value>
+    <value>segundos</value>
   </data>
   <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
-    <value>입력한 값이 Apple Music의 유효한 지역 코드가 아닙니다.</value>
+    <value>Código de región no válido</value>
   </data>
   <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
-    <value>클래식 트랙에서 연주자 대신 작곡가를 아티스트로 사용합니다.</value>
+    <value>Para piezas de música clásica, utilizar el compositor como artista en lugar del intérprete.</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
-    <value>Rich Presence에서 앨범 아트 옆에 Apple Music 아이콘을 표시합니다.</value>
+    <value>Muestra el icono de Apple Music junto a la portada del álbum en el Rich Presence display.</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
-    <value>음악의 공백 구간에서도 마지막 가사 줄을 계속 표시합니다.</value>
-  </data>
-  <data name="Settings_Discord_AlbumTitle_Description" xml:space="preserve">
-    <value>[TRANSLATE]</value>
+    <value>Durante los silencios en la música, seguir mostrando las últimas letras cantadas.</value>
   </data>
   <data name="Settings_General_AppleMusicRegion_Description" xml:space="preserve">
-    <value>Apple 계정 지역의 국가 코드입니다 (예: KR).</value>
+    <value>El código de región de tu cuenta de Apple (e.g. ES).</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice_Description" xml:space="preserve">
-    <value>Last.FM 대신 Apple Music 웹사이트에서 곡 길이를 가져옵니다. 더 느리지만 더 정확할 수 있습니다.</value>
+    <value>Obtener la duración de la canción del sitio web de Apple Music en lugar del sitio web de Last.FM. Más lento, pero puede ofrecer mejores resultados.</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime_Description" xml:space="preserve">
-    <value>이 시간이 지나면 아직 스크로블되지 않은 곡을 스크로블합니다.</value>
+    <value>Tras este periodo de tiempo, scrobblea la canción si no ha sido scrobbleada todavía.</value>
   </data>
   <data name="Message_Yes" xml:space="preserve">
-    <value>예</value>
+    <value>Sí</value>
   </data>
   <data name="Message_No" xml:space="preserve">
-    <value>아니요</value>
+    <value>No</value>
   </data>
   <data name="Settings_General_SectionTitle" xml:space="preserve">
-    <value>일반</value>
+    <value>General</value>
   </data>
   <data name="Settings_Discord_SectionTitleShort" xml:space="preserve">
     <value>Discord RP</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName_Description" xml:space="preserve">
-    <value>앨범 이름에서 "Single", "EP" 같은 일반 접미사를 제거합니다.</value>
+    <value>Elimina sufijos comunes como "Single" y "EP" del nombre de los álbumes.</value>
   </data>
   <data name="Taskbar_Settings_Title" xml:space="preserve">
-    <value>설정</value>
+    <value>Ajustes</value>
   </data>
   <data name="Taskbar_Exit_Title" xml:space="preserve">
-    <value>종료</value>
+    <value>Salir</value>
   </data>
   <data name="Settings_General_Language" xml:space="preserve">
-    <value>언어</value>
+    <value>Idioma</value>
   </data>
   <data name="Settings_General_Language_Description" xml:space="preserve">
-    <value>언어를 변경한 후 앱을 다시 시작해야 완전히 적용됩니다.</value>
+    <value>Reinicia la app después de cambiar el idioma para aplicar correctamente los cambios.</value>
   </data>
   <data name="Settings_General_Language_System" xml:space="preserve">
-    <value>시스템 기본값 (System default)</value>
+    <value>Por defecto del sistema (Por defecto del sistema)</value>
   </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
-    <value>영어 (English)</value>
+    <value>Inglés (English)</value>
   </data>
   <data name="Settings_General_Language_Turkish" xml:space="preserve">
-    <value>터키어 (Türkçe)</value>
+    <value>Turco (Türkçe)</value>
   </data>
   <data name="Settings_General_Language_Korean" xml:space="preserve">
-    <value>한국어 (한국어)</value>
+    <value>Coreano (한국어)</value>
   </data>
   <data name="Settings_General_Language_Japanese" xml:space="preserve">
-    <value>일본어 (日本語)</value>
+    <value>Japonés (日本語)</value>
   </data>
   <data name="Settings_General_Language_Russian" xml:space="preserve">
-    <value>러시아 (Русский)</value>
+    <value>Ruso (Русский)</value>
   </data>
   <data name="Settings_General_Language_Spanish" xml:space="preserve">
-    <value>스페인어 (Español)</value>
+    <value>Español (Español)</value>
   </data>
   <data name="Message_RestartRequired_Title" xml:space="preserve">
-    <value>다시 시작 필요</value>
+    <value>Se Requiere Reiniciar</value>
   </data>
   <data name="Message_RestartRequired_Content" xml:space="preserve">
-    <value>언어 변경을 적용하려면 지금 다시 시작할까요?</value>
+    <value>¿Reiniciar ahora para aplicar el cambio de idioma?</value>
   </data>
 </root>
