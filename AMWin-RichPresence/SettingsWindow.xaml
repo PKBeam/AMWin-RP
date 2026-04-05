@@ -79,7 +79,7 @@
                                     IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ClassicalComposerAsArtist, Mode=TwoWay}" 
                                     Click="CheckBox_ClassicalComposerAsArtist_Click"
                                     Content="{x:Static properties:Localisation.Settings_General_ComposerAsArtist}"/>
-                                
+
                                 <TextBlock 
    Margin="40 0 0 10" FontSize="12"  VerticalAlignment="Center" TextWrapping="Wrap"
                                     Text="{x:Static properties:Localisation.Settings_General_ComposerAsArtist_Description}"/>
@@ -99,6 +99,7 @@
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageTurkish" Tag="tr" Content="Turkce (Türkçe)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageKorean" Tag="ko" Content="Korean (한국어)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageJapanese" Tag="ja" Content="Japanese (日本語)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageRussian" Tag="ru" Content="Russian (Русский)"/>
                                     </ComboBox>
                                 </StackPanel>
                                 <TextBlock
@@ -142,6 +143,13 @@
                                     IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableRPCoverImages, Mode=TwoWay}" 
                                     Click="CheckBox_EnableRPCoverImages_Click" 
                           Content="{x:Static properties:Localisation.Settings_Discord_ShowAlbumArt}"/>
+
+                                <CheckBox 
+                                    x:Name="CheckBox_ShowRPAlbumTitle" 
+                                    IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableDiscordRP}" 
+                                    IsChecked="{Binding ShowAlbumTitle, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" 
+                                    Click="CheckBox_ShowAlbumTitle_Click" 
+                                    Content="{x:Static properties:Localisation.Settings_Discord_ShowAlbumTitle}"/>
 
                                 <CheckBox
                                               x:Name="CheckBox_ShowRPWhenMusicPaused" 
@@ -212,9 +220,14 @@
                                                 Content="{x:Static properties:Localisation.Settings_Discord_Lyrics_OpenCache}" 
                                                 Click="Button_OpenLyricCache_Click" />
                                             <Button 
-                                        </StackPanel>   
-                                 </StackPanel>
+                                                x:Name="Button_DeleteLyricCache"
+                                                Content="{x:Static properties:Localisation.Settings_Discord_Lyrics_ClearCache}" 
+                                                Click="Button_DeleteLyricCache_Click"/>
+                                        </StackPanel>
+                                    </StackPanel>
                                 </ui:Card>
+
+                                <!-- Scrobbling settings -->
                                 <TextBlock 
                                    x:Name="SectionTitleScrobbling"
                                      Padding="0 15 0 5" Margin="0 20 0 7" FontWeight="Bold" FontSize="18" 
@@ -269,8 +282,8 @@
                                                 FontSize="16" FontWeight="SemiBold"
                                                 Text="{x:Static properties:Localisation.Settings_Scrobbling_LastFM_SectionTitle}"/>
                                             <StackPanel HorizontalAlignment="Right">
-                                              <ui:ToggleSwitch 
-                                             x:Name="CheckBox_LastfmEnable" Margin="0 2 0 10"
+                                                <ui:ToggleSwitch 
+                                                x:Name="CheckBox_LastfmEnable" Margin="0 2 0 10"
                                                 IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmEnable, Mode=TwoWay}"
                                                 Click="CheckBox_LastfmEnable_Click"/>
                                             </StackPanel>
@@ -334,7 +347,8 @@
                                           x:Name="ListenBrainzUserToken" Margin="0 7 0 10" FontFamily="Cascadia Mono"
                                               IsEnabled="{Binding IsChecked, ElementName=CheckBox_ListenBrainzEnable}" 
                                             Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.ListenBrainzUserToken, Mode=TwoWay}" 
-                                            TextWrapping="Wrap"/>               
+                                            TextWrapping="Wrap"/>
+
                                         <Button x:Name="SaveListenBrainzCreds" Margin="0 7 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" 
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_ListenBrainzEnable}" 
                                             Content="{x:Static properties:Localisation.Settings_Scrobbling_LastFM_SaveCredentials}"
