@@ -1,5 +1,5 @@
 # AMWin-RP
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) &nbsp; ([English](README.md) | [Korean](README-KO.md) | [Japanese](README-JA.md))
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) &nbsp; ([English](README.md) | [Korean](README-KO.md) | [Japanese](README-JA.md) | [Español](README-ES.md))
 
 Клиент Discord Rich Presence для нативного приложения Apple Music на Windows.  
 Также включает скробблинг в Last.FM и ListenBrainz.
