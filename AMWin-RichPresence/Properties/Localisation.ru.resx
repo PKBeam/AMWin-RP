@@ -138,6 +138,9 @@
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
     <value>Показывать обложку альбома</value>
   </data>
+  <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
+    <value>[TRANSLATE]</value>
+  </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
     <value>Показывать при паузе</value>
   </data>
@@ -285,6 +288,9 @@
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
     <value>Показывает значок Apple Music рядом с обложкой альбома в Rich Presence.</value>
   </data>
+  <data name="Settings_Discord_AlbumTitle_Description" xml:space="preserve">
+    <value>[TRANSLATE]</value>
+  </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
     <value>Во время пауз в музыке продолжать показывать последнюю строку текста.</value>
   </data>
@@ -341,6 +347,9 @@
   </data>
   <data name="Settings_General_Language_Russian" xml:space="preserve">
     <value>Русский (Русский)</value>
+  </data>
+  <data name="Settings_General_Language_Spanish" xml:space="preserve">
+    <value>Испанский (Español)</value>
   </data>
   <data name="Message_RestartRequired_Title" xml:space="preserve">
     <value>Требуется перезапуск</value>

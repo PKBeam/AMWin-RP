@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!--
     Microsoft ResX Schema
@@ -137,6 +137,9 @@
   </data>
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
     <value>Mostrar portada del álbum</value>
+  </data>
+  <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
+    <value>Mostrar título del álbum</value>
   </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
     <value>Mostrar cuando la música está pausada</value>
@@ -285,6 +288,9 @@
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
     <value>Muestra el icono de Apple Music junto a la portada del álbum en el Rich Presence display.</value>
   </data>
+  <data name="Settings_Discord_ShowAlbumTitle_Description" xml:space="preserve">
+    <value>Muestra el título del álbum debajo de la canción y el artista en el Rich Presence display.</value>
+  </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
     <value>Durante los silencios en la música, seguir mostrando las últimas letras cantadas.</value>
   </data>
@@ -325,7 +331,7 @@
     <value>Reinicia la app después de cambiar el idioma para aplicar correctamente los cambios.</value>
   </data>
   <data name="Settings_General_Language_System" xml:space="preserve">
-    <value>Por defecto del sistema (Por defecto del sistema)</value>
+    <value>Por defecto del sistema (System default)</value>
   </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
     <value>Inglés (English)</value>
