@@ -329,6 +329,15 @@ namespace AMWin_RichPresence.Properties {
                 return ResourceManager.GetString("Settings_Discord_ShowAlbumArt", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show album title.
+        /// </summary>
+        public static string Settings_Discord_ShowAlbumTitle {
+            get {
+                return ResourceManager.GetString("Settings_Discord_ShowAlbumTitle", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Show Apple Music icon.

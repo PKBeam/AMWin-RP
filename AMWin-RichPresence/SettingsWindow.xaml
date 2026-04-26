@@ -1,4 +1,4 @@
-﻿<ui:FluentWindow 
+﻿﻿<ui:FluentWindow
     x:Class="AMWin_RichPresence.SettingsWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -99,6 +99,8 @@
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageTurkish" Tag="tr" Content="Turkce (Türkçe)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageKorean" Tag="ko" Content="Korean (한국어)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageJapanese" Tag="ja" Content="Japanese (日本語)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageRussian" Tag="ru" Content="Russian (Русский)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageSpanish" Tag="es" Content="Spanish (Español)"/>
                                     </ComboBox>
                                 </StackPanel>
                                 <TextBlock
@@ -141,7 +143,14 @@
                                     IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableDiscordRP}" 
                                     IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=EnableRPCoverImages, Mode=TwoWay}" 
                                     Click="CheckBox_EnableRPCoverImages_Click" 
-                                    Content="{x:Static properties:Localisation.Settings_Discord_ShowAlbumArt}"/>
+                          Content="{x:Static properties:Localisation.Settings_Discord_ShowAlbumArt}"/>
+
+                                <CheckBox 
+                                    x:Name="CheckBox_ShowRPAlbumTitle" 
+                                    IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableDiscordRP}" 
+                                    IsChecked="{Binding ShowAlbumTitle, Mode=TwoWay, Source={x:Static properties:Settings.Default}}" 
+                                    Click="CheckBox_ShowAlbumTitle_Click" 
+                                    Content="{x:Static properties:Localisation.Settings_Discord_ShowAlbumTitle}"/>
 
                                 <CheckBox
                                     x:Name="CheckBox_ShowRPWhenMusicPaused" 
