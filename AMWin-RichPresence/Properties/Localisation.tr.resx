@@ -333,6 +333,9 @@
   <data name="Settings_General_Language_System" xml:space="preserve">
     <value>Sistem varsayilani (System default)</value>
   </data>
+  <data name="Settings_General_Language_German" xml:space="preserve">
+    <value>Almanca (German)</value>
+  </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
     <value>Ingilizce (English)</value>
   </data>

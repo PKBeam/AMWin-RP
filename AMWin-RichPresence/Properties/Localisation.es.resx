@@ -333,6 +333,9 @@
   <data name="Settings_General_Language_System" xml:space="preserve">
     <value>Por defecto del sistema (System default)</value>
   </data>
+  <data name="Settings_General_Language_German" xml:space="preserve">
+    <value>Aleman (German)</value>
+  </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
     <value>Inglés (English)</value>
   </data>

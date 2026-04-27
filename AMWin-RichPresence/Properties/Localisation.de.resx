@@ -1,61 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
     <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
     <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Name1"><value>this is my long string</value><comment>Das ist ein Kommentar</comment></data>
     <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
     <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
         <value>[base64 mime encoded serialized .NET Framework object]</value>
     </data>
     <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
+        <comment>Das ist ein Kommentar</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -118,246 +118,246 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Settings_General_UpdateOnStartup" xml:space="preserve">
-    <value>Проверять обновления при запуске</value>
+    <value>Beim Start auf Updates prüfen</value>
   </data>
   <data name="Settings_General_ComposerAsArtist" xml:space="preserve">
-    <value>Считать композитора исполнителем</value>
+    <value>Componist als Künstler behandeln</value>
   </data>
   <data name="Settings_General_RunOnWindowsStartup" xml:space="preserve">
-    <value>Запускать вместе с Windows</value>
+    <value>Beim Start von Windows ausführen</value>
   </data>
   <data name="Settings_General_AppleMusicRegion" xml:space="preserve">
-    <value>Регион Apple Music</value>
+    <value>Apple Music region</value>
   </data>
   <data name="Settings_Discord_SectionTitle" xml:space="preserve">
     <value>Discord Rich Presence</value>
   </data>
   <data name="Settings_Discord_EnableRP" xml:space="preserve">
-    <value>Включить Discord Rich Presence</value>
+    <value>Discord Rich Presence aktivieren</value>
   </data>
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
-    <value>Показывать обложку альбома</value>
+    <value>Album-Cover anzeigen</value>
   </data>
   <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
-    <value>[TRANSLATE]</value>
+    <value>Albumtitel anzeigen</value>
   </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
-    <value>Показывать при паузе</value>
+    <value>Zeigen, wenn Musik pausiert ist</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon" xml:space="preserve">
-    <value>Показывать значок Apple Music</value>
+    <value>Apple Music-Icon anzeigen</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
-    <value>Показывать статус Discord как</value>
+    <value>Discord-Status anzeigen als</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_Artist" xml:space="preserve">
-    <value>Имя исполнителя</value>
+    <value>Künstlername</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_SongName" xml:space="preserve">
-    <value>Название трека</value>
+    <value>Songname</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_AppleMusic" xml:space="preserve">
     <value>Apple Music</value>
   </data>
   <data name="Settings_Discord_Lyrics_SectionTitle" xml:space="preserve">
-    <value>Синхронизированные тексты</value>
+    <value>Synchronisierte Lyrics</value>
   </data>
   <data name="Settings_Discord_Lyrics_EnableLyrics" xml:space="preserve">
-    <value>Показывать текст песни в Rich Presence</value>
+    <value>Songlyrics in Rich Presence anzeigen</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak" xml:space="preserve">
-    <value>Сохранять текст во время инструментальных пауз</value>
+    <value>Lyrics während instrumentaler Pausen anzeigen</value>
   </data>
   <data name="Settings_Discord_Lyrics_OpenCache" xml:space="preserve">
-    <value>Открыть кэш текстов</value>
+    <value>Lyrics cache anzeigen</value>
   </data>
   <data name="Settings_Discord_Lyrics_ClearCache" xml:space="preserve">
-    <value>Очистить кэш текстов</value>
+    <value>Lyrics cache löschen</value>
   </data>
   <data name="Settings_Scrobbling_SectionTitle" xml:space="preserve">
-    <value>Скробблинг</value>
+    <value>Scrobbling</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName" xml:space="preserve">
-    <value>Очистить название альбома</value>
+    <value>Albumnamen bereinigen</value>
   </data>
   <data name="Settings_Scrobbling_ScrobblePrimaryArtist" xml:space="preserve">
-    <value>Скробблить только первого исполнителя</value>
+    <value>Nur den ersten Künstler scrobblen</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice" xml:space="preserve">
-    <value>Использовать длительность трека с сайта Apple Music</value>
+    <value>Songlänge von Apple Music Webseite verwenden</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime" xml:space="preserve">
-    <value>Максимальное ожидание скробблинга:</value>
+    <value>Maximale Scrobble-Wartezeit:</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SectionTitle" xml:space="preserve">
     <value>Last.FM</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_ApiKey" xml:space="preserve">
-    <value>API ключ</value>
+    <value>API key</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_ApiSecret" xml:space="preserve">
-    <value>API секрет</value>
+    <value>API secret</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Username" xml:space="preserve">
-    <value>Имя пользователя</value>
+    <value>Benutzername</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Password" xml:space="preserve">
-    <value>Пароль</value>
+    <value>Passwort</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_SectionTitle" xml:space="preserve">
     <value>ListenBrainz</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_UserToken" xml:space="preserve">
-    <value>Токен пользователя</value>
+    <value>Benutzertoken</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_Enable" xml:space="preserve">
-    <value>Включить скробблинг Last.FM</value>
+    <value>Last.FM scrobbling aktivieren</value>
   </data>
   <data name="Settings_Scrobbling_ListenBrainz_Enable" xml:space="preserve">
-    <value>Включить скробблинг ListenBrainz</value>
+    <value>ListenBrainz scrobbling aktivieren</value>
   </data>
   <data name="Settings_Scrobbling_LastFM_SaveCredentials" xml:space="preserve">
-    <value>Сохранить данные</value>
+    <value>Anmeldedaten speichern</value>
   </data>
   <data name="Message_ClearLyricCache" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить все сохраненные тексты?</value>
+    <value>Sind Sie sicher, dass Sie alle gespeicherten Lyrics löschen möchten?</value>
   </data>
   <data name="Message_ClearLyricCache_Title" xml:space="preserve">
-    <value>Удалить кэшированные тексты</value>
+    <value>Gespeicherte Lyrics löschen</value>
   </data>
   <data name="Message_ClearedLyricCache" xml:space="preserve">
-    <value>Все сохраненные тексты удалены.</value>
+    <value>Alle gespeicherten Lyrics wurden gelöscht.</value>
   </data>
   <data name="Message_ClearedLyricCache_Title" xml:space="preserve">
-    <value>Тексты удалены</value>
+    <value>Lyrics gelöscht</value>
   </data>
   <data name="Message_ClearLyricCache_Fail" xml:space="preserve">
-    <value>Не удалось удалить тексты: </value>
+    <value>Lyrics konnten nicht gelöscht werden: </value>
   </data>
   <data name="Message_Error" xml:space="preserve">
-    <value>Ошибка</value>
+    <value>Fehler</value>
   </data>
   <data name="Message_ClearLyricCache_FailNotFound" xml:space="preserve">
-    <value>Сохраненные тексты не найдены.</value>
+    <value>Keine gespeicherten Lyrics gefunden.</value>
   </data>
   <data name="Message_Information" xml:space="preserve">
-    <value>Информация</value>
+    <value>Information</value>
   </data>
   <data name="Message_LastFM_Authentication_Title" xml:space="preserve">
-    <value>Аутентификация Last.FM</value>
+    <value>Last.FM Authentifizierung</value>
   </data>
   <data name="Message_LastFM_Authentication_Fail" xml:space="preserve">
-    <value>Не удалось проверить данные Last.FM. Убедитесь, что имя пользователя и пароль введены верно и что аккаунт не заблокирован.</value>
+    <value>Die Last.FM-Anmeldedaten konnten nicht authentifiziert werden. Bitte stellen Sie sicher, dass Sie den richtigen Benutzernamen und das richtige Passwort eingegeben haben, und dass Ihr Konto nicht aktuell gesperrt ist.</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Title" xml:space="preserve">
-    <value>Аутентификация ListenBrainz</value>
+    <value>ListenBrainz Authentifizierung</value>
   </data>
   <data name="Message_LastFM_Authentication_Success" xml:space="preserve">
-    <value>Данные Last.FM успешно проверены.</value>
+    <value>Die Last.FM-Anmeldedaten wurden erfolgreich authentifiziert.</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Fail" xml:space="preserve">
-    <value>Не удалось проверить данные ListenBrainz. Убедитесь, что пользовательский токен введен верно.</value>
+    <value>Die ListenBrainz-Anmeldedaten konnten nicht authentifiziert werden. Bitte stellen Sie sicher, dass Sie das richtige Benutzertoken eingegeben haben.</value>
   </data>
   <data name="Message_ListenBrainz_Authentication_Success" xml:space="preserve">
-    <value>Данные ListenBrainz успешно проверены.</value>
+    <value>Die ListenBrainz-Anmeldedaten wurden erfolgreich authentifiziert.</value>
   </data>
   <data name="DiscordButton_ListenOnAppleMusic" xml:space="preserve">
-    <value>Слушать в Apple Music</value>
+    <value>In Apple Music anhören</value>
   </data>
   <data name="DiscordButton_ViewArtist" xml:space="preserve">
-    <value>Открыть исполнителя</value>
+    <value>Interpret ansehen</value>
   </data>
   <data name="Message_AppUpdate_Title" xml:space="preserve">
-    <value>Доступно обновление</value>
+    <value>Neues Update verfügbar</value>
   </data>
   <data name="Message_AppUpdate" xml:space="preserve">
-    <value>Доступно новое обновление AMWin-RP. Открыть страницу релизов?</value>
+    <value>Ein neues Update für AMWin-RP ist verfügbar. Möchten Sie die Veröffentlichungen ansehen?</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Einstellungen</value>
   </data>
   <data name="Settings_TimeUnitSeconds" xml:space="preserve">
-    <value>сек</value>
+    <value>sek</value>
   </data>
   <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
-    <value>Недопустимый код региона</value>
+    <value>Ungültiger Regionscode</value>
   </data>
   <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
-    <value>Для треков классической музыки использовать композитора как исполнителя вместо исполнителя.</value>
+    <value>Bei klassischer Musik den Komponisten als Künstler verwenden anstelle des Interpreten.</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
-    <value>Показывает значок Apple Music рядом с обложкой альбома в Rich Presence.</value>
+    <value>Zeigt das Apple Music-Icon neben dem Album-Cover in der Rich Presence-Anzeige an.</value>
   </data>
-  <data name="Settings_Discord_AlbumTitle_Description" xml:space="preserve">
-    <value>[TRANSLATE]</value>
+  <data name="Settings_Discord_ShowAlbumTitle_Description" xml:space="preserve">
+    <value>Zeigt den Albumtitel unter dem Song und Künstler in der Rich Presence-Anzeige an.</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
-    <value>Во время пауз в музыке продолжать показывать последнюю строку текста.</value>
+    <value>Während Pausen in der Musik wird die zuletzt gespielte Songtexte angezeigt.</value>
   </data>
   <data name="Settings_General_AppleMusicRegion_Description" xml:space="preserve">
-    <value>Код страны региона вашей учетной записи Apple (например, RU).</value>
+    <value>Der Ländercode der Region Ihres Apple Accounts (z.B. EU).</value>
   </data>
   <data name="Settings_Scrobbling_SongDurationChoice_Description" xml:space="preserve">
-    <value>Получать длительность трека с сайта Apple Music вместо сайта Last.FM. Медленнее, но может дать более точный результат.</value>
+    <value>Die Länge des Songs von der Apple Music-Website anstelle der Last.FM-Website abrufen. Langsamer, aber möglicherweise bessere Ergebnisse.</value>
   </data>
   <data name="Settings_Scrobbling_ScrobbleTime_Description" xml:space="preserve">
-    <value>По истечении этого времени трек будет отправлен в скробблинг, если он еще не был отправлен.</value>
+    <value>Nach Ablauf dieser Zeitspanne den Song scrobbeln, falls er noch nicht gescrobbelt wurde.</value>
   </data>
   <data name="Message_Yes" xml:space="preserve">
-    <value>Да</value>
+    <value>Ja</value>
   </data>
   <data name="Message_No" xml:space="preserve">
-    <value>Нет</value>
+    <value>Nein</value>
   </data>
   <data name="Settings_General_SectionTitle" xml:space="preserve">
-    <value>Общие</value>
+    <value>Allgemein</value>
   </data>
   <data name="Settings_Discord_SectionTitleShort" xml:space="preserve">
     <value>Discord RP</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName_Description" xml:space="preserve">
-    <value>Удаляет распространенные суффиксы вроде "Single" и "EP" из названий альбомов.</value>
+    <value>Remove common suffixes like "Single" and "EP" from album names.</value>
   </data>
   <data name="Taskbar_Settings_Title" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Einstellungen</value>
   </data>
   <data name="Taskbar_Exit_Title" xml:space="preserve">
-    <value>Выход</value>
+    <value>Beenden</value>
   </data>
   <data name="Settings_General_Language" xml:space="preserve">
-    <value>Язык</value>
+    <value>Sprache</value>
   </data>
   <data name="Settings_General_Language_Description" xml:space="preserve">
-    <value>После изменения языка перезапустите приложение, чтобы применить его полностью.</value>
+    <value>Neu starten, um die Sprachänderung vollständig anzuwenden.</value>
   </data>
   <data name="Settings_General_Language_System" xml:space="preserve">
-    <value>Системный (System default)</value>
+    <value>System default (System default)</value>
   </data>
   <data name="Settings_General_Language_German" xml:space="preserve">
-    <value>Немецкий (German)</value>
+    <value>Deutsch (German)</value>
   </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
-    <value>Английский (English)</value>
+    <value>Englisch (English)</value>
   </data>
   <data name="Settings_General_Language_Turkish" xml:space="preserve">
-    <value>Турецкий (Türkçe)</value>
+    <value>Tuerkisch (Türkçe)</value>
   </data>
   <data name="Settings_General_Language_Korean" xml:space="preserve">
-    <value>Корейский (한국어)</value>
+    <value>Koreanisch (한국어)</value>
   </data>
   <data name="Settings_General_Language_Japanese" xml:space="preserve">
-    <value>Японский (日本語)</value>
+    <value>Japanisch (日本語)</value>
   </data>
   <data name="Settings_General_Language_Russian" xml:space="preserve">
-    <value>Русский (Русский)</value>
+    <value>Russisch (Русский)</value>
   </data>
   <data name="Settings_General_Language_Spanish" xml:space="preserve">
-    <value>Испанский (Español)</value>
+    <value>Spanisch (Español)</value>
   </data>
   <data name="Message_RestartRequired_Title" xml:space="preserve">
-    <value>Требуется перезапуск</value>
+    <value>Neustart erforderlich</value>
   </data>
   <data name="Message_RestartRequired_Content" xml:space="preserve">
-    <value>Перезапустить сейчас, чтобы применить изменение языка?</value>
+    <value>Jetzt neu starten, um die Sprachänderung vollständig anzuwenden?</value>
   </data>
 </root>

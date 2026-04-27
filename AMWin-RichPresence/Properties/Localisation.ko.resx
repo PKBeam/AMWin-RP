@@ -333,6 +333,9 @@
   <data name="Settings_General_Language_System" xml:space="preserve">
     <value>시스템 기본값 (System default)</value>
   </data>
+  <data name="Settings_General_Language_German" xml:space="preserve">
+    <value>독일 사람 (German)</value>
+  </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
     <value>영어 (English)</value>
   </data>
