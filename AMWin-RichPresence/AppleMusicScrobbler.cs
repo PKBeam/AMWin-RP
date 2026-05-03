@@ -36,6 +36,7 @@ namespace AMWin_RichPresence {
         protected int elapsedSeconds;
         protected string? lastSongID;
         protected bool hasScrobbled;
+        protected bool nowPlayingSent;
         protected double lastSongProgress;
         protected Logger? logger;
         protected string serviceName;
@@ -71,7 +72,7 @@ namespace AMWin_RichPresence {
 
         public abstract Task<bool> UpdateCredsAsync(C credentials);
 
-        protected abstract Task UpdateNowPlaying(string artist, string album, string song);
+        protected abstract Task<bool> UpdateNowPlaying(string artist, string album, string song);
 
         protected abstract Task ScrobbleSong(string artist, string album, string song);
 
@@ -95,10 +96,8 @@ namespace AMWin_RichPresence {
                     elapsedSeconds = 0;
                     scrobbleInProgress = false;
                     hasScrobbled = false;
+                    nowPlayingSent = false;
                     logger?.Log($"[{serviceName} scrobbler] New Song: {lastSongID}");
-
-                    await UpdateNowPlaying(artist, album, info.SongName);
-                    logger?.Log($"[{serviceName} scrobbler] Updated now playing: {lastSongID}");
                 } else {
                     elapsedSeconds += Constants.RefreshPeriod;
 
@@ -121,6 +120,13 @@ namespace AMWin_RichPresence {
                     }
 
                     lastSongProgress = info.CurrentTime ?? 0.0;
+                }
+
+                if (!nowPlayingSent) {
+                    nowPlayingSent = await UpdateNowPlaying(artist, album, info.SongName);
+                    if (nowPlayingSent) {
+                        logger?.Log($"[{serviceName} scrobbler] Updated now playing: {lastSongID}");
+                    }
                 }
             } catch (Exception ex) {
                 logger?.Log($"[{serviceName} scrobbler] An error occurred while scrobbling: {ex}");
@@ -174,13 +180,14 @@ namespace AMWin_RichPresence {
             await lastFmScrobbler.ScrobbleAsync(scrobble);
         }
 
-        protected async override Task UpdateNowPlaying(string artist, string album, string song) {
+        protected async override Task<bool> UpdateNowPlaying(string artist, string album, string song) {
             if (trackApi == null || lastfmAuth?.Authenticated != true) {
-                return;
+                return false;
             }
 
             var scrobble = new Scrobble(artist, album, song, DateTime.UtcNow);
             await trackApi.UpdateNowPlayingAsync(scrobble);
+            return true;
         }
     }
 
@@ -223,12 +230,13 @@ namespace AMWin_RichPresence {
             await listenBrainzClient.SubmitSingleListenAsync(song, artist, album);
         }
 
-        protected async override Task UpdateNowPlaying(string artist, string album, string song) {
+        protected async override Task<bool> UpdateNowPlaying(string artist, string album, string song) {
             if (string.IsNullOrEmpty(listenBrainzClient?.UserToken)) {
-                return;
+                return false;
             }
 
             await listenBrainzClient.SetNowPlayingAsync(song, artist, album);
+            return true;
         }
     }
 }
