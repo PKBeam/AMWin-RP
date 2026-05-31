@@ -296,7 +296,7 @@
                                         <TextBox 
                                             x:Name="LastfmAPIKey" Margin="0 7 0 10" TextWrapping="Wrap" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}" 
-                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}"/>
+                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmAPIKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                         <TextBlock
                                             VerticalAlignment="Center" 
@@ -304,7 +304,7 @@
                                         <TextBox 
                                             x:Name="LastfmSecret" Margin="0 7 0 10" TextWrapping="Wrap" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}" 
-                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}"/>
+                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmSecret, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                         <TextBlock 
                                             VerticalAlignment="Center" 
@@ -312,7 +312,7 @@
                                         <TextBox 
                                             x:Name="LastfmUsername" Margin="0 7 0 10" TextWrapping="Wrap"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}" 
-                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmUsername}"/>
+                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                         <TextBlock
                                             VerticalAlignment="Center"
@@ -350,7 +350,7 @@
                                         <TextBox 
                                             x:Name="ListenBrainzUserToken" Margin="0 7 0 10" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_ListenBrainzEnable}" 
-                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.ListenBrainzUserToken, Mode=TwoWay}" 
+                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=ListenBrainzUserToken, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                             TextWrapping="Wrap"/>               
 
                                         <Button x:Name="SaveListenBrainzCreds" Margin="0 7 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" 
