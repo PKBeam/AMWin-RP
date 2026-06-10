@@ -175,7 +175,7 @@
     <value>Eliminar caché de letras</value>
   </data>
   <data name="Settings_Scrobbling_SectionTitle" xml:space="preserve">
-    <value>Servicios de scrobbling </value>
+    <value>Configuraciones de scrobbling</value>
   </data>
   <data name="Settings_Scrobbling_CleanAlbumName" xml:space="preserve">
     <value>Corregir el nombre del álbum</value>
