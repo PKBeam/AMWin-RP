@@ -6,7 +6,7 @@ También incluyen servicios de *scrobbling* para Last.FM y ListenBrainz.
 
 <image width=450 src="https://github.com/user-attachments/assets/d26a1318-2579-493a-a720-b51408d6178b" />
 &nbsp; &nbsp; 
-<image src=https://github.com/user-attachments/assets/16fbb938-4edd-4968-a8d9-aa7922ea7ee6 width=400 />
+<image src=https://github.com/user-attachments/assets/0fa47407-8af0-418f-b3ee-1586d045bd32 width=400 />
 
 ## Requisitos
 AMWin-RP requiere Windows 11 24H2 o una versión posterior.
