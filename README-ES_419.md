@@ -1,5 +1,5 @@
 # AMWin-RP 
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) &nbsp; ([한국어](README-KO.md) | [日本語](README-JA.md) | [Russian](README-RU.md) | [Español de España](README-ES.md) | [Deutsch](README-DE.md))
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) &nbsp; ([English](README.md) | [한국어](README-KO.md) | [日本語](README-JA.md) | [Russian](README-RU.md) | [Español de España](README-ES.md) | [Deutsch](README-DE.md))
 
 Un complemento de presencia enriquecida de Discord (Discord Rich Presence) para la aplicación nativa de Apple Music en Windows.
 También incluyen servicios de *scrobbling* para Last.FM y ListenBrainz.
