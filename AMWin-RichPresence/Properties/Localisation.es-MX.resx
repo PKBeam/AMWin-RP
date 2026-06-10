@@ -130,10 +130,10 @@
     <value>Región de Apple Music:</value>
   </data>
   <data name="Settings_Discord_SectionTitle" xml:space="preserve">
-    <value>Estado de Discord</value>
+    <value>Actividad de Discord</value>
   </data>
   <data name="Settings_Discord_EnableRP" xml:space="preserve">
-    <value>Mostrar en tu estado de Discord la música que estás escuchando</value>
+    <value>Mostrar la música que estás escuchando en tu actividad de Discord </value>
   </data>
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
     <value>Mostrar la portada del álbum</value>
@@ -148,7 +148,7 @@
     <value>Mostrar el ícono de Apple Music</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
-    <value>Mostrar en el estado de Discord como:</value>
+    <value>Mostrar en la actividad de Discord:</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay_Artist" xml:space="preserve">
     <value>Nombre del artista</value>
@@ -163,7 +163,7 @@
     <value>Letras sincronizadas</value>
   </data>
   <data name="Settings_Discord_Lyrics_EnableLyrics" xml:space="preserve">
-    <value>Muestra en tu estado de Discord la letra de la canción.</value>
+    <value>Muestra la letra de la canción en tu actividad de Discord.</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak" xml:space="preserve">
     <value>Mantener la letra durante los interludios instrumentales</value>
@@ -286,10 +286,10 @@
     <value>En el caso de composiciones de música clásica, utiliza el nombre del compositor como artista en lugar del intérprete.</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
-    <value>Muestra el ícono de Apple Music junto a la portada del álbum en tu estado de Discord.</value>
+    <value>Muestra el ícono de Apple Music junto a la portada del álbum en tu actividad de Discord.</value>
   </data>
   <data name="Settings_Discord_ShowAlbumTitle_Description" xml:space="preserve">
-    <value>Muestra el título del álbum debajo de la música y el nombre del artista en tu estado de Discord.</value>
+    <value>Muestra el título del álbum debajo de la música y el nombre del artista en tu actividad de Discord.</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
     <value>Durante las pausas vocales de la canción, muestra la última letra que se haya mostrado.</value>
