@@ -29,11 +29,13 @@ namespace AMWin_RichPresence {
         internal static string NormalizeLanguageCode(string? languageCode) {
             return languageCode?.Trim().ToLowerInvariant() switch {
                 "en" => "en",
+                "de" => "de",
                 "tr" => "tr",
                 "ko" => "ko",
                 "ja" => "ja",
                 "ru" => "ru",
                 "es" => "es",
+                "es-MX" => "es-MX",
                 _ => ""
             };
         }

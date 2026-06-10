@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!--
-    Microsoft ResX Schema
-
+  <!-- 
+    Microsoft ResX Schema 
+    
     Version 2.0
-
-    The primary goals of this format is to allow a simple XML format
-    that is mostly human readable. The generation and parsing of the
-    various data types are done through the TypeConverter classes
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
     associated with the data types.
-
+    
     Example:
-
+    
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-
-    There are any number of "resheader" rows that contain simple
+                
+    There are any number of "resheader" rows that contain simple 
     name/value pairs.
-
-    Each data row contains a name, and value. The row also contains a
-    type or mimetype. Type corresponds to a .NET class that support
-    text/value conversion through the TypeConverter architecture.
-    Classes that don't support this are serialized and stored with the
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
     mimetype set.
-
-    The mimetype is used for serialized objects, and tells the
-    ResXResourceReader how to depersist the object. This is currently not
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
     extensible. For a given mimetype the value must be set accordingly:
-
-    Note - application/x-microsoft.net.object.binary.base64 is the format
-    that the ResXResourceWriter will generate, however the reader can
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
     read any of the formats listed below.
-
+    
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with
+    value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-
+    
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with
+    value   : The object must be serialized with 
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array
+    value   : The object must be serialized into a byte array 
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -138,14 +138,14 @@
   <data name="Settings_Discord_ShowAlbumArt" xml:space="preserve">
     <value>Kapak resimlerini göster</value>
   </data>
+  <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
+    <value>[Translate]</value>
+  </data>
   <data name="Settings_Discord_ShowWhenPaused" xml:space="preserve">
     <value>Müzik duraklatıldığında RP'yi kapatma</value>
   </data>
   <data name="Settings_Discord_ShowAppleMusicIcon" xml:space="preserve">
     <value>Durumda Apple Music ikonunu göster</value>
-  </data>
-  <data name="Settings_Discord_ShowAlbumTitle" xml:space="preserve">
-    <value>[Translate]</value>
   </data>
   <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
     <value>Discord Durum görünümü</value>
@@ -267,23 +267,17 @@
   <data name="DiscordButton_ViewArtist" xml:space="preserve">
     <value>Sanatçıyı Görüntüle</value>
   </data>
-  <data name="Settings_Title" xml:space="preserve">
-    <value>Ayarlar</value>
-  </data>
-  <data name="Settings_TimeUnitSeconds" xml:space="preserve">
-    <value>sn</value>
-  </data>
-  <data name="Taskbar_Settings_Title" xml:space="preserve">
-    <value>Ayarlar</value>
-  </data>
-  <data name="Taskbar_Exit_Title" xml:space="preserve">
-    <value>Cikis</value>
-  </data>
   <data name="Message_AppUpdate_Title" xml:space="preserve">
     <value>Yeni guncelleme mevcut</value>
   </data>
   <data name="Message_AppUpdate" xml:space="preserve">
     <value>AMWin-RP icin yeni bir guncelleme mevcut. Surumleri goruntulemek ister misiniz?</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="Settings_TimeUnitSeconds" xml:space="preserve">
+    <value>sn</value>
   </data>
   <data name="Settings_General_TooltipAppleMusicRegionError" xml:space="preserve">
     <value>Girilen deger Apple Music icin gecerli bir bolge kodu degil.</value>
@@ -291,11 +285,11 @@
   <data name="Settings_General_ComposerAsArtist_Description" xml:space="preserve">
     <value>Klasik parcalarda sanatci yerine besteciyi kullanir.</value>
   </data>
-  <data name="Settings_Discord_ShowAlbumTitle_Description" xml:space="preserve">
-    <value>[TRANSLATE]</value>
-  </data>
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
     <value>Rich Presence ekraninda album kapaginin yaninda Apple Music ikonunu gosterir.</value>
+  </data>
+  <data name="Settings_Discord_ShowAlbumTitle_Description" xml:space="preserve">
+    <value>[TRANSLATE]</value>
   </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
     <value>Muzikteki bosluklarda son gosterilen sarki sozunu gostermeye devam eder.</value>
@@ -324,6 +318,12 @@
   <data name="Settings_Scrobbling_CleanAlbumName_Description" xml:space="preserve">
     <value>Album adlarindan "Single" ve "EP" gibi yaygin ekleri kaldirir.</value>
   </data>
+  <data name="Taskbar_Settings_Title" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="Taskbar_Exit_Title" xml:space="preserve">
+    <value>Cikis</value>
+  </data>
   <data name="Settings_General_Language" xml:space="preserve">
     <value>Dil</value>
   </data>
@@ -332,9 +332,6 @@
   </data>
   <data name="Settings_General_Language_System" xml:space="preserve">
     <value>Sistem varsayilani (System default)</value>
-  </data>
-  <data name="Settings_General_Language_German" xml:space="preserve">
-    <value>Almanca (German)</value>
   </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
     <value>Ingilizce (English)</value>
@@ -352,12 +349,21 @@
     <value>Rusça (Русский)</value>
   </data>
   <data name="Settings_General_Language_Spanish" xml:space="preserve">
-    <value>İspanyolca (Español)</value>
+    <value>İspanyolca - İspanya (Español de España)</value>
   </data>
   <data name="Message_RestartRequired_Title" xml:space="preserve">
     <value>Yeniden baslatma gerekli</value>
   </data>
   <data name="Message_RestartRequired_Content" xml:space="preserve">
     <value>Dil degisikligini uygulamak icin simdi yeniden baslatilsin mi?</value>
+  </data>
+  <data name="Settings_General_Language_German" xml:space="preserve">
+    <value>Almanca (German)</value>
+  </data>
+  <data name="Settings_General_Language_Latam" xml:space="preserve">
+    <value>İspanyolca - Latin Amerika (Español de Latinoamérica)</value>
+  </data>
+  <data name="Settings_Scrobbling_SectionTitleShort" xml:space="preserve">
+    <value>Scrobbling</value>
   </data>
 </root>

@@ -11,7 +11,7 @@
     Title="{x:Static properties:Localisation.Settings_Title}" 
     Icon="/Resources/AMWinRP.ico"
     ExtendsContentIntoTitleBar="True" ResizeMode="CanResize" WindowStartupLocation="CenterScreen"
-    MinWidth="515" Width="600" Height="850">
+    MinWidth="665" Width="700" Height="850">
     <Grid TextElement.FontSize="14">
         <ui:TitleBar/>
         <DockPanel>
@@ -48,7 +48,7 @@
                         Click="NavItemDiscord_Click"/>
                     <ui:NavigationViewItem
                         x:Name="NavItemScrobbling"
-                        Content="{x:Static properties:Localisation.Settings_Scrobbling_SectionTitle}"
+                        Content="{x:Static properties:Localisation.Settings_Scrobbling_SectionTitleShort}"
                         Icon="{ui:SymbolIcon Headphones20}" 
                         Click="NavItemScrobbling_Click"/>
                 </ui:NavigationView.MenuItems>
@@ -96,11 +96,13 @@
                                         SelectionChanged="ComboBox_Language_SelectionChanged">
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageSystem" Tag="" Content="System default (System default)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageEnglish" Tag="en" Content="English (English)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageGerman" Tag="de" Content="German (Deutsch)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageTurkish" Tag="tr" Content="Turkce (Türkçe)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageKorean" Tag="ko" Content="Korean (한국어)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageJapanese" Tag="ja" Content="Japanese (日本語)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageRussian" Tag="ru" Content="Russian (Русский)"/>
-                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageSpanish" Tag="es" Content="Spanish (Español)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageSpanish" Tag="es" Content="Spanish - Spain (Español de España)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageLatam" Tag="es-MX" Content="Latin American Spanish (Español de Latinoamérica)"/>
                                     </ComboBox>
                                 </StackPanel>
                                 <TextBlock
