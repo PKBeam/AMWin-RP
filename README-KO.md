@@ -1,5 +1,5 @@
 # AMWin-RP
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) &nbsp; ([English](README.md) | [日本語](README-JA.md) | [Russian](README-RU.md) | [Español](README-ES.md) | [Deutsch](README-DE.md))
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/total) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/downloads-pre/PKBeam/AMWin-RP/latest/total) &nbsp; ([English](README.md) | [日本語](README-JA.md) | [Russian](README-RU.md) | [Español de Latinoamérica](README-ES_419.md) | [Español de España](README-ES.md) | [Deutsch](README-DE.md))
 
 Apple Music 네이티브 Windows 앱용 Discord Rich Presence 클라이언트입니다.  
 Last.FM 및 ListenBrainz 스크로블링도 지원합니다.
