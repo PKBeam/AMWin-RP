@@ -29,9 +29,9 @@ Necesitas tener la [versión de Apple Music de Microsoft Store](https://apps.mic
 - Haz clic en el archivo .exe para iniciar la aplicación.
 - AMWin-RP se ejecutará en segundo plano, minimizado en la barra de tareas.
 - Al hacer doble clic en el ícono de la barra de tareas, se abrirá la ventana de configuración.
-  
-- Desde aquí puedes personalizar las configuraciones individuales, por ejemplo, si quieres que se abra al iniciar el sistema, la función de *scrobbling* y la detección de música. 
+  - Desde aquí puedes personalizar las configuraciones individuales, por ejemplo, si quieres que se abra al iniciar el sistema, la función de *scrobbling* y la detección de música. 
 - Puedes cerrar la aplicación haciendo clic con el botón derecho en el ícono de la barra de tareas y seleccionando "Salir".
+- Para que se comparta tu actividad en Discord, de forma predeterminada, la aplicación de Apple Music debe estar abierta y reproduciendo música (sin estar en pausa).
 
 **Nota**: Si usas escritorios virtuales, AMWin-RP y Apple Music deben estar en el mismo escritorio. 
 Esta es una limitación técnica de la biblioteca UI Automation utilizada para extraer datos de la aplicación cliente de Apple Music.
