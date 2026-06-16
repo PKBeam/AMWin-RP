@@ -180,6 +180,12 @@
   <data name="Settings_Scrobbling_CleanAlbumName" xml:space="preserve">
     <value>Clean up album name</value>
   </data>
+  <data name="Settings_Scrobbling_CleanSongName" xml:space="preserve">
+    <value>Clean up song name</value>
+  </data>
+  <data name="Settings_Scrobbling_CleanSongName_Description" xml:space="preserve">
+    <value>Remove extra text from song names (e.g., "(Mixed)", "[Mixed]")</value>
+  </data>
   <data name="Settings_Scrobbling_ScrobblePrimaryArtist" xml:space="preserve">
     <value>Only scrobble the first artist</value>
   </data>

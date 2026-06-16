@@ -32,6 +32,10 @@
     <Setting Name="LastfmCleanAlbumName" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <!-- Whether to clean song names by removing " (Mixed)", " [Mixed]", " (Mixed]", and " [Mixed)" -->
+    <Setting Name="LastfmCleanSongName" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
     <Setting Name="LastfmScrobblePrimaryArtist" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>

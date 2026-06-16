@@ -32,6 +32,18 @@ namespace AMWin_RichPresence {
 
     }
 
+    /// <summary>
+    /// Removes " (Mixed)", " [Mixed]", " (Mixed]", and " [Mixed)" from the end of song names, which Apple Music DJ Playlisted often appends to the end of the song name, and causes scrobbling issues.
+    /// </summary>
+    internal class SongCleaner {
+        private static readonly Regex SongCleanerRegex = new Regex(@"\s(\(|\[)Mixed(/]|\))$", RegexOptions.Compiled);
+
+        public static string CleanSongName(string songName) {
+            // Remove " (Mixed)", " [Mixed]", " (Mixed]", and " [Mixed)"
+            return SongCleanerRegex.Replace(songName, new MatchEvaluator((m) => { return ""; }));
+        }
+    }
+
     internal abstract class AppleMusicScrobbler<C> where C : IScrobblerCredentials {
         protected int elapsedSeconds;
         protected string? lastSongID;
@@ -90,6 +102,7 @@ namespace AMWin_RichPresence {
                 var webScraper = new AppleMusicWebScraper(info.SongName, info.SongAlbum, info.SongArtist, region);
                 var artist = Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await webScraper.GetArtistList()).FirstOrDefault(info.SongArtist) : info.SongArtist;
                 var album = Properties.Settings.Default.LastfmCleanAlbumName ? AlbumCleaner.CleanAlbumName(info.SongAlbum) : info.SongAlbum;
+                var song = Properties.Settings.Default.LastfmCleanSongName ? SongCleaner.CleanSongName(info.SongName) : info.SongName;
 
                 if (thisSongID != lastSongID) {
                     lastSongID = thisSongID;
@@ -112,7 +125,7 @@ namespace AMWin_RichPresence {
 
                         try {
                             scrobbleInProgress = true;
-                            await ScrobbleSong(artist, album, info.SongName);
+                            await ScrobbleSong(artist, album, song);
                             hasScrobbled = true;
                         } finally {
                             scrobbleInProgress = false;
@@ -123,7 +136,7 @@ namespace AMWin_RichPresence {
                 }
 
                 if (!nowPlayingSent) {
-                    nowPlayingSent = await UpdateNowPlaying(artist, album, info.SongName);
+                    nowPlayingSent = await UpdateNowPlaying(artist, album, song);
                     if (nowPlayingSent) {
                         logger?.Log($"[{serviceName} scrobbler] Updated now playing: {lastSongID}");
                     }

@@ -245,6 +245,10 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
+        private void CheckBox_LastfmCleanSongName_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
         private void CheckBox_LastfmScrobblePrimary_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
