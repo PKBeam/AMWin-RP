@@ -36,7 +36,7 @@ namespace AMWin_RichPresence {
     /// Removes " (Mixed)", " [Mixed]", " (Mixed]", and " [Mixed)" from the end of song names, which Apple Music DJ Playlisted often appends to the end of the song name, and causes scrobbling issues.
     /// </summary>
     internal class SongCleaner {
-        private static readonly Regex SongCleanerRegex = new Regex(@"\s(\(|\[)Mixed(/]|\))$", RegexOptions.Compiled);
+        private static readonly Regex SongCleanerRegex = new Regex(@"\s(\(|\[)Mixed(\]|\))$", RegexOptions.Compiled);
 
         public static string CleanSongName(string songName) {
             // Remove " (Mixed)", " [Mixed]", " (Mixed]", and " [Mixed)"
