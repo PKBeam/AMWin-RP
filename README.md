@@ -14,7 +14,8 @@ AMWin-RP requires Windows 11 24H2 or later.
 Builds can be found [here](https://github.com/PKBeam/AMWin-RP/releases).  
 
 ### Which release do I use?
-Pick x64 or ARM64 based on what processor your PC has.  
+Pick x64 or ARM64 based on what processor your PC has. (If you have an Intel or AMD CPU, pick the x64 release.)  
+
 Then there are two files to choose from: the standard one and one marked as `NoRuntime`.
 
 If in doubt, use the unlabelled release (i.e. the one without `NoRuntime`).  
