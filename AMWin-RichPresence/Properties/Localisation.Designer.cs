@@ -616,7 +616,25 @@ namespace AMWin_RichPresence.Properties {
                 return ResourceManager.GetString("Settings_Scrobbling_CleanAlbumName_Description", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to Clean up song name.
+        /// </summary>
+        public static string Settings_Scrobbling_CleanSongName {
+            get {
+                return ResourceManager.GetString("Settings_Scrobbling_CleanSongName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Remove extra text from song names (e.g., "(Mixed)", "[Mixed]").
+        /// </summary>
+        public static string Settings_Scrobbling_CleanSongName_Description {
+            get {
+                return ResourceManager.GetString("Settings_Scrobbling_CleanSongName_Description", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to API key.
         /// </summary>

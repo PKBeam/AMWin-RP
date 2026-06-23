@@ -247,7 +247,17 @@
                                     Text="{x:Static properties:Localisation.Settings_Scrobbling_CleanAlbumName_Description}"/>
 
                                 <CheckBox 
-                                    x:Name="CheckBox_LastfmScrobblePrimary" Margin="0 2 0 0" 
+                                    x:Name="CheckBox_LastfmCleanSongName"
+                                    IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmCleanSongName, Mode=TwoWay}" 
+                                    Click="CheckBox_LastfmCleanSongName_Click" 
+                                    Content="{x:Static properties:Localisation.Settings_Scrobbling_CleanSongName}"/>
+                                <TextBlock 
+                                    Margin="40 0 0 10" FontSize="12"  VerticalAlignment="Center" TextWrapping="Wrap"
+                                    Text="{x:Static properties:Localisation.Settings_Scrobbling_CleanSongName_Description}"/>
+
+                                <CheckBox 
+                                    x:Name="CheckBox_LastfmScrobblePrimary" 
+                                    Margin="0 2 0 0" 
                                     IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmScrobblePrimaryArtist, Mode=TwoWay}" 
                                     Click="CheckBox_LastfmScrobblePrimary_Click" 
                                     Content="{x:Static properties:Localisation.Settings_Scrobbling_ScrobblePrimaryArtist}"/>
