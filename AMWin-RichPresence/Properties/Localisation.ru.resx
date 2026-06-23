@@ -288,9 +288,6 @@
   <data name="Settings_Discord_ShowAppleMusicIcon_Description" xml:space="preserve">
     <value>Показывает значок Apple Music рядом с обложкой альбома в Rich Presence.</value>
   </data>
-  <data name="Settings_Discord_AlbumTitle_Description" xml:space="preserve">
-    <value>[TRANSLATE]</value>
-  </data>
   <data name="Settings_Discord_Lyrics_ShowDuringBreak_Description" xml:space="preserve">
     <value>Во время пауз в музыке продолжать показывать последнюю строку текста.</value>
   </data>
@@ -333,9 +330,6 @@
   <data name="Settings_General_Language_System" xml:space="preserve">
     <value>Системный (System default)</value>
   </data>
-  <data name="Settings_General_Language_German" xml:space="preserve">
-    <value>Немецкий (German)</value>
-  </data>
   <data name="Settings_General_Language_English" xml:space="preserve">
     <value>Английский (English)</value>
   </data>
@@ -352,12 +346,21 @@
     <value>Русский (Русский)</value>
   </data>
   <data name="Settings_General_Language_Spanish" xml:space="preserve">
-    <value>Испанский (Español)</value>
+    <value>испанский — Испания (Español de España)</value>
   </data>
   <data name="Message_RestartRequired_Title" xml:space="preserve">
     <value>Требуется перезапуск</value>
   </data>
   <data name="Message_RestartRequired_Content" xml:space="preserve">
     <value>Перезапустить сейчас, чтобы применить изменение языка?</value>
+  </data>
+  <data name="Settings_General_Language_German" xml:space="preserve">
+    <value>Немецкий (German)</value>
+  </data>
+  <data name="Settings_General_Language_Latam" xml:space="preserve">
+    <value>испанский — Латинская Америка (Español de Latinoamérica)</value>
+  </data>
+  <data name="Settings_Scrobbling_SectionTitleShort" xml:space="preserve">
+    <value>Скробблинг</value>
   </data>
 </root>
