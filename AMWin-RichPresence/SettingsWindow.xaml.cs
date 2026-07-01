@@ -20,6 +20,7 @@ namespace AMWin_RichPresence {
     /// </summary>
     public partial class SettingsWindow : FluentWindow {
         private bool isLanguageSelectorInitialized;
+        private bool isDiscordClientSelectorInitialized;
 
         private bool amRegionValid {
             get { return Constants.ValidAppleMusicRegions.Contains(AppleMusicRegion.Text.ToLower()); }
@@ -30,6 +31,7 @@ namespace AMWin_RichPresence {
             SystemThemeWatcher.Watch(this);
             InitializeComponent();
             InitializeLanguageSelector();
+            InitializeDiscordClientSelector();
 
             string imagePath = IsDarkMode()
                 ? "/Resources/GitHub_Invertocat_White.png"
@@ -94,6 +96,23 @@ namespace AMWin_RichPresence {
             };
 
             isLanguageSelectorInitialized = true;
+        }
+
+        private void InitializeDiscordClientSelector() {
+            TextBlock_DiscordClientLabel.Text = GetLocalisedString("Settings_Discord_ClientChoice", "Send Rich Presence to");
+            TextBlock_DiscordClientDescription.Text = GetLocalisedString("Settings_Discord_ClientChoice_Description", "Choose which Discord app receives Rich Presence when you have more than one running (e.g. Stable and Canary). Leave on Automatic if you only use one.");
+            ComboBoxItem_DiscordClientAuto.Content = GetLocalisedString("Settings_Discord_ClientChoice_Auto", "Automatic (any running client)");
+            ComboBoxItem_DiscordClientStable.Content = GetLocalisedString("Settings_Discord_ClientChoice_Stable", "Discord (Stable)");
+            ComboBoxItem_DiscordClientPTB.Content = GetLocalisedString("Settings_Discord_ClientChoice_PTB", "Discord PTB");
+            ComboBoxItem_DiscordClientCanary.Content = GetLocalisedString("Settings_Discord_ClientChoice_Canary", "Discord Canary");
+
+            var selectedIndex = Properties.Settings.Default.DiscordClientPreference;
+            if (selectedIndex < 0 || selectedIndex >= ComboBox_DiscordClient.Items.Count) {
+                selectedIndex = 0;
+            }
+            ComboBox_DiscordClient.SelectedIndex = selectedIndex;
+
+            isDiscordClientSelectorInitialized = true;
         }
 
         private static string GetLocalisedString(string key, string fallback) {
@@ -167,6 +186,16 @@ namespace AMWin_RichPresence {
             var newOption = AppleMusicDiscordClient.StatusDisplayOptionFromIndex(ComboBox_RPDisplayChoice.SelectedIndex);
             ((App)Application.Current).UpdateRPStatusDisplay(newOption);
             SaveSettings();
+        }
+
+        private void ComboBox_DiscordClient_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (!isDiscordClientSelectorInitialized) {
+                return;
+            }
+            var selectedIndex = ComboBox_DiscordClient.SelectedIndex;
+            Properties.Settings.Default.DiscordClientPreference = selectedIndex;
+            SaveSettings();
+            ((App)Application.Current).UpdateDiscordClientPreference((DiscordClientType)selectedIndex);
         }
 
         private void CheckBox_EnableSyncLyrics_Click(object sender, RoutedEventArgs e) {

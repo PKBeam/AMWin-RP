@@ -115,7 +115,8 @@ namespace AMWin_RichPresence {
             // start Discord RPC
             var statusDisplayOptions = (AppleMusicDiscordClient.RPStatusDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPDisplayChoice;
             var classicalComposerAsArtist = AMWin_RichPresence.Properties.Settings.Default.ClassicalComposerAsArtist;
-            discordClient = new(Constants.DiscordClientID, enabled: false, statusDisplayOptions: statusDisplayOptions, logger: logger);
+            var preferredDiscordClient = (DiscordClientType)AMWin_RichPresence.Properties.Settings.Default.DiscordClientPreference;
+            discordClient = new(Constants.DiscordClientID, enabled: false, statusDisplayOptions: statusDisplayOptions, logger: logger, preferredClient: preferredDiscordClient);
 
             // start Last.FM scrobbler
             var amRegion = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion;
@@ -183,6 +184,10 @@ namespace AMWin_RichPresence {
 
         internal void UpdateRPStatusDisplay(AppleMusicDiscordClient.RPStatusDisplayOptions newVal) {
             discordClient.statusDisplayOptions = newVal;
+        }
+
+        internal void UpdateDiscordClientPreference(DiscordClientType newClient) {
+            discordClient.SetPreferredClient(newClient);
         }
 
         internal async Task<bool> UpdateLastfmCreds() {
