@@ -22,17 +22,20 @@ internal class AppleMusicDiscordClient {
     Logger? logger;
     int maxStringLength = 127;
     string? songLyrics = null;
+    DiscordClientType preferredClient;
 
     public AppleMusicDiscordClient(
         string discordClientID,
         bool enabled = true,
         RPStatusDisplayOptions statusDisplayOptions = RPStatusDisplayOptions.Artist,
-        Logger? logger = null
+        Logger? logger = null,
+        DiscordClientType preferredClient = DiscordClientType.Auto
     ) {
         this.discordClientID = discordClientID;
         this.enabled = enabled;
         this.statusDisplayOptions = statusDisplayOptions;
         this.logger = logger;
+        this.preferredClient = preferredClient;
 
         if (enabled) {
             InitClient();
@@ -169,8 +172,27 @@ internal class AppleMusicDiscordClient {
         client?.ClearPresence();
         DeinitClient();
     }
+    public void SetPreferredClient(DiscordClientType newClient) {
+        if (preferredClient == newClient) {
+            return;
+        }
+        preferredClient = newClient;
+
+        if (enabled) {
+            client?.ClearPresence();
+            DeinitClient();
+            InitClient();
+        }
+    }
     private void InitClient() {
-        client = new DiscordRpcClient(discordClientID, logger: logger);
+        int pipe = -1;
+        if (preferredClient != DiscordClientType.Auto) {
+            var resolved = DiscordPipeFinder.FindPipeForClient(preferredClient, logger);
+            if (resolved != null) {
+                pipe = resolved.Value;
+            }
+        }
+        client = new DiscordRpcClient(discordClientID, pipe: pipe, logger: logger);
         client.Initialize();
     }
     private void DeinitClient() {
