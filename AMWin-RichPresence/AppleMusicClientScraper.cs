@@ -171,12 +171,21 @@ namespace AMWin_RichPresence {
             }
 
             // find an apple music window that we can extract information from
-            (string? Name, Func<AutomationElement?> MiniPanel, Func<AutomationElement?> TransportBar) PanelSources(AutomationElement window) => (
-                Try(() => window.Name),
-                () => Try(() => window.FindFirstDescendant(cf => cf.ByClassName("InputSiteWindowClass"))),
-                () => Try(() => window.FindFirstDescendant(cf => cf.ByAutomationId("TransportBar"))));
-
-            var (amSongPanel, isMiniPlayer) = PickSongPanel(windows.Select(PanelSources));
+            AutomationElement? amSongPanel = null;
+            var isMiniPlayer = false;
+            foreach (var window in windows) {
+                // TODO: can localisation change the window name of the Mini Player?
+                if (Try(() => window.Name)?.Replace(" ", "") == "MiniPlayer") {
+                    // preference the mini player because it always has timestamps visible
+                    var miniPanel = Try(() => window.FindFirstDescendant(cf => cf.ByClassName("InputSiteWindowClass")));
+                    if (miniPanel != null) {
+                        (amSongPanel, isMiniPlayer) = (miniPanel, true);
+                        break;
+                    }
+                } else {
+                    amSongPanel ??= Try(() => window.FindFirstDescendant(cf => cf.ByAutomationId("TransportBar")));
+                }
+            }
 
             if (isMiniPlayer) {
                 logger?.Log("Using Mini Player");
@@ -417,23 +426,6 @@ namespace AMWin_RichPresence {
                     currentSong.SyncedLyrics = result.Lyrics;
                 }
             }
-        }
-
-        internal static (T? panel, bool isMiniPlayer) PickSongPanel<T>(IEnumerable<(string? Name, Func<T?> MiniPanel, Func<T?> TransportBar)> windows) where T : class {
-            T? mainWindowPanel = null;
-            foreach (var window in windows) {
-                // TODO: can localisation change the window name of the Mini Player?
-                if (window.Name == "Mini Player") {
-                    // preference the mini player because it always has timestamps visible
-                    var miniPanel = window.MiniPanel();
-                    if (miniPanel != null) {
-                        return (miniPanel, true);
-                    }
-                } else {
-                    mainWindowPanel ??= window.TransportBar();
-                }
-            }
-            return (mainWindowPanel, false);
         }
 
         // one stale window shouldn't abort the whole scrape
