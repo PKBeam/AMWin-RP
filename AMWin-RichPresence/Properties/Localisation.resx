@@ -150,6 +150,24 @@
   <data name="Settings_Discord_UserStatusDisplay" xml:space="preserve">
     <value>Show Discord status as</value>
   </data>
+  <data name="Settings_Discord_ClientChoice" xml:space="preserve">
+    <value>Send Rich Presence to</value>
+  </data>
+  <data name="Settings_Discord_ClientChoice_Description" xml:space="preserve">
+    <value>Choose which Discord app receives Rich Presence when you have more than one running (e.g. Stable and Canary). Leave on Automatic if you only use one.</value>
+  </data>
+  <data name="Settings_Discord_ClientChoice_Auto" xml:space="preserve">
+    <value>Automatic (any running client)</value>
+  </data>
+  <data name="Settings_Discord_ClientChoice_Stable" xml:space="preserve">
+    <value>Discord (Stable)</value>
+  </data>
+  <data name="Settings_Discord_ClientChoice_PTB" xml:space="preserve">
+    <value>Discord PTB</value>
+  </data>
+  <data name="Settings_Discord_ClientChoice_Canary" xml:space="preserve">
+    <value>Discord Canary</value>
+  </data>
   <data name="Settings_Discord_UserStatusDisplay_Artist" xml:space="preserve">
     <value>Artist name</value>
   </data>

@@ -23,17 +23,20 @@ internal class AppleMusicDiscordClient {
     int maxStringLength = 127;
     string? songLyrics = null;
     volatile bool isConnected = false;
+    DiscordClientType preferredClient;
 
     public AppleMusicDiscordClient(
         string discordClientID,
         bool enabled = true,
         RPStatusDisplayOptions statusDisplayOptions = RPStatusDisplayOptions.Artist,
-        Logger? logger = null
+        Logger? logger = null,
+        DiscordClientType preferredClient = DiscordClientType.Auto
     ) {
         this.discordClientID = discordClientID;
         this.enabled = enabled;
         this.statusDisplayOptions = statusDisplayOptions;
         this.logger = logger;
+        this.preferredClient = preferredClient;
 
         if (enabled) {
             InitClient();
@@ -178,8 +181,27 @@ internal class AppleMusicDiscordClient {
         client?.ClearPresence();
         DeinitClient();
     }
+    public void SetPreferredClient(DiscordClientType newClient) {
+        if (preferredClient == newClient) {
+            return;
+        }
+        preferredClient = newClient;
+
+        if (enabled) {
+            client?.ClearPresence();
+            DeinitClient();
+            InitClient();
+        }
+    }
     private void InitClient() {
-        client = new DiscordRpcClient(discordClientID, logger: logger);
+        int pipe = -1;
+        if (preferredClient != DiscordClientType.Auto) {
+            var resolved = DiscordPipeFinder.FindPipeForClient(preferredClient, logger);
+            if (resolved != null) {
+                pipe = resolved.Value;
+            }
+        }
+        client = new DiscordRpcClient(discordClientID, pipe: pipe, logger: logger);
         client.OnReady += (_, _) => isConnected = true;
         client.OnConnectionFailed += (_, _) => isConnected = false;
         client.OnClose += (_, _) => isConnected = false;
