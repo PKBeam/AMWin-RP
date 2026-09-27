@@ -188,6 +188,28 @@
                                     </ComboBox>
                                 </StackPanel>
 
+                                <StackPanel Orientation="Horizontal" Margin="10 7 0 2">
+                                    <TextBlock
+                                        x:Name="TextBlock_DiscordClientLabel"
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 10 2"
+                                        Text="Send Rich Presence to"/>
+                                    <ComboBox
+                                        x:Name="ComboBox_DiscordClient"
+                                        Width="245"
+                                        IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableDiscordRP}"
+                                        SelectionChanged="ComboBox_DiscordClient_SelectionChanged">
+                                        <ComboBoxItem x:Name="ComboBoxItem_DiscordClientAuto"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_DiscordClientStable"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_DiscordClientPTB"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_DiscordClientCanary"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBlock
+                                    x:Name="TextBlock_DiscordClientDescription"
+                                    Margin="10 5 0 10" FontSize="12" VerticalAlignment="Center" TextWrapping="Wrap"
+                                    Text="Choose which Discord app receives Rich Presence when you have more than one running."/>
+
                                 <!-- Discord RP settings: Lyrics (experimental) -->
                                 <ui:Card Margin="0 15 0 5">
                                     <StackPanel>
