@@ -22,6 +22,7 @@ internal class AppleMusicDiscordClient {
     Logger? logger;
     int maxStringLength = 127;
     string? songLyrics = null;
+    volatile bool isConnected = false;
     DiscordClientType preferredClient;
 
     public AppleMusicDiscordClient(
@@ -154,7 +155,10 @@ internal class AppleMusicDiscordClient {
                 logger?.Log($"Tried to set Discord RP, but no client");
             } else {
                 client.SetPresence(rp);
-                logger?.Log($"Set Discord RP to:\n{amInfo}");
+                // the IPC pipe can be down while the client keeps retrying, e.g. Discord
+                // restarting, or the pipe dropping along with a dock change
+                var what = isConnected ? "Set" : "Queued (not connected to Discord)";
+                logger?.Log($"{what} Discord RP:\n{amInfo}");
             }
 
             } catch (Exception ex) {
@@ -198,9 +202,13 @@ internal class AppleMusicDiscordClient {
             }
         }
         client = new DiscordRpcClient(discordClientID, pipe: pipe, logger: logger);
+        client.OnReady += (_, _) => isConnected = true;
+        client.OnConnectionFailed += (_, _) => isConnected = false;
+        client.OnClose += (_, _) => isConnected = false;
         client.Initialize();
     }
     private void DeinitClient() {
+        isConnected = false;
         if (client != null) {
             client.Deinitialize();
             client.Dispose();
