@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Timers;
@@ -138,47 +139,44 @@ namespace AMWin_RichPresence {
         }
 
         public async Task GetAppleMusicInfo() {
-            var isMiniPlayer = true;
             var amProcesses = Process.GetProcessesByName("AppleMusic");
-            if (!amProcesses.Any()) {
+            var processIds = amProcesses.Select(p => p.Id).ToList();
+            foreach (var p in amProcesses) {
+                p.Dispose();
+            }
+            if (processIds.Count == 0) {
                 logger?.Log("Could not find an AppleMusic.exe process");
                 currentSong = null;
                 return;
             }
 
+            // reads throw COMException 0x80040201 once Apple Music rebuilds its UI tree
+            using var automation = new UIA3Automation();
+
             // find apple music windows
             var windows = new List<AutomationElement>();
-            using (var automation = new UIA3Automation()) {
-                var processId = amProcesses[0].Id;
-                windows = [.. automation.GetDesktop().FindAllChildren(c => c.ByProcessId(processId))];
-                
-                // if no windows on the normal desktop, search for virtual desktops and add them
-                if (windows.Count == 0) {
-                    logger?.Log("No windows found on desktop, trying alternative search");
-                    var vdesktopWin = FlaUI.Core.Application.Attach(processId).GetMainWindow(automation, TimeSpan.FromSeconds(3));
-                    if (vdesktopWin != null) {
-                        windows.Add(vdesktopWin);
+            foreach (var processId in processIds) {
+                windows.AddRange(Try(() => automation.GetDesktop().FindAllChildren(cf => cf.ByProcessId(processId))) ?? []);
+            }
+
+            // a display change (docking, undocking, sleep/wake) can drop the windows out of the UIA desktop tree 
+            if (windows.Count == 0) {
+                logger?.Log("No windows found on desktop, enumerating top-level windows instead");
+                foreach (var hWnd in Win32.GetTopLevelWindows(processIds)) {
+                    var window = Try(() => automation.FromHandle(hWnd));
+                    if (window != null) {
+                        windows.Add(window);
                     }
                 }
             }
 
             // find an apple music window that we can extract information from
-            AutomationElement? amSongPanel = null;
-            foreach (var window in windows) {
-                // TODO: can localisation change the window name of the Mini Player?
-                isMiniPlayer = window.Name == "Mini Player";
+            (string? Name, Func<AutomationElement?> MiniPanel, Func<AutomationElement?> TransportBar) PanelSources(AutomationElement window) => (
+                Try(() => window.Name),
+                () => Try(() => window.FindFirstDescendant(cf => cf.ByClassName("InputSiteWindowClass"))),
+                () => Try(() => window.FindFirstDescendant(cf => cf.ByAutomationId("TransportBar"))));
 
-                if (isMiniPlayer) {
-                    amSongPanel = window.FindFirstDescendant(cf => cf.ByClassName("InputSiteWindowClass"));
-
-                    // preference the mini player because it always has timestamps visible
-                    if (amSongPanel != null) {
-                        break;
-                    }
-                } else {
-                    amSongPanel = window.FindFirstDescendant(cf => cf.ByAutomationId("TransportBar")) ?? amSongPanel;
-                }
-            }
+            var (amSongPanel, isMiniPlayer) = PickSongPanel(windows.Select(PanelSources));
 
             if (isMiniPlayer) {
                 logger?.Log("Using Mini Player");
@@ -202,7 +200,7 @@ namespace AMWin_RichPresence {
             // ------------------------------------------------
 
             // an active mini player must have a song 
-            if (!isMiniPlayer && songFields.Length != 2) {
+            if (songFields.Length < 2 || (!isMiniPlayer && songFields.Length != 2)) {
                 currentSong = null;
                 return;
             }
@@ -421,6 +419,33 @@ namespace AMWin_RichPresence {
             }
         }
 
+        internal static (T? panel, bool isMiniPlayer) PickSongPanel<T>(IEnumerable<(string? Name, Func<T?> MiniPanel, Func<T?> TransportBar)> windows) where T : class {
+            T? mainWindowPanel = null;
+            foreach (var window in windows) {
+                // TODO: can localisation change the window name of the Mini Player?
+                if (window.Name == "Mini Player") {
+                    // preference the mini player because it always has timestamps visible
+                    var miniPanel = window.MiniPanel();
+                    if (miniPanel != null) {
+                        return (miniPanel, true);
+                    }
+                } else {
+                    mainWindowPanel ??= window.TransportBar();
+                }
+            }
+            return (mainWindowPanel, false);
+        }
+
+        // one stale window shouldn't abort the whole scrape
+        private T? Try<T>(Func<T?> f) where T : class {
+            try {
+                return f();
+            } catch (Exception ex) {
+                logger?.Log($"Could not read Apple Music UI: {ex.Message}");
+                return null;
+            }
+        }
+
         // e.g. parse "-1:30" to 90 seconds
         private static int? ParseTimeString(string? time) {
 
@@ -485,6 +510,33 @@ namespace AMWin_RichPresence {
                 return DeduplicatedString(firstHalf) ?? firstHalf;
             }
             return null;
+        }
+    }
+
+    internal static class Win32 {
+        private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        private static extern bool EnumWindows(EnumWindowsProc callback, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+
+        [DllImport("user32.dll")]
+        private static extern bool IsWindowVisible(IntPtr hWnd);
+
+        // includes windows that got cloaked or parked off-screen by a display change
+        public static List<IntPtr> GetTopLevelWindows(ICollection<int> processIds) {
+            var hWnds = new List<IntPtr>();
+            EnumWindows((hWnd, _) => {
+                GetWindowThreadProcessId(hWnd, out var processId);
+                // cloaked windows still report as visible, so this only drops helper windows
+                if (processIds.Contains((int)processId) && IsWindowVisible(hWnd)) {
+                    hWnds.Add(hWnd);
+                }
+                return true;
+            }, IntPtr.Zero);
+            return hWnds;
         }
     }
 }
