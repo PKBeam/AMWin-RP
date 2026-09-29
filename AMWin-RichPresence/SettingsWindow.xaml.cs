@@ -20,6 +20,7 @@ namespace AMWin_RichPresence {
     /// </summary>
     public partial class SettingsWindow : FluentWindow {
         private bool isLanguageSelectorInitialized;
+        private bool isDiscordClientSelectorInitialized;
 
         private bool amRegionValid {
             get { return Constants.ValidAppleMusicRegions.Contains(AppleMusicRegion.Text.ToLower()); }
@@ -30,6 +31,7 @@ namespace AMWin_RichPresence {
             SystemThemeWatcher.Watch(this);
             InitializeComponent();
             InitializeLanguageSelector();
+            InitializeDiscordClientSelector();
 
             string imagePath = IsDarkMode()
                 ? "/Resources/GitHub_Invertocat_White.png"
@@ -67,11 +69,13 @@ namespace AMWin_RichPresence {
             TextBlock_LanguageDescription.Text = GetLocalisedString("Settings_General_Language_Description", "Restart the app after changing the language.");
             ComboBoxItem_LanguageSystem.Content = GetLocalisedString("Settings_General_Language_System", "System default (System default)");
             ComboBoxItem_LanguageEnglish.Content = GetLocalisedString("Settings_General_Language_English", "English (English)");
+            ComboBoxItem_LanguageGerman.Content = GetLocalisedString("Settings_General_Language_German", "German (Deutsch)");
             ComboBoxItem_LanguageTurkish.Content = GetLocalisedString("Settings_General_Language_Turkish", "Turkce (Turkce)");
             ComboBoxItem_LanguageKorean.Content = GetLocalisedString("Settings_General_Language_Korean", "Korean (한국어)");
             ComboBoxItem_LanguageJapanese.Content = GetLocalisedString("Settings_General_Language_Japanese", "Japanese (日本語)");
             ComboBoxItem_LanguageRussian.Content = GetLocalisedString("Settings_General_Language_Russian", "Russian (Русский)");
-            ComboBoxItem_LanguageSpanish.Content = GetLocalisedString("Settings_General_Language_Spanish", "Spanish (Español)");
+            ComboBoxItem_LanguageSpanish.Content = GetLocalisedString("Settings_General_Language_Spanish", "Spanish - Spain (Español de España)");
+            ComboBoxItem_LanguageLatam.Content = GetLocalisedString("Settings_General_Language_Latam", "Spanish - Latin America (Español de Latinoamérica)");
 
             var selectedLanguage = App.NormalizeLanguageCode(Properties.Settings.Default.Language);
             if (!String.Equals(selectedLanguage, Properties.Settings.Default.Language, StringComparison.Ordinal)) {
@@ -81,15 +85,34 @@ namespace AMWin_RichPresence {
 
             ComboBox_Language.SelectedItem = selectedLanguage switch {
                 "en" => ComboBoxItem_LanguageEnglish,
+                "de" => ComboBoxItem_LanguageGerman,
                 "tr" => ComboBoxItem_LanguageTurkish,
                 "ko" => ComboBoxItem_LanguageKorean,
                 "ja" => ComboBoxItem_LanguageJapanese,
                 "ru" => ComboBoxItem_LanguageRussian,
                 "es" => ComboBoxItem_LanguageSpanish,
+                "es-MX" => ComboBoxItem_LanguageLatam,
                 _ => ComboBoxItem_LanguageSystem
             };
 
             isLanguageSelectorInitialized = true;
+        }
+
+        private void InitializeDiscordClientSelector() {
+            TextBlock_DiscordClientLabel.Text = GetLocalisedString("Settings_Discord_ClientChoice", "Send Rich Presence to");
+            TextBlock_DiscordClientDescription.Text = GetLocalisedString("Settings_Discord_ClientChoice_Description", "Choose which Discord app receives Rich Presence when you have more than one running (e.g. Stable and Canary). Leave on Automatic if you only use one.");
+            ComboBoxItem_DiscordClientAuto.Content = GetLocalisedString("Settings_Discord_ClientChoice_Auto", "Automatic (any running client)");
+            ComboBoxItem_DiscordClientStable.Content = GetLocalisedString("Settings_Discord_ClientChoice_Stable", "Discord (Stable)");
+            ComboBoxItem_DiscordClientPTB.Content = GetLocalisedString("Settings_Discord_ClientChoice_PTB", "Discord PTB");
+            ComboBoxItem_DiscordClientCanary.Content = GetLocalisedString("Settings_Discord_ClientChoice_Canary", "Discord Canary");
+
+            var selectedIndex = Properties.Settings.Default.DiscordClientPreference;
+            if (selectedIndex < 0 || selectedIndex >= ComboBox_DiscordClient.Items.Count) {
+                selectedIndex = 0;
+            }
+            ComboBox_DiscordClient.SelectedIndex = selectedIndex;
+
+            isDiscordClientSelectorInitialized = true;
         }
 
         private static string GetLocalisedString(string key, string fallback) {
@@ -165,6 +188,16 @@ namespace AMWin_RichPresence {
             SaveSettings();
         }
 
+        private void ComboBox_DiscordClient_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (!isDiscordClientSelectorInitialized) {
+                return;
+            }
+            var selectedIndex = ComboBox_DiscordClient.SelectedIndex;
+            Properties.Settings.Default.DiscordClientPreference = selectedIndex;
+            SaveSettings();
+            ((App)Application.Current).UpdateDiscordClientPreference((DiscordClientType)selectedIndex);
+        }
+
         private void CheckBox_EnableSyncLyrics_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
@@ -188,7 +221,7 @@ namespace AMWin_RichPresence {
             var path = Path.Combine(Constants.AppDataFolder, "LyricCache");
             if (Directory.Exists(path)) {
                 var result = await new MessageBox {
-                    Title = Localisation.Message_ClearLyricCache,
+                    Title = Localisation.Message_ClearLyricCache_Title,
                     Content = Localisation.Message_ClearLyricCache,
                     IsCloseButtonEnabled = false,
                     PrimaryButtonText = Localisation.Message_Yes,
@@ -242,6 +275,10 @@ namespace AMWin_RichPresence {
         }
 
         private void CheckBox_LastfmCleanAlbumName_Click(object sender, RoutedEventArgs e) {
+            SaveSettings();
+        }
+
+        private void CheckBox_LastfmCleanSongName_Click(object sender, RoutedEventArgs e) {
             SaveSettings();
         }
 

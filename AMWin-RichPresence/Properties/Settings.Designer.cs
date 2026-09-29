@@ -145,6 +145,18 @@ namespace AMWin_RichPresence.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LastfmCleanSongName {
+            get {
+                return ((bool)(this["LastfmCleanSongName"]));
+            }
+            set {
+                this["LastfmCleanSongName"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool LastfmScrobblePrimaryArtist {
             get {
@@ -308,6 +320,18 @@ namespace AMWin_RichPresence.Properties {
             }
             set {
                 this["Language"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DiscordClientPreference {
+            get {
+                return ((int)(this["DiscordClientPreference"]));
+            }
+            set {
+                this["DiscordClientPreference"] = value;
             }
         }
     }

@@ -29,11 +29,13 @@ namespace AMWin_RichPresence {
         internal static string NormalizeLanguageCode(string? languageCode) {
             return languageCode?.Trim().ToLowerInvariant() switch {
                 "en" => "en",
+                "de" => "de",
                 "tr" => "tr",
                 "ko" => "ko",
                 "ja" => "ja",
                 "ru" => "ru",
                 "es" => "es",
+                "es-MX" => "es-MX",
                 _ => ""
             };
         }
@@ -107,18 +109,14 @@ namespace AMWin_RichPresence {
 
             // check for updates
             if (AMWin_RichPresence.Properties.Settings.Default.CheckForUpdatesOnStartup) {
-                try {
-                    CheckForUpdates();
-                    logger?.Log("No AMWin-RP updates available.");
-                } catch (Exception e) {
-                    logger?.Log($"Could not check for AMWin-RP updates: {e.Message}");
-                }
+                _ = CheckForUpdates();
             }
 
             // start Discord RPC
             var statusDisplayOptions = (AppleMusicDiscordClient.RPStatusDisplayOptions)AMWin_RichPresence.Properties.Settings.Default.RPDisplayChoice;
             var classicalComposerAsArtist = AMWin_RichPresence.Properties.Settings.Default.ClassicalComposerAsArtist;
-            discordClient = new(Constants.DiscordClientID, enabled: false, statusDisplayOptions: statusDisplayOptions, logger: logger);
+            var preferredDiscordClient = (DiscordClientType)AMWin_RichPresence.Properties.Settings.Default.DiscordClientPreference;
+            discordClient = new(Constants.DiscordClientID, enabled: false, statusDisplayOptions: statusDisplayOptions, logger: logger, preferredClient: preferredDiscordClient);
 
             // start Last.FM scrobbler
             var amRegion = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion;
@@ -188,6 +186,10 @@ namespace AMWin_RichPresence {
             discordClient.statusDisplayOptions = newVal;
         }
 
+        internal void UpdateDiscordClientPreference(DiscordClientType newClient) {
+            discordClient.SetPreferredClient(newClient);
+        }
+
         internal async Task<bool> UpdateLastfmCreds() {
             return await lastFmScrobblerClient.UpdateCredsAsync(lastFmCredentials);
         }
@@ -206,39 +208,49 @@ namespace AMWin_RichPresence {
             amScraper.composerAsArtist = composerAsArtist;
         }
 
-        internal async void CheckForUpdates() {
-            static int StringVerToInt(string v) {
-                var verStr = v[1..].Split("b")[0].Replace(".", "").PadRight(4, '0');
-                return int.Parse(verStr);
-            }
-            Constants.HttpClient.DefaultRequestHeaders.Add("User-Agent", "AMWin-RP");
-            var result = await Constants.HttpClient.GetStringAsync(Constants.GithubReleasesApiUrl);
-            var json = JsonDocument.Parse(result);
+        internal async Task CheckForUpdates() {
+            try {
+                static int StringVerToInt(string v) {
+                    var verStr = v[1..].Split("b")[0].Replace(".", "").PadRight(4, '0');
+                    return int.Parse(verStr);
+                }
 
-            var verLocal = Constants.ProgramVersionBase;
-            var verRemote = json.RootElement.GetProperty("name").GetString()!;
+                if (!Constants.HttpClient.DefaultRequestHeaders.UserAgent.Any()) {
+                    Constants.HttpClient.DefaultRequestHeaders.Add("User-Agent", "AMWin-RP");
+                }
 
-            var numverLocal = StringVerToInt(verLocal);
-            var numverRemote = StringVerToInt(verRemote);
+                var result = await Constants.HttpClient.GetStringAsync(Constants.GithubReleasesApiUrl);
+                using var json = JsonDocument.Parse(result);
 
-            // TODO add support for multiple beta versions (i.e. b1 and b2)
-            if (numverRemote > numverLocal || (numverRemote == numverLocal && verLocal.Contains('b') && !verRemote.Contains('b'))) {
-                Application.Current.Dispatcher.Invoke((Action)async delegate {
-                    var result = await new MessageBox {
-                        Title = Localisation.Message_AppUpdate_Title,
-                        Content = Localisation.Message_AppUpdate,
-                        IsCloseButtonEnabled = false,
-                        PrimaryButtonText = Localisation.Message_Yes,
-                        SecondaryButtonText = Localisation.Message_No
-                    }.ShowDialogAsync();
+                var verLocal = Constants.ProgramVersionBase;
+                var verRemote = json.RootElement.GetProperty("name").GetString()!;
 
-                    if (result == MessageBoxResult.Primary) {
-                        Process.Start(new ProcessStartInfo {
-                            FileName = Constants.GithubReleasesUrl,
-                            UseShellExecute = true
-                        });
-                    }
-                });
+                var numverLocal = StringVerToInt(verLocal);
+                var numverRemote = StringVerToInt(verRemote);
+
+                // TODO add support for multiple beta versions (i.e. b1 and b2)
+                if (numverRemote > numverLocal || (numverRemote == numverLocal && verLocal.Contains('b') && !verRemote.Contains('b'))) {
+                    Application.Current.Dispatcher.Invoke((Action)async delegate {
+                        var result = await new MessageBox {
+                            Title = Localisation.Message_AppUpdate_Title,
+                            Content = Localisation.Message_AppUpdate,
+                            IsCloseButtonEnabled = false,
+                            PrimaryButtonText = Localisation.Message_Yes,
+                            SecondaryButtonText = Localisation.Message_No
+                        }.ShowDialogAsync();
+
+                        if (result == MessageBoxResult.Primary) {
+                            Process.Start(new ProcessStartInfo {
+                                FileName = Constants.GithubReleasesUrl,
+                                UseShellExecute = true
+                            });
+                        }
+                    });
+                } else {
+                    logger?.Log("No AMWin-RP updates available.");
+                }
+            } catch (Exception e) {
+                logger?.Log($"Could not check for AMWin-RP updates: {e.Message}");
             }
         }
     }

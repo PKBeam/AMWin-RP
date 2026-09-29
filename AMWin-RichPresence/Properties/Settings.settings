@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AMWin_RichPresence.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
@@ -30,6 +30,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="LastfmCleanAlbumName" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <!-- Whether to clean song names by removing " (Mixed)", " [Mixed]", " (Mixed]", and " [Mixed)" -->
+    <Setting Name="LastfmCleanSongName" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="LastfmScrobblePrimaryArtist" Type="System.Boolean" Scope="User">
@@ -73,6 +77,9 @@
     </Setting>
     <Setting Name="Language" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DiscordClientPreference" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

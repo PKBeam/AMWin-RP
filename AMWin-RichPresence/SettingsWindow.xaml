@@ -11,7 +11,7 @@
     Title="{x:Static properties:Localisation.Settings_Title}" 
     Icon="/Resources/AMWinRP.ico"
     ExtendsContentIntoTitleBar="True" ResizeMode="CanResize" WindowStartupLocation="CenterScreen"
-    MinWidth="515" Width="600" Height="850">
+    MinWidth="665" Width="700" Height="850">
     <Grid TextElement.FontSize="14">
         <ui:TitleBar/>
         <DockPanel>
@@ -48,7 +48,7 @@
                         Click="NavItemDiscord_Click"/>
                     <ui:NavigationViewItem
                         x:Name="NavItemScrobbling"
-                        Content="{x:Static properties:Localisation.Settings_Scrobbling_SectionTitle}"
+                        Content="{x:Static properties:Localisation.Settings_Scrobbling_SectionTitleShort}"
                         Icon="{ui:SymbolIcon Headphones20}" 
                         Click="NavItemScrobbling_Click"/>
                 </ui:NavigationView.MenuItems>
@@ -96,11 +96,13 @@
                                         SelectionChanged="ComboBox_Language_SelectionChanged">
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageSystem" Tag="" Content="System default (System default)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageEnglish" Tag="en" Content="English (English)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageGerman" Tag="de" Content="German (Deutsch)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageTurkish" Tag="tr" Content="Turkce (Türkçe)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageKorean" Tag="ko" Content="Korean (한국어)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageJapanese" Tag="ja" Content="Japanese (日本語)"/>
                                         <ComboBoxItem x:Name="ComboBoxItem_LanguageRussian" Tag="ru" Content="Russian (Русский)"/>
-                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageSpanish" Tag="es" Content="Spanish (Español)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageSpanish" Tag="es" Content="Spanish - Spain (Español de España)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_LanguageLatam" Tag="es-MX" Content="Latin American Spanish (Español de Latinoamérica)"/>
                                     </ComboBox>
                                 </StackPanel>
                                 <TextBlock
@@ -186,6 +188,28 @@
                                     </ComboBox>
                                 </StackPanel>
 
+                                <StackPanel Orientation="Horizontal" Margin="10 7 0 2">
+                                    <TextBlock
+                                        x:Name="TextBlock_DiscordClientLabel"
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 10 2"
+                                        Text="Send Rich Presence to"/>
+                                    <ComboBox
+                                        x:Name="ComboBox_DiscordClient"
+                                        Width="245"
+                                        IsEnabled="{Binding IsChecked, ElementName=CheckBox_EnableDiscordRP}"
+                                        SelectionChanged="ComboBox_DiscordClient_SelectionChanged">
+                                        <ComboBoxItem x:Name="ComboBoxItem_DiscordClientAuto"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_DiscordClientStable"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_DiscordClientPTB"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_DiscordClientCanary"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBlock
+                                    x:Name="TextBlock_DiscordClientDescription"
+                                    Margin="10 5 0 10" FontSize="12" VerticalAlignment="Center" TextWrapping="Wrap"
+                                    Text="Choose which Discord app receives Rich Presence when you have more than one running."/>
+
                                 <!-- Discord RP settings: Lyrics (experimental) -->
                                 <ui:Card Margin="0 15 0 5">
                                     <StackPanel>
@@ -245,7 +269,17 @@
                                     Text="{x:Static properties:Localisation.Settings_Scrobbling_CleanAlbumName_Description}"/>
 
                                 <CheckBox 
-                                    x:Name="CheckBox_LastfmScrobblePrimary" Margin="0 2 0 0" 
+                                    x:Name="CheckBox_LastfmCleanSongName"
+                                    IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmCleanSongName, Mode=TwoWay}" 
+                                    Click="CheckBox_LastfmCleanSongName_Click" 
+                                    Content="{x:Static properties:Localisation.Settings_Scrobbling_CleanSongName}"/>
+                                <TextBlock 
+                                    Margin="40 0 0 10" FontSize="12"  VerticalAlignment="Center" TextWrapping="Wrap"
+                                    Text="{x:Static properties:Localisation.Settings_Scrobbling_CleanSongName_Description}"/>
+
+                                <CheckBox 
+                                    x:Name="CheckBox_LastfmScrobblePrimary" 
+                                    Margin="0 2 0 0" 
                                     IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmScrobblePrimaryArtist, Mode=TwoWay}" 
                                     Click="CheckBox_LastfmScrobblePrimary_Click" 
                                     Content="{x:Static properties:Localisation.Settings_Scrobbling_ScrobblePrimaryArtist}"/>
@@ -296,7 +330,7 @@
                                         <TextBox 
                                             x:Name="LastfmAPIKey" Margin="0 7 0 10" TextWrapping="Wrap" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}" 
-                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmAPIKey}"/>
+                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmAPIKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                         <TextBlock
                                             VerticalAlignment="Center" 
@@ -304,7 +338,7 @@
                                         <TextBox 
                                             x:Name="LastfmSecret" Margin="0 7 0 10" TextWrapping="Wrap" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}" 
-                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmSecret}"/>
+                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmSecret, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                         <TextBlock 
                                             VerticalAlignment="Center" 
@@ -312,7 +346,7 @@
                                         <TextBox 
                                             x:Name="LastfmUsername" Margin="0 7 0 10" TextWrapping="Wrap"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_LastfmEnable}" 
-                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.LastfmUsername}"/>
+                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=LastfmUsername, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                                         <TextBlock
                                             VerticalAlignment="Center"
@@ -350,7 +384,7 @@
                                         <TextBox 
                                             x:Name="ListenBrainzUserToken" Margin="0 7 0 10" FontFamily="Cascadia Mono"
                                             IsEnabled="{Binding IsChecked, ElementName=CheckBox_ListenBrainzEnable}" 
-                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=Default.ListenBrainzUserToken, Mode=TwoWay}" 
+                                            Text="{Binding Source={x:Static properties:Settings.Default}, Path=ListenBrainzUserToken, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                             TextWrapping="Wrap"/>               
 
                                         <Button x:Name="SaveListenBrainzCreds" Margin="0 7 0 0" VerticalAlignment="Center" HorizontalAlignment="Right" 

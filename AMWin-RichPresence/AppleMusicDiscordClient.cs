@@ -22,17 +22,21 @@ internal class AppleMusicDiscordClient {
     Logger? logger;
     int maxStringLength = 127;
     string? songLyrics = null;
+    volatile bool isConnected = false;
+    DiscordClientType preferredClient;
 
     public AppleMusicDiscordClient(
         string discordClientID,
         bool enabled = true,
         RPStatusDisplayOptions statusDisplayOptions = RPStatusDisplayOptions.Artist,
-        Logger? logger = null
+        Logger? logger = null,
+        DiscordClientType preferredClient = DiscordClientType.Auto
     ) {
         this.discordClientID = discordClientID;
         this.enabled = enabled;
         this.statusDisplayOptions = statusDisplayOptions;
         this.logger = logger;
+        this.preferredClient = preferredClient;
 
         if (enabled) {
             InitClient();
@@ -69,6 +73,11 @@ internal class AppleMusicDiscordClient {
         // hack to show 1-character album names
         while (songAlbum.Length < 2) {
             songAlbum += "\u0000";
+        }
+
+        // hack to show 1-character artist names
+        while (songArtist.Length < 2) {
+            songArtist += "\u0000";
         }
 
         // pick the subtitle format to show
@@ -146,7 +155,10 @@ internal class AppleMusicDiscordClient {
                 logger?.Log($"Tried to set Discord RP, but no client");
             } else {
                 client.SetPresence(rp);
-                logger?.Log($"Set Discord RP to:\n{amInfo}");
+                // the IPC pipe can be down while the client keeps retrying, e.g. Discord
+                // restarting, or the pipe dropping along with a dock change
+                var what = isConnected ? "Set" : "Queued (not connected to Discord)";
+                logger?.Log($"{what} Discord RP:\n{amInfo}");
             }
 
             } catch (Exception ex) {
@@ -169,11 +181,34 @@ internal class AppleMusicDiscordClient {
         client?.ClearPresence();
         DeinitClient();
     }
+    public void SetPreferredClient(DiscordClientType newClient) {
+        if (preferredClient == newClient) {
+            return;
+        }
+        preferredClient = newClient;
+
+        if (enabled) {
+            client?.ClearPresence();
+            DeinitClient();
+            InitClient();
+        }
+    }
     private void InitClient() {
-        client = new DiscordRpcClient(discordClientID, logger: logger);
+        int pipe = -1;
+        if (preferredClient != DiscordClientType.Auto) {
+            var resolved = DiscordPipeFinder.FindPipeForClient(preferredClient, logger);
+            if (resolved != null) {
+                pipe = resolved.Value;
+            }
+        }
+        client = new DiscordRpcClient(discordClientID, pipe: pipe, logger: logger);
+        client.OnReady += (_, _) => isConnected = true;
+        client.OnConnectionFailed += (_, _) => isConnected = false;
+        client.OnClose += (_, _) => isConnected = false;
         client.Initialize();
     }
     private void DeinitClient() {
+        isConnected = false;
         if (client != null) {
             client.Deinitialize();
             client.Dispose();

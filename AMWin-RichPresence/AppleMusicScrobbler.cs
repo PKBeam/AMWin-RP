@@ -32,10 +32,23 @@ namespace AMWin_RichPresence {
 
     }
 
+    /// <summary>
+    /// Removes " (Mixed)", " [Mixed]", " (Mixed]", and " [Mixed)" from the end of song names, which Apple Music DJ Playlisted often appends to the end of the song name, and causes scrobbling issues.
+    /// </summary>
+    internal class SongCleaner {
+        private static readonly Regex SongCleanerRegex = new Regex(@"\s(\(|\[)Mixed(\]|\))$", RegexOptions.Compiled);
+
+        public static string CleanSongName(string songName) {
+            // Remove " (Mixed)", " [Mixed]", " (Mixed]", and " [Mixed)"
+            return SongCleanerRegex.Replace(songName, new MatchEvaluator((m) => { return ""; }));
+        }
+    }
+
     internal abstract class AppleMusicScrobbler<C> where C : IScrobblerCredentials {
         protected int elapsedSeconds;
         protected string? lastSongID;
         protected bool hasScrobbled;
+        protected bool nowPlayingSent;
         protected double lastSongProgress;
         protected Logger? logger;
         protected string serviceName;
@@ -71,7 +84,7 @@ namespace AMWin_RichPresence {
 
         public abstract Task<bool> UpdateCredsAsync(C credentials);
 
-        protected abstract Task UpdateNowPlaying(string artist, string album, string song);
+        protected abstract Task<bool> UpdateNowPlaying(string artist, string album, string song);
 
         protected abstract Task ScrobbleSong(string artist, string album, string song);
 
@@ -89,16 +102,15 @@ namespace AMWin_RichPresence {
                 var webScraper = new AppleMusicWebScraper(info.SongName, info.SongAlbum, info.SongArtist, region);
                 var artist = Properties.Settings.Default.LastfmScrobblePrimaryArtist ? (await webScraper.GetArtistList()).FirstOrDefault(info.SongArtist) : info.SongArtist;
                 var album = Properties.Settings.Default.LastfmCleanAlbumName ? AlbumCleaner.CleanAlbumName(info.SongAlbum) : info.SongAlbum;
+                var song = Properties.Settings.Default.LastfmCleanSongName ? SongCleaner.CleanSongName(info.SongName) : info.SongName;
 
                 if (thisSongID != lastSongID) {
                     lastSongID = thisSongID;
                     elapsedSeconds = 0;
                     scrobbleInProgress = false;
                     hasScrobbled = false;
+                    nowPlayingSent = false;
                     logger?.Log($"[{serviceName} scrobbler] New Song: {lastSongID}");
-
-                    await UpdateNowPlaying(artist, album, info.SongName);
-                    logger?.Log($"[{serviceName} scrobbler] Updated now playing: {lastSongID}");
                 } else {
                     elapsedSeconds += Constants.RefreshPeriod;
 
@@ -113,7 +125,7 @@ namespace AMWin_RichPresence {
 
                         try {
                             scrobbleInProgress = true;
-                            await ScrobbleSong(artist, album, info.SongName);
+                            await ScrobbleSong(artist, album, song);
                             hasScrobbled = true;
                         } finally {
                             scrobbleInProgress = false;
@@ -121,6 +133,13 @@ namespace AMWin_RichPresence {
                     }
 
                     lastSongProgress = info.CurrentTime ?? 0.0;
+                }
+
+                if (!nowPlayingSent) {
+                    nowPlayingSent = await UpdateNowPlaying(artist, album, song);
+                    if (nowPlayingSent) {
+                        logger?.Log($"[{serviceName} scrobbler] Updated now playing: {lastSongID}");
+                    }
                 }
             } catch (Exception ex) {
                 logger?.Log($"[{serviceName} scrobbler] An error occurred while scrobbling: {ex}");
@@ -174,13 +193,14 @@ namespace AMWin_RichPresence {
             await lastFmScrobbler.ScrobbleAsync(scrobble);
         }
 
-        protected async override Task UpdateNowPlaying(string artist, string album, string song) {
+        protected async override Task<bool> UpdateNowPlaying(string artist, string album, string song) {
             if (trackApi == null || lastfmAuth?.Authenticated != true) {
-                return;
+                return false;
             }
 
             var scrobble = new Scrobble(artist, album, song, DateTime.UtcNow);
             await trackApi.UpdateNowPlayingAsync(scrobble);
+            return true;
         }
     }
 
@@ -223,12 +243,13 @@ namespace AMWin_RichPresence {
             await listenBrainzClient.SubmitSingleListenAsync(song, artist, album);
         }
 
-        protected async override Task UpdateNowPlaying(string artist, string album, string song) {
+        protected async override Task<bool> UpdateNowPlaying(string artist, string album, string song) {
             if (string.IsNullOrEmpty(listenBrainzClient?.UserToken)) {
-                return;
+                return false;
             }
 
             await listenBrainzClient.SetNowPlayingAsync(song, artist, album);
+            return true;
         }
     }
 }
