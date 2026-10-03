@@ -391,4 +391,16 @@
   <data name="Settings_Scrobbling_SectionTitleShort" xml:space="preserve">
     <value>Scrobbling</value>
   </data>
+  <data name="Settings_General_PlaybackSource" xml:space="preserve">
+    <value>Playback source</value>
+  </data>
+  <data name="Settings_General_PlaybackSource_Description" xml:space="preserve">
+    <value>Windows Runtime can read playback while Apple Music is minimised or on another virtual desktop.</value>
+  </data>
+  <data name="Settings_General_PlaybackSource_Client" xml:space="preserve">
+    <value>Apple Music Window Scraping (default)</value>
+  </data>
+  <data name="Settings_General_PlaybackSource_WindowsRuntime" xml:space="preserve">
+    <value>Windows Runtime</value>
+  </data>
 </root>

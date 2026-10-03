@@ -20,7 +20,7 @@ namespace AMWin_RichPresence {
         private const string OpenSettingsWindowArg = "--open-settings-window";
 
         private TaskbarIcon? taskbarIcon;
-        private AppleMusicClientScraper amScraper;
+        private AppleMusicPlaybackManager playbackManager;
         private AppleMusicDiscordClient discordClient;
         private AppleMusicLastFmScrobbler lastFmScrobblerClient;
         private AppleMusicListenBrainzScrobbler listenBrainzScrobblerClient;
@@ -132,10 +132,10 @@ namespace AMWin_RichPresence {
             listenBrainzScrobblerClient = new AppleMusicListenBrainzScrobbler(region: amRegion, logger: logger);
             _ = listenBrainzScrobblerClient.init(listenBrainzCredentials);
 
-            // start Apple Music scraper
-            amScraper = new(lastFMApiKey, Constants.RefreshPeriod, classicalComposerAsArtist, AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion, (newInfo) => {
+            // start playback polling and metadata management
+            playbackManager = new(CreatePlaybackSource(), lastFMApiKey, Constants.RefreshPeriod, classicalComposerAsArtist, AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion, (newInfo) => {
 
-                // don't update scraper if Apple Music is paused or not open
+                // update consumers only when playback should be shown
                 if (newInfo != null && (AMWin_RichPresence.Properties.Settings.Default.ShowRPWhenMusicPaused || !newInfo.IsPaused)) {
 
                     // Discord RP update
@@ -162,6 +162,7 @@ namespace AMWin_RichPresence {
                     discordClient.Disable();
                 }
             }, logger);
+            playbackManager.Start();
         }
 
         protected override void OnStartup(StartupEventArgs e) {
@@ -177,6 +178,7 @@ namespace AMWin_RichPresence {
         }
 
         private void Application_Exit(object sender, ExitEventArgs e) {
+            playbackManager.Dispose();
             taskbarIcon?.Dispose();
             discordClient.Disable();
             logger?.Log("Application finished");
@@ -201,11 +203,23 @@ namespace AMWin_RichPresence {
         internal void UpdateRegion() {
             var region = AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion;
             logger?.Log($"Changed region to {region}");
-            amScraper.ChangeRegion(region);
+            playbackManager.ChangeRegion(region);
         }
 
         internal void UpdateScraperPreferences(bool composerAsArtist) {
-            amScraper.composerAsArtist = composerAsArtist;
+            playbackManager.ComposerAsArtist = composerAsArtist;
+        }
+
+        private IPlaybackDataSource CreatePlaybackSource() {
+            var source = (PlaybackSourceType)AMWin_RichPresence.Properties.Settings.Default.PlaybackSource;
+            logger?.Log($"Using playback source: {source}");
+            return source == PlaybackSourceType.WindowsRuntime
+                ? new AppleMusicWindowsRuntimeSource(logger)
+                : new AppleMusicClientScraper(logger);
+        }
+
+        internal void UpdatePlaybackSource() {
+            playbackManager.ChangePlaybackSource(CreatePlaybackSource());
         }
 
         internal async Task CheckForUpdates() {

@@ -258,6 +258,15 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send Rich Presence to.
+        /// </summary>
+        public static string Settings_Discord_ClientChoice {
+            get {
+                return ResourceManager.GetString("Settings_Discord_ClientChoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Discord Rich Presence.
         /// </summary>
         public static string Settings_Discord_EnableRP {
@@ -564,6 +573,42 @@ namespace AMWin_RichPresence.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Playback source.
+        /// </summary>
+        public static string Settings_General_PlaybackSource {
+            get {
+                return ResourceManager.GetString("Settings_General_PlaybackSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apple Music Window Scraping (default).
+        /// </summary>
+        public static string Settings_General_PlaybackSource_Client {
+            get {
+                return ResourceManager.GetString("Settings_General_PlaybackSource_Client", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows Runtime can read playback while Apple Music is minimised or on another virtual desktop..
+        /// </summary>
+        public static string Settings_General_PlaybackSource_Description {
+            get {
+                return ResourceManager.GetString("Settings_General_PlaybackSource_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows Runtime.
+        /// </summary>
+        public static string Settings_General_PlaybackSource_WindowsRuntime {
+            get {
+                return ResourceManager.GetString("Settings_General_PlaybackSource_WindowsRuntime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Run when Windows starts.
         /// </summary>
         public static string Settings_General_RunOnWindowsStartup {
@@ -616,7 +661,7 @@ namespace AMWin_RichPresence.Properties {
                 return ResourceManager.GetString("Settings_Scrobbling_CleanAlbumName_Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Clean up song name.
         /// </summary>
@@ -625,16 +670,16 @@ namespace AMWin_RichPresence.Properties {
                 return ResourceManager.GetString("Settings_Scrobbling_CleanSongName", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to Remove extra text from song names (e.g., "(Mixed)", "[Mixed]").
+        ///   Looks up a localized string similar to Remove extra text from song names (e.g., &quot;(Mixed)&quot;, &quot;[Mixed]&quot;).
         /// </summary>
         public static string Settings_Scrobbling_CleanSongName_Description {
             get {
                 return ResourceManager.GetString("Settings_Scrobbling_CleanSongName_Description", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to API key.
         /// </summary>
