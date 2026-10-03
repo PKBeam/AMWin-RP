@@ -23,7 +23,8 @@ namespace AMWin_RichPresence {
 
         private static readonly Regex ComposerPerformerRegex = new Regex(@"By\s.*?\s\u2014", RegexOptions.Compiled);
 
-        private readonly IPlaybackDataSource playbackSource;
+        private IPlaybackDataSource playbackSource;
+        private IPlaybackDataSource? pendingPlaybackSource;
         private readonly string? lastFmApiKey;
         private readonly Timer timer;
         private readonly Action<AppleMusicInfo?> refreshHandler;
@@ -66,6 +67,12 @@ namespace AMWin_RichPresence {
             _ = RefreshAsync();
         }
 
+        public void ChangePlaybackSource(IPlaybackDataSource source) {
+            ObjectDisposedException.ThrowIf(disposed, this);
+            Interlocked.Exchange(ref pendingPlaybackSource, source);
+            _ = RefreshAsync();
+        }
+
         private async void OnTimerElapsed(object? sender, ElapsedEventArgs e) {
             await RefreshAsync();
         }
@@ -75,6 +82,14 @@ namespace AMWin_RichPresence {
             if (disposed || Interlocked.CompareExchange(ref refreshInProgress, 1, 0) != 0) return;
 
             try {
+                var source = Interlocked.Exchange(ref pendingPlaybackSource, null);
+                if (source != null) {
+                    playbackSource = source;
+                    currentSong = null;
+                    previousPlayback = null;
+                    metadataTask = null;
+                }
+
                 if (Interlocked.Exchange(ref invalidateMetadata, 0) != 0) {
                     currentSong = null;
                 }
@@ -85,16 +100,17 @@ namespace AMWin_RichPresence {
                     logger?.Log($"Something went wrong while reading playback data: {ex}");
                 }
 
-                if (!disposed) refreshHandler(currentSong);
+                if (!disposed && Volatile.Read(ref pendingPlaybackSource) == null) refreshHandler(currentSong);
             } catch (Exception ex) {
                 logger?.Log($"Something went wrong while refreshing playback: {ex}");
             } finally {
                 Interlocked.Exchange(ref refreshInProgress, 0);
+                if (!disposed && Volatile.Read(ref pendingPlaybackSource) != null) _ = RefreshAsync();
             }
         }
 
         private async Task UpdateSongAsync() {
-            var playback = playbackSource.GetPlaybackData();
+            var playback = await playbackSource.GetPlaybackDataAsync();
             if (playback == null) {
                 currentSong = null;
                 previousPlayback = null;
@@ -179,7 +195,7 @@ namespace AMWin_RichPresence {
         }
 
         private bool IsCurrentSong(AppleMusicInfo song) {
-            return !disposed && ReferenceEquals(currentSong, song);
+            return !disposed && Volatile.Read(ref pendingPlaybackSource) == null && ReferenceEquals(currentSong, song);
         }
 
         private async Task EnrichSongAsync(AppleMusicInfo song, AppleMusicWebScraper webScraper, WebReqFailCounters counters) {

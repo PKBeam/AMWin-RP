@@ -21,6 +21,7 @@ namespace AMWin_RichPresence {
     public partial class SettingsWindow : FluentWindow {
         private bool isLanguageSelectorInitialized;
         private bool isDiscordClientSelectorInitialized;
+        private bool isPlaybackSourceSelectorInitialized;
 
         private bool amRegionValid {
             get { return Constants.ValidAppleMusicRegions.Contains(AppleMusicRegion.Text.ToLower()); }
@@ -32,6 +33,7 @@ namespace AMWin_RichPresence {
             InitializeComponent();
             InitializeLanguageSelector();
             InitializeDiscordClientSelector();
+            InitializePlaybackSourceSelector();
 
             string imagePath = IsDarkMode()
                 ? "/Resources/GitHub_Invertocat_White.png"
@@ -117,6 +119,23 @@ namespace AMWin_RichPresence {
 
         private static string GetLocalisedString(string key, string fallback) {
             return Localisation.ResourceManager.GetString(key, Localisation.Culture) ?? fallback;
+        }
+
+        private void InitializePlaybackSourceSelector() {
+            TextBlock_PlaybackSourceLabel.Text = GetLocalisedString("Settings_General_PlaybackSource", "Playback source");
+            TextBlock_PlaybackSourceDescription.Text = GetLocalisedString("Settings_General_PlaybackSource_Description",
+                "Windows Runtime can read playback while Apple Music is minimised or on another virtual desktop.");
+            ComboBoxItem_PlaybackSourceClient.Content = GetLocalisedString("Settings_General_PlaybackSource_Client", "Apple Music window (default)");
+            ComboBoxItem_PlaybackSourceWindowsRuntime.Content = GetLocalisedString("Settings_General_PlaybackSource_WindowsRuntime", "Windows Runtime");
+            ComboBox_PlaybackSource.SelectedIndex = Properties.Settings.Default.PlaybackSource == (int)PlaybackSourceType.WindowsRuntime ? 1 : 0;
+            isPlaybackSourceSelectorInitialized = true;
+        }
+
+        private void ComboBox_PlaybackSource_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (!isPlaybackSourceSelectorInitialized || ComboBox_PlaybackSource.SelectedIndex < 0) return;
+            Properties.Settings.Default.PlaybackSource = ComboBox_PlaybackSource.SelectedIndex;
+            SaveSettings();
+            ((App)Application.Current).UpdatePlaybackSource();
         }
 
         private async void ComboBox_Language_SelectionChanged(object sender, SelectionChangedEventArgs e) {

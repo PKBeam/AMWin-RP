@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace AMWin_RichPresence {
     internal class AppleMusicClientScraper : IPlaybackDataSource {
@@ -12,6 +13,10 @@ namespace AMWin_RichPresence {
 
         public AppleMusicClientScraper(Logger? logger = null) {
             this.logger = logger;
+        }
+
+        public Task<PlaybackData?> GetPlaybackDataAsync() {
+            return Task.FromResult(GetPlaybackData());
         }
 
         public PlaybackData? GetPlaybackData() {

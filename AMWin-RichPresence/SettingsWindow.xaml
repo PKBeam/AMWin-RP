@@ -85,6 +85,18 @@
                                     Text="{x:Static properties:Localisation.Settings_General_ComposerAsArtist_Description}"/>
 
                                 <StackPanel Orientation="Horizontal" Margin="10 10 0 2">
+                                    <TextBlock x:Name="TextBlock_PlaybackSourceLabel" VerticalAlignment="Center" Text="Playback source"/>
+                                    <ComboBox x:Name="ComboBox_PlaybackSource" Width="245" Margin="10 0 0 0"
+                                              SelectionChanged="ComboBox_PlaybackSource_SelectionChanged">
+                                        <ComboBoxItem x:Name="ComboBoxItem_PlaybackSourceClient" Content="Apple Music window (default)"/>
+                                        <ComboBoxItem x:Name="ComboBoxItem_PlaybackSourceWindowsRuntime" Content="Windows Runtime"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBlock x:Name="TextBlock_PlaybackSourceDescription" Margin="10 5 0 10" FontSize="12"
+                                           VerticalAlignment="Center" TextWrapping="Wrap"
+                                           Text="Windows Runtime can read playback while Apple Music is minimised or on another virtual desktop."/>
+
+                                <StackPanel Orientation="Horizontal" Margin="10 10 0 2">
                                     <TextBlock
                                         x:Name="TextBlock_LanguageLabel"
                                         VerticalAlignment="Center"

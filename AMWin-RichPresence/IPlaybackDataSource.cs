@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace AMWin_RichPresence {
     /// <summary>
@@ -6,7 +7,7 @@ namespace AMWin_RichPresence {
     /// A null result means the source has no accessible current track.
     /// </summary>
     internal interface IPlaybackDataSource {
-        PlaybackData? GetPlaybackData();
+        Task<PlaybackData?> GetPlaybackDataAsync();
     }
 
     /// <summary>

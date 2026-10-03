@@ -133,7 +133,7 @@ namespace AMWin_RichPresence {
             _ = listenBrainzScrobblerClient.init(listenBrainzCredentials);
 
             // start playback polling and metadata management
-            playbackManager = new(new AppleMusicClientScraper(logger), lastFMApiKey, Constants.RefreshPeriod, classicalComposerAsArtist, AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion, (newInfo) => {
+            playbackManager = new(CreatePlaybackSource(), lastFMApiKey, Constants.RefreshPeriod, classicalComposerAsArtist, AMWin_RichPresence.Properties.Settings.Default.AppleMusicRegion, (newInfo) => {
 
                 // update consumers only when playback should be shown
                 if (newInfo != null && (AMWin_RichPresence.Properties.Settings.Default.ShowRPWhenMusicPaused || !newInfo.IsPaused)) {
@@ -208,6 +208,18 @@ namespace AMWin_RichPresence {
 
         internal void UpdateScraperPreferences(bool composerAsArtist) {
             playbackManager.ComposerAsArtist = composerAsArtist;
+        }
+
+        private IPlaybackDataSource CreatePlaybackSource() {
+            var source = (PlaybackSourceType)AMWin_RichPresence.Properties.Settings.Default.PlaybackSource;
+            logger?.Log($"Using playback source: {source}");
+            return source == PlaybackSourceType.WindowsRuntime
+                ? new AppleMusicWindowsRuntimeSource(logger)
+                : new AppleMusicClientScraper(logger);
+        }
+
+        internal void UpdatePlaybackSource() {
+            playbackManager.ChangePlaybackSource(CreatePlaybackSource());
         }
 
         internal async Task CheckForUpdates() {
